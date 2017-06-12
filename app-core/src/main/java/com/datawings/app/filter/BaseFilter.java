@@ -7,9 +7,7 @@ public class BaseFilter {
 	protected static int PAGE_SIZE_STANDARD = 20;
 
 	protected Integer page;
-
 	protected Integer rowCount;
-
 	protected Integer pageSize;
 
 	public BaseFilter() {

@@ -23,6 +23,13 @@
              		<i class="fa fa-th-large"></i><span class="nav-label"><spring:message code="menu.dashboard" text="!"/></span>
              	</a>
 			</li>
+			
+			<li id="marketing">
+             	<a href="<c:url value="/secure/marketing"/>">
+             		<i class="fa fa-university"></i><span class="nav-label"><spring:message code="menu.marketing" text="!"/></span>
+             	</a>
+			</li>
+			
 			<li id="customer">
 				<a href="#">
 					<i class="fa fa-users"></i><span class="nav-label"><spring:message code="menu.customer" text="!"/></span><span class="fa arrow"></span>
