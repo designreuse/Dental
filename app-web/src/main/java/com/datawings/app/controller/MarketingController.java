@@ -245,7 +245,6 @@ public class MarketingController {
 		if(StringUtils.equals(action, "ADD_CUSTOMER")){
 			Integer customerId = customerManager.addCustomer(filter, sysUser, id);
 			return "redirect:/secure/records?id=" + customerId;
-			
 		}
 		return "redirect:/secure/marketing";
 	}

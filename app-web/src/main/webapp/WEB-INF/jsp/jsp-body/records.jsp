@@ -206,11 +206,11 @@
 							<th class="text-center">#</th>
 							<th class="text-center"></th>
 							<th><spring:message code="records.dateExcute" text="!"/></th>
+							<th><spring:message code="customer.dentist" text="!"/></th>
 							<th><spring:message code="records.teeth" text="!"/></th>
 							<th><spring:message code="records.content" text="!"/></th>
 							<th><spring:message code="records.dateNext" text="!"/></th>
 							<th><spring:message code="records.contentNext" text="!"/></th>
-							<th><spring:message code="customer.dentist" text="!"/></th>
 							<th class="text-right"><spring:message code="records.amount.extra" text="!"/></th>
 							<th class="text-right"><spring:message code="records.sale" text="!"/></th>
 							<th class="text-right"><spring:message code="records.net" text="!"/></th>
@@ -223,7 +223,16 @@
 								<c:param name="id" value="${elm.recordId }"></c:param>
 							</c:url>
 							
-							<tr id="${elm.recordId}">
+							<c:choose>
+								<c:when test="${elm.status == 'F'}">
+									<c:set value="" var="color"></c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set value="text-danger" var="color"></c:set>
+								</c:otherwise>
+							</c:choose>
+									
+							<tr id="${elm.recordId}" class="${color }">
 								<td class="text-center">${stt.index + 1}</td>
 								<td class="text-center text-nowrap">
 									<a href="${print }"  target="_blank" title="<spring:message code="button.printer" text="!"/>"><i class="fa fa-2x fa-print"></i></a>
@@ -243,11 +252,11 @@
 									</c:choose>
 								</td>
 								<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateExcute}" /></td>
+								<td>${elm.dentist}</td>
 								<td>${elm.teeth}</td>
 								<td>${elm.content}</td>
 								<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateNext}" /></td>
 								<td>${elm.contentNext}</td>
-								<td>${elm.dentist}</td>
 								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross}"/></td>
 								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.sale}"/></td>
 								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross -  elm.sale}"/></td>

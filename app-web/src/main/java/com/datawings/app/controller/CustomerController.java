@@ -28,6 +28,7 @@ import com.datawings.app.common.DateUtil;
 import com.datawings.app.common.StringUtilz;
 import com.datawings.app.filter.CustomerFiler;
 import com.datawings.app.filter.ValidationError;
+import com.datawings.app.manager.CustomerManager;
 import com.datawings.app.model.Branches;
 import com.datawings.app.model.Customer;
 import com.datawings.app.model.Dentist;
@@ -55,6 +56,9 @@ public class CustomerController {
 	
 	@Autowired
 	private IBranchesService branchesService;
+	
+	@Autowired
+	private CustomerManager customerManager;
 	
 	@ModelAttribute("customerFilter")
 	public CustomerFiler customerFilter() {
@@ -105,29 +109,10 @@ public class CustomerController {
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
 		if(StringUtils.equals(action, "CREATE")){
-			Customer customer = new Customer();
-			customer.setSerial(customerService.maxSerial(sysUser));
-			customer.setFullName(filter.getFullNameCreate().trim().toUpperCase());
-			customer.setFullNameEn(StringUtilz.unAccent(filter.getFullNameCreate().trim()).toUpperCase());
-			customer.setSex(filter.getSexCreate());
-			customer.setType(filter.getTypeCreate());
-			customer.setBirthday(DateUtil.string2Date(filter.getBirthdayCreate(), "dd/MM/yyyy"));
-			customer.setPhone(filter.getPhoneCreate());
-			customer.setEmail(filter.getEmailCreate());
-			customer.setAddress(filter.getAddressCreate().toUpperCase());
-			customer.setArrivalDate(DateUtil.string2Date(filter.getArrivalDateCreate(), "dd/MM/yyyy"));
-			customer.setCause(filter.getCauseCreate().toUpperCase());
-			customer.setDentist(filter.getDentistCreate());
-			customer.setStatus(filter.getStatusCreate());
-			customer.setBranch(sysUser.getBranch());
-			customer.setNote(filter.getNoteCreate().trim());
-			customer.setCreatedBy(sysUser.getUsername());
-			customer.setCreatedDate(new Date());
-			
-			customerService.merge(customer);
+			Integer customerId = customerManager.addCustomerGuest(filter, sysUser);
 			filter.init();
 			
-			return "redirect:/secure/records?id=" + customer.getCustomerId();
+			return "redirect:/secure/records?id=" + customerId;
 			
 		}else if(StringUtils.equals(action, "DELETE")){
 			Integer id = ServletRequestUtils.getIntParameter(request, "id", 0);
