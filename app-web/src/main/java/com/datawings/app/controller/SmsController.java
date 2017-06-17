@@ -23,8 +23,14 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.datawings.app.common.DateUtil;
 import com.datawings.app.common.StringUtilz;
 import com.datawings.app.filter.SmsFilter;
+
+import com.datawings.app.manager.SmsManager;
+import com.datawings.app.model.Customer;
+import com.datawings.app.model.Params;
+
 import com.datawings.app.model.Sms;
 import com.datawings.app.model.SysUser;
+import com.datawings.app.service.ICustomerService;
 import com.datawings.app.service.IParamsService;
 import com.datawings.app.service.ISmsService;
 
@@ -41,8 +47,16 @@ public class SmsController {
 	@Autowired
 	private ISmsService smsService;
 	
+
+	@Autowired
+	private SmsManager smsManager;
+	
+	@Autowired
+	private ICustomerService customerService;
+
 	@Autowired 
 	private MessageSource messageSource;
+
 	
 	@ModelAttribute("smsFilter")
 	public SmsFilter smsFilter() {
@@ -105,7 +119,19 @@ public class SmsController {
 			filter.setDateFrom(DateUtil.date2String(start, "dd/MM/yyyy"));
 			filter.setDateTo(DateUtil.date2String(end, "dd/MM/yyyy"));
 		}else if(StringUtils.equals(action, "SEND")){
-			//thong xu ly goi tin nhan
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			SysUser sysUser = (SysUser) auth.getPrincipal();
+			Customer customer = customerService.findByUser(filter.getSerial(),sysUser);
+			if(customer!=null){
+				filter.setAddress(customer.getAddress());
+				filter.setFullName(customer.getFullName());
+				filter.setPhoneSend(customer.getPhone());
+			}
+			String result = smsManager.sendSms(filter,sysUser);
+			if (!"SUCCESS".equals(result)){
+				//error
+			}
+			
 		}
 		return "redirect:/secure/sms";
 	}

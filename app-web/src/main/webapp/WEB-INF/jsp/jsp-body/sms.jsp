@@ -59,6 +59,10 @@
 	    	"disable_search": true
 	    });
 	});
+	
+	function doSendSMS(){
+		$("#sms-send-form").submit();
+	}
 </script>
 
 <div id="body">
@@ -169,7 +173,7 @@
 					<h5 class="modal-title text-uppercase"><spring:message code="sms.create" text="!"/></h5>
 				</div>
 				<div class="modal-body">
-					<form:form id="form-add" name="form-add" method="post" commandName="smsFilter" action="sms">
+					<form:form id="sms-send-form" name="form-add" method="post" commandName="smsFilter" action="sms">
 						<input type="hidden" name="action" value="SEND">
 						
 						<div class="form-group">
@@ -214,7 +218,7 @@
 									<button type="button" class="btn btn-w-m btn-default text-uppercase" data-dismiss="modal">
 										<i class="fa fa-close"></i> <spring:message code="button.close" text="!"/>
 									</button>
-									<button type="button" onclick="doCreate();" class="btn btn-w-m btn-success text-uppercase">
+									<button type="button" onclick="doSendSMS();" class="btn btn-w-m btn-success text-uppercase">
 										<i class="fa fa-paper-plane"></i> <spring:message code="button.send" text="!"/>
 									</button>
 								</div>
