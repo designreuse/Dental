@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.datawings.app.common.DateUtil;
+import com.datawings.app.common.StringUtilz;
 import com.datawings.app.filter.SmsFilter;
+
 import com.datawings.app.manager.SmsManager;
 import com.datawings.app.model.Customer;
 import com.datawings.app.model.Params;
+
 import com.datawings.app.model.Sms;
 import com.datawings.app.model.SysUser;
 import com.datawings.app.service.ICustomerService;
@@ -43,11 +47,16 @@ public class SmsController {
 	@Autowired
 	private ISmsService smsService;
 	
+
 	@Autowired
 	private SmsManager smsManager;
 	
 	@Autowired
 	private ICustomerService customerService;
+
+	@Autowired 
+	private MessageSource messageSource;
+
 	
 	@ModelAttribute("smsFilter")
 	public SmsFilter smsFilter() {
@@ -170,11 +179,26 @@ public class SmsController {
 		return "redirect:/secure/sms/statistic";
 	}
 	
-	@RequestMapping(value = "send", method = RequestMethod.POST)
+	@RequestMapping(value = "/secure/sms/form", method = RequestMethod.GET)
+	public String getSmsForm(String phone, Model model){
+		model.addAttribute("phone", phone);
+		return "smsForm";
+	}
+	
+	@RequestMapping(value = "/secure/smsSend", method = RequestMethod.POST)
 	public String sendSms(Model model , HttpServletRequest request) throws IOException {
-		List<Params> listParams = paramsService.findAll();
-		model.addAttribute("listParams", listParams);
-		return "params";
+		String referrer = ((HttpServletRequest) request).getHeader("referer");
+		String ridirect = StringUtilz.referrer(referrer);
+		
+		String phoneSms = request.getParameter("phoneSms");
+		String typeSms = request.getParameter("typeSms");
+		String contentSms = request.getParameter("messageSms");
+		
+		//Thong send message
+		System.out.println(phoneSms + typeSms + contentSms);
+		
+		
+		return "redirect:" + ridirect;
 	}
 	
 }
