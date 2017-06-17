@@ -31,6 +31,9 @@ import com.datawings.app.service.ISmsService;
 /*@PreAuthorize(value = "hasRole('ADMIN')")*/
 @SessionAttributes({ "smsFilter",  "smsStatisticFilter" })
 public class SmsController {
+	private static Integer unit_spam = 400;
+	private static Integer unit_trademark = 600;
+	
 	@Autowired
 	private IParamsService paramsService;
 	
@@ -111,12 +114,12 @@ public class SmsController {
 		SmsFilter totalSms = new SmsFilter();
 		for (SmsFilter elm : smsStatistic) {
 			if(StringUtils.equals(elm.getType(), "1")){
-				elm.setUnit(400);
+				elm.setUnit(unit_spam);
 				elm.setGross(elm.getCount() * elm.getUnit());
 				totalSms.setCount(totalSms.getCount() + elm.getCount());
 				totalSms.setGross(totalSms.getGross() + elm.getGross());
 			}else {
-				elm.setUnit(600);
+				elm.setUnit(unit_trademark);
 				elm.setGross(elm.getCount() * elm.getUnit());
 				totalSms.setCount(totalSms.getCount() + elm.getCount());
 				totalSms.setGross(totalSms.getGross() + elm.getGross());

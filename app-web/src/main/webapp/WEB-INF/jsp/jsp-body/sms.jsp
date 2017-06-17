@@ -137,7 +137,12 @@
 		
 		<div class="form-group">
 			<div class="row">
-				<div class="col-sm-12 text-right">
+				<div class="col-sm-4">
+					<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
+						<i class="fa fa-envelope"> <spring:message code="sms.create" text="!"/></i>
+					</button>
+				</div>
+				<div class="col-sm-8 text-right">
 					<a onclick="javascript:doSubmit('RESET');" class="btn btn-w-m btn-default text-uppercase">
 						<i class="fa fa-undo"></i> <spring:message code="button.reset" text="!"/>
 					</a>
@@ -154,4 +159,54 @@
 			</div>
 		</div>
 	</form:form>
+	
+	<!-- ------------------------------------------- CREATE ----------------------------------------------------- -->
+	<div class="modal inmodal" id="formCreate" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" style="width:900px">
+			<div class="modal-content animated bounceInRight">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
+					<h5 class="modal-title text-uppercase"><spring:message code="sms.create" text="!"/></h5>
+				</div>
+				<div class="modal-body">
+					<form:form id="form-add" name="form-add" method="post" commandName="smsFilter" action="#">
+						<input type="hidden" name="action" value="CREATE">
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12">
+									<spring:message code="sms.phone.note" text="!" var = "notePhone"/>
+									<label><spring:message code="customer.telephone" text="!"/></label> <label class="text-danger">*</label>
+									<form:textarea placeholder="${notePhone }" path="phoneSend" rows="2" class="form-control textfield"/>
+									<label id="err_phoneSend" class="text-danger"></label>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12">
+									<label><spring:message code="sms.message" text="!"/></label>
+									<form:textarea path="messageSend" rows="2" class="form-control textfield"/>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12 text-right">
+									<button type="button" class="btn btn-w-m btn-default text-uppercase" data-dismiss="modal">
+										<i class="fa fa-close"></i> <spring:message code="button.close" text="!"/>
+									</button>
+									<button type="button" onclick="doCreate();" class="btn btn-w-m btn-success text-uppercase">
+										<i class="fa fa-paper-plane"></i> <spring:message code="button.send" text="!"/>
+									</button>
+								</div>
+							</div>
+						</div>
+					</form:form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

@@ -80,22 +80,23 @@ public class SmsDao extends BaseDao<Sms, Integer> implements ISmsDao{
 	public List<SmsFilter> getSmsStatistic(SmsFilter filter, SysUser sysUser) {
 		StringBuffer hql = new StringBuffer();
 		hql.append("select type, sum(count) as count");
-		hql.append(" from sms where true");
+		hql.append(" from sms");
+		hql.append(" where status = 'F'");
 		
 		if(StringUtils.isNotBlank(filter.getDateFrom().trim()) && StringUtils.isNotBlank(filter.getDateTo().trim()) ){
 			if(DateUtil.checkDateAsString(filter.getDateFrom().trim(), "dd/MM/yyyy") 
 					&& DateUtil.checkDateAsString(filter.getDateTo().trim(), "dd/MM/yyyy")){
-					hql.append(" and date_sent between '" + filter.getDateFrom().trim() + "' and '" + filter.getDateTo().trim() + "'");
+					hql.append(" and date_sent between str_to_date('" + filter.getDateFrom().trim() + "', '%d/%m/%Y') and str_to_date('" + filter.getDateTo().trim() + "', '%d/%m/%Y')");
 			}
 		}
 		else if(StringUtils.isNotBlank(filter.getDateFrom().trim())){
 			if(DateUtil.checkDateAsString(filter.getDateFrom().trim(), "dd/MM/yyyy")){
-				hql.append(" and date_sent > '" + filter.getDateFrom().trim() + "'");
+				hql.append(" and date_sent > str_to_date('" + filter.getDateFrom().trim() + "', '%d/%m/%Y')");
 			}
 		}
 		else if(StringUtils.isNotBlank(filter.getDateTo().trim())){
 			if(DateUtil.checkDateAsString(filter.getDateFrom().trim(), "dd/MM/yyyy")){
-				hql.append(" and date_sent < '" + filter.getDateTo().trim() + "'");
+				hql.append(" and date_sent < str_to_date('" + filter.getDateTo().trim() + "', '%d/%m/%Y')");
 			}
 		}
 		hql.append(" group by type");
