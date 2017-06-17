@@ -169,8 +169,24 @@
 					<h5 class="modal-title text-uppercase"><spring:message code="sms.create" text="!"/></h5>
 				</div>
 				<div class="modal-body">
-					<form:form id="form-add" name="form-add" method="post" commandName="smsFilter" action="#">
-						<input type="hidden" name="action" value="CREATE">
+					<form:form id="form-add" name="form-add" method="post" commandName="smsFilter" action="sms">
+						<input type="hidden" name="action" value="SEND">
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-4">
+									<label><spring:message code="sms.type" text="!"/></label>
+									<form:select path="typeSend" class="chosen-select" cssStyle="width:100%">
+										<option value="1" <c:if test="${'1' == smsFilter.typeSend}">selected="selected"</c:if>>
+											<spring:message code="sms.type.1" text="!"/>
+										</option>
+										<option value="2" <c:if test="${'1' == smsFilter.typeSend}">selected="selected"</c:if>>
+											<spring:message code="sms.type.2" text="!"/>
+										</option>
+									</form:select>
+								</div>
+							</div>
+						</div>
 						
 						<div class="form-group">
 							<div class="row">

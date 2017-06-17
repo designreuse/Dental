@@ -10,6 +10,7 @@ public class SmsFilter extends BaseFilter {
 	private String dateFrom;
 	private String dateTo;
 	
+	private String typeSend;
 	private String phoneSend;
 	private String messageSend;
 	
@@ -23,6 +24,14 @@ public class SmsFilter extends BaseFilter {
 
 	public void init() {
 		super.init();
+	}
+
+	public String getTypeSend() {
+		return typeSend;
+	}
+
+	public void setTypeSend(String typeSend) {
+		this.typeSend = typeSend;
 	}
 
 	public String getPhoneSend() {

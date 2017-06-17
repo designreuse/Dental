@@ -100,6 +100,8 @@ public class SmsController {
 			Date end  = DateUtil.endMonth(start);
 			filter.setDateFrom(DateUtil.date2String(start, "dd/MM/yyyy"));
 			filter.setDateTo(DateUtil.date2String(end, "dd/MM/yyyy"));
+		}else if(StringUtils.equals(action, "SEND")){
+			//thong xu ly goi tin nhan
 		}
 		return "redirect:/secure/sms";
 	}
