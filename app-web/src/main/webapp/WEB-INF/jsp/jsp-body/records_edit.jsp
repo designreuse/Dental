@@ -116,23 +116,17 @@
 
 	<div class="form-group">
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<fmt:formatNumber pattern="${formatPattern}" value="${records.gross}" var="gross"/>
 				<label><spring:message code="records.amount.extra" text="!"/></label> <label class="text-danger">*</label>
 				<form:input path="grossEdit" value="${gross }" type="text" cssClass="form-control textfield text-right"/>
 				<label id="err_grossEdit" class="text-danger"></label>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<fmt:formatNumber pattern="${formatPattern}" value="${records.sale}" var="sale"/>
 				<label><spring:message code="records.sale" text="!"/></label> <label class="text-danger">*</label>
 				<form:input path="saleEdit" value="${sale }" type="text" cssClass="form-control textfield text-right"/>
 				<label id="err_saleEdit" class="text-danger"></label>
-			</div>
-			<div class="col-sm-4">
-				<fmt:formatNumber pattern="${formatPattern}" value="${records.payment}" var="payment"/>
-				<label><spring:message code="records.payment" text="!"/></label> <label class="text-danger">*</label>
-				<form:input path="paymentEdit" value="${payment }" type="text" cssClass="form-control textfield text-right"/>
-				<label id="err_paymentEdit" class="text-danger"></label>
 			</div>
 		</div>
 	</div>
@@ -154,7 +148,22 @@
 			</div>
 		</div>
 	</div>
-			
+		
+	<div class="form-group">
+		<div class="row">
+			<div class="col-sm-6">
+				<label><spring:message code="invoice.cause" text="!"/></label>
+				<form:input path="causePaymentEdit" type="text" cssClass="form-control textfield"/>
+			</div>
+			<div class="col-sm-6">
+				<fmt:formatNumber pattern="${formatPattern}" value="${records.payment}" var="payment"/>
+				<label><spring:message code="records.payment" text="!"/></label> <label class="text-danger">*</label>
+				<form:input path="paymentEdit" value="${payment }" type="text" cssClass="form-control textfield text-right"/>
+				<label id="err_paymentEdit" class="text-danger"></label>
+			</div>
+		</div>
+	</div>
+		
 	<div class="form-group">
 		<div class="row">
 			<div class="col-sm-12 text-right">

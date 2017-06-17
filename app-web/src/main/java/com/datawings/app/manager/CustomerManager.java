@@ -95,6 +95,7 @@ public class CustomerManager {
 		records.setDateNext(DateUtil.string2Date(filter.getDateNextEdit(), "dd/MM/yyyy"));
 		records.setContentNext(filter.getContentNextEdit().toUpperCase());
 		records.setModifiedBy(sysUser.getUsername());
+		records.setCausePayment(filter.getCausePaymentEdit());
 		records.setModifiedDate(new Date());
 		recordsService.merge(records);
 	}
