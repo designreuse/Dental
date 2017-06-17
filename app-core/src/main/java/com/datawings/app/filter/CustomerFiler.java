@@ -2,20 +2,20 @@ package com.datawings.app.filter;
 
 public class CustomerFiler extends BaseFilter {
 	public String serial;
-	public String name;
-	public String telephone;
+	public String fullName;
+	public String phone;
 	public String dentist;
-	public String dateStartFrom;
-	public String dateStartTo;
+	public String arrivalDateFrom;
+	public String arrivalDateTo;
 	public String status;
 	public String branch;
 	private String type;
+	private String source;
 
-	public String serialCreate;
-	public String nameCreate;
-	public String telephoneCreate;
+	public String fullNameCreate;
+	public String phoneCreate;
 	public String dentistCreate;
-	public String dateStartCreate;
+	public String arrivalDateCreate;
 	public String statusCreate;
 	private String typeCreate;
 	private String sexCreate;
@@ -23,8 +23,22 @@ public class CustomerFiler extends BaseFilter {
 	private String emailCreate;
 	private String causeCreate;
 	private String contentCreate;
-	private String dateBirthCreate;
+	private String birthdayCreate;
 	private String noteCreate;
+	
+	public String fullNameAdd;
+	public String phoneAdd;
+	public String dentistAdd;
+	public String arrivalDateAdd;
+	public String statusAdd;
+	private String typeAdd;
+	private String sexAdd;
+	private String addressAdd;
+	private String emailAdd;
+	private String causeAdd;
+	private String contentAdd;
+	private String birthdayAdd;
+	private String noteAdd;
 
 	public CustomerFiler() {
 		init();
@@ -50,20 +64,116 @@ public class CustomerFiler extends BaseFilter {
 		return type;
 	}
 
+	public String getFullNameAdd() {
+		return fullNameAdd;
+	}
+
+	public void setFullNameAdd(String fullNameAdd) {
+		this.fullNameAdd = fullNameAdd;
+	}
+
+	public String getPhoneAdd() {
+		return phoneAdd;
+	}
+
+	public void setPhoneAdd(String phoneAdd) {
+		this.phoneAdd = phoneAdd;
+	}
+
+	public String getDentistAdd() {
+		return dentistAdd;
+	}
+
+	public void setDentistAdd(String dentistAdd) {
+		this.dentistAdd = dentistAdd;
+	}
+
+	public String getArrivalDateAdd() {
+		return arrivalDateAdd;
+	}
+
+	public void setArrivalDateAdd(String arrivalDateAdd) {
+		this.arrivalDateAdd = arrivalDateAdd;
+	}
+
+	public String getStatusAdd() {
+		return statusAdd;
+	}
+
+	public void setStatusAdd(String statusAdd) {
+		this.statusAdd = statusAdd;
+	}
+
+	public String getTypeAdd() {
+		return typeAdd;
+	}
+
+	public void setTypeAdd(String typeAdd) {
+		this.typeAdd = typeAdd;
+	}
+
+	public String getSexAdd() {
+		return sexAdd;
+	}
+
+	public void setSexAdd(String sexAdd) {
+		this.sexAdd = sexAdd;
+	}
+
+	public String getAddressAdd() {
+		return addressAdd;
+	}
+
+	public void setAddressAdd(String addressAdd) {
+		this.addressAdd = addressAdd;
+	}
+
+	public String getEmailAdd() {
+		return emailAdd;
+	}
+
+	public void setEmailAdd(String emailAdd) {
+		this.emailAdd = emailAdd;
+	}
+
+	public String getCauseAdd() {
+		return causeAdd;
+	}
+
+	public void setCauseAdd(String causeAdd) {
+		this.causeAdd = causeAdd;
+	}
+
+	public String getContentAdd() {
+		return contentAdd;
+	}
+
+	public void setContentAdd(String contentAdd) {
+		this.contentAdd = contentAdd;
+	}
+
+	public String getBirthdayAdd() {
+		return birthdayAdd;
+	}
+
+	public void setBirthdayAdd(String birthdayAdd) {
+		this.birthdayAdd = birthdayAdd;
+	}
+
+	public String getNoteAdd() {
+		return noteAdd;
+	}
+
+	public void setNoteAdd(String noteAdd) {
+		this.noteAdd = noteAdd;
+	}
+
 	public void setType(String type) {
 		this.type = type;
 	}
 
 	public void setNoteCreate(String noteCreate) {
 		this.noteCreate = noteCreate;
-	}
-
-	public String getDateBirthCreate() {
-		return dateBirthCreate;
-	}
-
-	public void setDateBirthCreate(String dateBirthCreate) {
-		this.dateBirthCreate = dateBirthCreate;
 	}
 
 	public String getTypeCreate() {
@@ -114,54 +224,6 @@ public class CustomerFiler extends BaseFilter {
 		this.contentCreate = contentCreate;
 	}
 
-	public String getSerialCreate() {
-		return serialCreate;
-	}
-
-	public void setSerialCreate(String serialCreate) {
-		this.serialCreate = serialCreate;
-	}
-
-	public String getNameCreate() {
-		return nameCreate;
-	}
-
-	public void setNameCreate(String nameCreate) {
-		this.nameCreate = nameCreate;
-	}
-
-	public String getTelephoneCreate() {
-		return telephoneCreate;
-	}
-
-	public void setTelephoneCreate(String telephoneCreate) {
-		this.telephoneCreate = telephoneCreate;
-	}
-
-	public String getDentistCreate() {
-		return dentistCreate;
-	}
-
-	public void setDentistCreate(String dentistCreate) {
-		this.dentistCreate = dentistCreate;
-	}
-
-	public String getDateStartCreate() {
-		return dateStartCreate;
-	}
-
-	public void setDateStartCreate(String dateStartCreate) {
-		this.dateStartCreate = dateStartCreate;
-	}
-
-	public String getStatusCreate() {
-		return statusCreate;
-	}
-
-	public void setStatusCreate(String statusCreate) {
-		this.statusCreate = statusCreate;
-	}
-
 	public String getSerial() {
 		return serial;
 	}
@@ -170,20 +232,20 @@ public class CustomerFiler extends BaseFilter {
 		this.serial = serial;
 	}
 
-	public String getName() {
-		return name;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
-	public String getTelephone() {
-		return telephone;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getDentist() {
@@ -194,20 +256,76 @@ public class CustomerFiler extends BaseFilter {
 		this.dentist = dentist;
 	}
 
-	public String getDateStartFrom() {
-		return dateStartFrom;
+	public String getArrivalDateFrom() {
+		return arrivalDateFrom;
 	}
 
-	public void setDateStartFrom(String dateStartFrom) {
-		this.dateStartFrom = dateStartFrom;
+	public void setArrivalDateFrom(String arrivalDateFrom) {
+		this.arrivalDateFrom = arrivalDateFrom;
 	}
 
-	public String getDateStartTo() {
-		return dateStartTo;
+	public String getArrivalDateTo() {
+		return arrivalDateTo;
 	}
 
-	public void setDateStartTo(String dateStartTo) {
-		this.dateStartTo = dateStartTo;
+	public void setArrivalDateTo(String arrivalDateTo) {
+		this.arrivalDateTo = arrivalDateTo;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public String getFullNameCreate() {
+		return fullNameCreate;
+	}
+
+	public void setFullNameCreate(String fullNameCreate) {
+		this.fullNameCreate = fullNameCreate;
+	}
+
+	public String getPhoneCreate() {
+		return phoneCreate;
+	}
+
+	public void setPhoneCreate(String phoneCreate) {
+		this.phoneCreate = phoneCreate;
+	}
+
+	public String getDentistCreate() {
+		return dentistCreate;
+	}
+
+	public void setDentistCreate(String dentistCreate) {
+		this.dentistCreate = dentistCreate;
+	}
+
+	public String getArrivalDateCreate() {
+		return arrivalDateCreate;
+	}
+
+	public void setArrivalDateCreate(String arrivalDateCreate) {
+		this.arrivalDateCreate = arrivalDateCreate;
+	}
+
+	public String getStatusCreate() {
+		return statusCreate;
+	}
+
+	public void setStatusCreate(String statusCreate) {
+		this.statusCreate = statusCreate;
+	}
+
+	public String getBirthdayCreate() {
+		return birthdayCreate;
+	}
+
+	public void setBirthdayCreate(String birthdayCreate) {
+		this.birthdayCreate = birthdayCreate;
 	}
 
 	public String getStatus() {

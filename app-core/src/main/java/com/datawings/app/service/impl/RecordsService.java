@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.datawings.app.dao.IRecordsDao;
 import com.datawings.app.filter.CustomerFiler;
 import com.datawings.app.filter.RecordsFilter;
-import com.datawings.app.model.Customer;
 import com.datawings.app.model.Records;
 import com.datawings.app.model.SysUser;
 import com.datawings.app.service.IRecordsService;
@@ -83,11 +82,6 @@ public class RecordsService implements IRecordsService{
 	//@Transactional
 	public List<Records> getScheduleDashboard(RecordsFilter filter, SysUser sysUser, Integer pageNo) {
 		return dao.getScheduleDashboard(filter, sysUser, pageNo);
-	}
-
-	@Transactional
-	public void updateName(Customer customer) {
-		dao.updateName(customer);
 	}
 
 	@Override

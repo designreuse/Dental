@@ -4,8 +4,8 @@ import java.util.Date;
 
 import com.datawings.app.common.DateUtil;
 
-public class RecordsFilter extends BaseFilter{
-	
+public class RecordsFilter extends BaseFilter {
+
 	private String serial;
 	private String name;
 	private String telephone;
@@ -22,10 +22,12 @@ public class RecordsFilter extends BaseFilter{
 	private String sale;
 	private String payment;
 	private String branch;
-	
-	private String serialEdit;
+
+	private Integer customerId;
+	private Integer recordId;
+
 	private String branchEdit;
-	private Integer recordIdEdit;
+
 	private String dateExcuteEdit;
 	private String teethEdit;
 	private String contentEdit;
@@ -35,7 +37,6 @@ public class RecordsFilter extends BaseFilter{
 	private String grossEdit;
 	private String saleEdit;
 	private String paymentEdit;
-	
 
 	public RecordsFilter() {
 		init();
@@ -47,14 +48,6 @@ public class RecordsFilter extends BaseFilter{
 		this.dateExcute = DateUtil.date2String(new Date(), "dd/MM/yyyy");
 	}
 
-	public Integer getRecordIdEdit() {
-		return recordIdEdit;
-	}
-
-	public String getSerialEdit() {
-		return serialEdit;
-	}
-
 	public String getBranchEdit() {
 		return branchEdit;
 	}
@@ -63,12 +56,20 @@ public class RecordsFilter extends BaseFilter{
 		this.branchEdit = branchEdit;
 	}
 
-	public void setSerialEdit(String serialEdit) {
-		this.serialEdit = serialEdit;
+	public Integer getCustomerId() {
+		return customerId;
 	}
 
-	public void setRecordIdEdit(Integer recordIdEdit) {
-		this.recordIdEdit = recordIdEdit;
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+	public Integer getRecordId() {
+		return recordId;
+	}
+
+	public void setRecordId(Integer recordId) {
+		this.recordId = recordId;
 	}
 
 	public String getDateExcuteEdit() {

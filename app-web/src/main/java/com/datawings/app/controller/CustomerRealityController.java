@@ -46,8 +46,8 @@ public class CustomerRealityController {
 		String tmp = DateUtil.date2String(new Date(), "MM/yyyy");
 		Date start = DateUtil.string2Date(tmp, "MM/yyyy");
 		Date end  = DateUtil.endMonth(start);
-		filter.setDateStartFrom(DateUtil.date2String(start, "dd/MM/yyyy"));
-		filter.setDateStartTo(DateUtil.date2String(end, "dd/MM/yyyy"));
+		filter.setArrivalDateFrom(DateUtil.date2String(start, "dd/MM/yyyy"));
+		filter.setArrivalDateTo(DateUtil.date2String(end, "dd/MM/yyyy"));
 		
 		return filter;
 	}

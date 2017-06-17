@@ -88,11 +88,11 @@
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.name" text="!"/></label>
-					<form:input path="name" class="form-control textfield"/>
+					<form:input path="fullName" class="form-control textfield"/>
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.telephone" text="!"/></label>
-					<form:input path="telephone" class="form-control textfield"/>
+					<form:input path="phone" class="form-control textfield"/>
 				</div>
 			</div>
 		</div>
@@ -103,14 +103,14 @@
 					<label><spring:message code="customer.date.start" text="!"/></label>
 					<div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <form:input path="dateStartFrom" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+                        <form:input path="arrivalDateFrom" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
 					</div>
 				</div>
 				<div class="col-sm-4">
 					<label>&nbsp;</label>
 					<div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <form:input path="dateStartTo" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+                        <form:input path="arrivalDateTo" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
 					</div>
 				</div>
 				<div class="col-sm-4">

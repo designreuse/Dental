@@ -24,7 +24,7 @@ public class RecordsValidator {
 			erroCode = 1;
 		}
 		
-		if (StringUtils.isBlank(filter.getTeeth())) {
+		/*if (StringUtils.isBlank(filter.getTeeth())) {
 			errors.rejectValue("teeth", "message.empty", "!");
 			erroCode = 1;
 		}
@@ -56,7 +56,7 @@ public class RecordsValidator {
 		} else if (StringUtils.isNotBlank(filter.getPayment()) && !IntegerUtil.isInteger(StringUtilz.replaceMoney(filter.getPayment()))) {
 			errors.rejectValue("payment", "message.valid", "!");
 			erroCode = 1;
-		}
+		}*/
 		
 		if (StringUtils.isNotBlank(filter.getDateNext()) && !DateUtil.checkDateAsString(filter.getDateNext(), "dd/MM/yyyy")) {
 			errors.rejectValue("dateNext", "message.valid", "!");

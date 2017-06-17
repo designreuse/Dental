@@ -157,6 +157,8 @@
     <script src="<c:url value="/static/inspinia/js/plugins/dataTables/dataTables.bootstrap.js"/>"></script>
     <script src="<c:url value="/static/inspinia/js/plugins/dataTables/dataTables.responsive.js"/>"></script>
 	<script src="<c:url value="/static/inspinia/js/plugins/dataTables/dataTables.tableTools.min.js"/>"></script>
+	
+	<script src="<c:url value="/static/inspinia/js/jquery.mask.js"/>"></script>
     
    	<script type="text/javascript">
    		$(document).ready(function() {

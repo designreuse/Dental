@@ -8,18 +8,18 @@
 
 <div class="row">
 	<div class="col-lg-5">
-		<label class="label label-success" style="font-size:14px">${customerFilter.rowCount} <spring:message code="message.result" text="!Result(s)"/></label>
+		<label class="label label-success" style="font-size:14px">${marketingFilter.rowCount} <spring:message code="message.result" text="!Result(s)"/></label>
 	</div>
 	<div class="col-lg-7 text-right">
-		<c:if test="${customerFilter.totalPage > 1}">
+		<c:if test="${marketingFilter.totalPage > 1}">
 			<div class="form-group">
 				<label class="control-label" style="font-weight: 500; font-size: 14px;"><spring:message code="button.page" text="!page"></spring:message>&nbsp;</label>
-				<input id="PageNoGo" type="text" style="width:50px; height:30px; vertical-align:middle;border-radius:3px; border: 1px solid #e5e6e7; font-size:14px;" value="${customerFilter.page + 1}">
-		        <label class="control-label" style="font-weight: 500; font-size:15px"> /${customerFilter.totalPage}&nbsp;</label>
+				<input id="PageNoGo" type="text" style="width:50px; height:30px; vertical-align:middle;border-radius:3px; border: 1px solid #e5e6e7; font-size:14px;" value="${marketingFilter.page + 1}">
+		        <label class="control-label" style="font-weight: 500; font-size:15px"> /${marketingFilter.totalPage}&nbsp;</label>
 		        <button id="go" class="btn btn-success btn-sm text-uppercase" type="button">&nbsp;<spring:message code="button.go" text="!Go"/>&nbsp;</button>
 		        <div class="btn-group">
 			        <c:choose>
-				        <c:when test="${customerFilter.page > 0}">
+				        <c:when test="${marketingFilter.page > 0}">
 				        	<a id="prev" class="btn btn-sm btn-white text-uppercase" href="--pageNo"><spring:message code="button.prev" text="!Prev."/></a>
 				        </c:when>
 				        <c:otherwise>
@@ -28,7 +28,7 @@
 			        </c:choose>
 		                        
 		                <c:choose>
-				            <c:when test="${customerFilter.page < (customerFilter.totalPage - 1)}">
+				            <c:when test="${marketingFilter.page < (marketingFilter.totalPage - 1)}">
 				            	<a id="next" class="btn btn-sm btn-white text-uppercase" href="++pageNo"><spring:message code="button.next" text="!Next"/></a>
 				                </c:when>
 				                <c:otherwise>
@@ -49,47 +49,41 @@
 				<tr>
 					<th class="text-center">#</th>
 					<th class="text-center"></th>
-					<th><spring:message code="customer.id" text="!"/></th>
 					<th><spring:message code="customer.name" text="!"/></th>
-					<th><spring:message code="customer.address" text="!"/></th>
 					<th><spring:message code="customer.telephone" text="!"/></th>
+					<th><spring:message code="customer.address" text="!"/></th>
 					<th><spring:message code="customer.date.start" text="!"/></th>
-					<th class="text-right"><spring:message code="customer.amount" text="!"/></th>
-					<th class="text-right"><spring:message code="customer.sale" text="!"/></th>
-					<th class="text-right"><spring:message code="customer.payment" text="!"/></th>
-					<th class="text-right"><spring:message code="customer.rest" text="!"/></th>
+					<th><spring:message code="customer.content" text="!"/></th>
+					<th><spring:message code="customer.note" text="!"/></th>
 					<th><spring:message code="customer.status" text="!"/></th>
-					
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${customers}" var="elm" varStatus="stt">
+				<c:forEach items="${marketings}" var="elm" varStatus="stt">
 					<tr>
-						<c:url value="/secure/records"  var="linkCustomerDetail">
-							<c:param name="id" value="${elm.customerId}"/>
-						</c:url>
-						
 						<td class="text-center">${row + stt.index + 1}</td>
 						<td class="text-center text-nowrap">
-							<a onclick="ConformDelete('${elm.customerId}', '${elm.fullName}')" title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i></a>
+							<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
+								<a onclick='doCustomer("${elm.marketingId}")' data-toggle="modal" data-target="#formCustomer"
+									title="<spring:message code="button.go" text="!"/>"><i class="fa fa-2x fa-user-plus"></i>
+								</a>
+							</sec:authorize>
+							<sec:authorize access="hasAnyRole('MARKETING','ADMIN')">
+								<a onclick='doEdit("${elm.marketingId}")' data-toggle="modal" data-target="#formEdit"
+									title="<spring:message code="message.edit" text="!"/>"><i class="fa fa-2x fa-edit"></i>
+								</a>
+								<a onclick="ConformDelete('${elm.marketingId}', '${elm.fullName}')" 
+									title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i>
+								</a>
+							</sec:authorize>
 						</td>
-						<td><a href="${linkCustomerDetail }">${elm.serial}</a></td>
-						<td><a href="${linkCustomerDetail }">${elm.fullName}</a></td>
-						<td>${elm.address}</td>
+						<td>${elm.fullName}</td>
 						<td>${elm.phone}</td>
+						<td>${elm.address}</td>
 						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.arrivalDate}" /></td>
-						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross}"/></td>
-						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.sale}"/></td>
-						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.payment}"/></td>
-						<c:choose>
-							<c:when test="${elm.gross - elm.sale - elm.payment < 0 }">
-								<td class="text-right text-danger"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross - elm.sale - elm.payment}"/></td>
-							</c:when>
-							<c:otherwise>
-								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross - elm.sale - elm.payment}"/></td>
-							</c:otherwise>
-						</c:choose>
-						<td><spring:message code="customer.status.${elm.status}" text="!"/></td>
+						<td>${elm.content}</td>
+						<td>${elm.note}</td>
+						<td><spring:message code="marketing.status_${elm.status}" text="!"/></td>
 					</tr>
 				</c:forEach>	
 			</tbody>
@@ -99,7 +93,7 @@
 
 <script type="text/javascript">
 
-	var pageCount = ${customerFilter.totalPage};
+	var pageCount = ${marketingFilter.totalPage};
 	
 	$(function () {
 		$("#prev").click(function () {
@@ -137,15 +131,4 @@
  			"scrollX": true
  	   	}); 	 	
 	});
-		
-	function fnLoadPage() {
-		$.ajax({
-			url : "<spring:url value='/secure/customer/loadpage'/>",
-		    data: { pageNo: pageNo },
-		    cache : false,
-		    success: function (response) {
-		        $("#_results").html(response);
-		    }
-		});
-	};
 </script>

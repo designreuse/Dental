@@ -47,10 +47,8 @@ public class CustomerLoader {
 		
 		int count = 0;
 		for (Customer elm : loaderCustomer) {
-			recordsService.updateName(elm);
-			
+			//recordsService.updateName(elm);
 			count++;
-			System.out.println("--------" + count + "---------- " + elm.getId().getSerial());
 		}
 	}
 

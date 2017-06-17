@@ -25,21 +25,21 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 		
 		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("id.branch", sysUser.getBranch()));
+			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("id.branch", filter.getBranch()));
+				criteria.add(Restrictions.eq("branch", filter.getBranch()));
 			}
 		}
-		
 		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("id.serial", filter.getSerial().trim()));
+			criteria.add(Restrictions.eq("serial", filter.getSerial().trim()));
 		}
-		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("name", filter.getName().trim().toUpperCase(), MatchMode.ANYWHERE));
+		if(StringUtils.isNotBlank(filter.getFullName())){
+			criteria.add(Restrictions.or(Restrictions.like("fullName", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE), 
+					Restrictions.like("fullNameEn", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE)));
 		}
-		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("telephone", filter.getTelephone().trim()));
+		if(StringUtils.isNotBlank(filter.getPhone())){
+			criteria.add(Restrictions.eq("phone", filter.getPhone().trim()));
 		}
 		if(StringUtils.isNotBlank(filter.getStatus())){
 			criteria.add(Restrictions.eq("status", filter.getStatus().trim()));
@@ -47,8 +47,10 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 		if(StringUtils.isNotBlank(filter.getType())){
 			criteria.add(Restrictions.eq("type", filter.getType().trim()));
 		}
-		
-		SqlUtil.buildDatesBetweenLikeCrit("date_start", filter.getDateStartFrom(), filter.getDateStartTo(), criteria);
+		if(StringUtils.isNotBlank(filter.getSource())){
+			criteria.add(Restrictions.eq("source", filter.getSource().trim()));
+		}
+		SqlUtil.buildDatesBetweenLikeCrit("arrival_date", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), criteria);
 		
 		return ((Number) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
 	}
@@ -57,20 +59,21 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 	public List<Customer> getCustomers(CustomerFiler filter, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("id.branch", sysUser.getBranch()));
+			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("id.branch", filter.getBranch()));
+				criteria.add(Restrictions.eq("branch", filter.getBranch()));
 			}
 		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("id.serial", filter.getSerial().trim()));
+			criteria.add(Restrictions.eq("serial", filter.getSerial().trim()));
 		}
-		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("name", filter.getName().trim().toUpperCase(), MatchMode.ANYWHERE));
+		if(StringUtils.isNotBlank(filter.getFullName())){
+			criteria.add(Restrictions.or(Restrictions.like("fullName", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE), 
+					Restrictions.like("fullNameEn", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE)));
 		}
-		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("telephone", filter.getTelephone().trim()));
+		if(StringUtils.isNotBlank(filter.getPhone())){
+			criteria.add(Restrictions.eq("phone", filter.getPhone().trim()));
 		}
 		if(StringUtils.isNotBlank(filter.getStatus())){
 			criteria.add(Restrictions.eq("status", filter.getStatus().trim()));
@@ -78,10 +81,12 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 		if(StringUtils.isNotBlank(filter.getType())){
 			criteria.add(Restrictions.eq("type", filter.getType().trim()));
 		}
-		SqlUtil.buildDatesBetweenLikeCrit("date_start", filter.getDateStartFrom(), filter.getDateStartTo(), criteria);
+		if(StringUtils.isNotBlank(filter.getSource())){
+			criteria.add(Restrictions.eq("source", filter.getSource().trim()));
+		}
+		SqlUtil.buildDatesBetweenLikeCrit("arrival_date", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), criteria);
 		
-		criteria.addOrder(Order.desc("dateStart"));
-		criteria.addOrder(Order.desc("id.serial"));
+		criteria.addOrder(Order.desc("serial"));
 		criteria.setMaxResults(filter.getPageSize());
 		criteria.setFirstResult(filter.getOffset());
 		return  criteria.list();
@@ -100,11 +105,23 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Customer> getCustomer(String branch) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		criteria.add(Restrictions.eq("id.branch", branch));
+		criteria.add(Restrictions.eq("branch", branch));
 		
-		criteria.addOrder(Order.desc("dateStart"));
-		criteria.addOrder(Order.desc("id.serial"));
+		criteria.addOrder(Order.desc("serial"));
 		return  criteria.list();
+	}
+
+	@SuppressWarnings("deprecation")
+	public Integer maxSerial(SysUser sysUser) {
+		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+		criteria.setProjection(Projections.max("serial"));
+		criteria.add(Restrictions.eq("branch", sysUser.getBranch().trim()));
+		
+		Integer rs = (Integer) criteria.uniqueResult();
+		if(rs == null){
+			return 0;
+		}
+		return rs;
 	}
 
 }

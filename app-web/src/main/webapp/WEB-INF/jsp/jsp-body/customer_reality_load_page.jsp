@@ -48,9 +48,9 @@
 			<thead>
 				<tr>
 					<th class="text-center">#</th>
-					<th><spring:message code="customer.date.start" text="!"/></th>
-					<th class="text-center"><spring:message code="customer.id" text="!"/></th>
+					<th><spring:message code="customer.id" text="!"/></th>
 					<th><spring:message code="customer.name" text="!"/></th>
+					<th><spring:message code="customer.date.start" text="!"/></th>
 					<th><spring:message code="customer.telephone" text="!"/></th>
 					<th><spring:message code="records.content" text="!"/></th>
 					<th><spring:message code="customer.dentist" text="!"/></th>
@@ -61,12 +61,12 @@
 				<c:forEach items="${records}" var="elm" varStatus="stt">
 					<tr>
 						<td class="text-center">${row + stt.index + 1}</td>
-						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateExcute}" /></td>
-						<td class="text-center">
+						<td>
 							<a onclick="doView('VIEW', '${elm.serial}', '${elm.branch}')">${elm.serial }</a>
 						</td>
-						<td><a onclick="doView('VIEW', '${elm.serial}', '${elm.branch}')">${elm.customer.name}</a></td>
-						<td>${elm.customer.telephone}</td>
+						<td><a onclick="doView('VIEW', '${elm.serial}', '${elm.branch}')">${elm.customer.fullName}</a></td>
+						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateExcute}" /></td>
+						<td>${elm.customer.phone}</td>
 						<td>${elm.content}</td>
 						<td>${elm.dentist}</td>
 						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.payment}"/></td>

@@ -25,11 +25,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.datawings.app.common.DateUtil;
+import com.datawings.app.common.StringUtilz;
 import com.datawings.app.filter.CustomerFiler;
 import com.datawings.app.filter.ValidationError;
 import com.datawings.app.model.Branches;
 import com.datawings.app.model.Customer;
-import com.datawings.app.model.CustomerId;
 import com.datawings.app.model.Dentist;
 import com.datawings.app.model.SysUser;
 import com.datawings.app.service.IBranchesService;
@@ -59,7 +59,7 @@ public class CustomerController {
 	@ModelAttribute("customerFilter")
 	public CustomerFiler customerFilter() {
 		CustomerFiler filter = new CustomerFiler();
-		filter.setDateStartCreate(DateUtil.date2String(new Date(), "dd/MM/yyyy"));
+		filter.setArrivalDateCreate(DateUtil.date2String(new Date(), "dd/MM/yyyy"));
 		return filter;
 	}
 	
@@ -106,43 +106,32 @@ public class CustomerController {
 		
 		if(StringUtils.equals(action, "CREATE")){
 			Customer customer = new Customer();
-			customer.getId().setSerial(filter.getSerialCreate());
-			customer.setName(filter.getNameCreate().trim().toUpperCase());
+			customer.setSerial(customerService.maxSerial(sysUser));
+			customer.setFullName(filter.getFullNameCreate().trim().toUpperCase());
+			customer.setFullNameEn(StringUtilz.unAccent(filter.getFullNameCreate().trim()).toUpperCase());
 			customer.setSex(filter.getSexCreate());
 			customer.setType(filter.getTypeCreate());
-			customer.setDateBirth(DateUtil.string2Date(filter.getDateBirthCreate(), "dd/MM/yyyy"));
-			customer.setTelephone(filter.getTelephoneCreate());
+			customer.setBirthday(DateUtil.string2Date(filter.getBirthdayCreate(), "dd/MM/yyyy"));
+			customer.setPhone(filter.getPhoneCreate());
 			customer.setEmail(filter.getEmailCreate());
 			customer.setAddress(filter.getAddressCreate().toUpperCase());
-			customer.setDateStart(DateUtil.string2Date(filter.getDateStartCreate(), "dd/MM/yyyy"));
+			customer.setArrivalDate(DateUtil.string2Date(filter.getArrivalDateCreate(), "dd/MM/yyyy"));
 			customer.setCause(filter.getCauseCreate().toUpperCase());
 			customer.setDentist(filter.getDentistCreate());
 			customer.setStatus(filter.getStatusCreate());
-			customer.getId().setBranch(sysUser.getBranch());
+			customer.setBranch(sysUser.getBranch());
 			customer.setNote(filter.getNoteCreate().trim());
 			customer.setCreatedBy(sysUser.getUsername());
 			customer.setCreatedDate(new Date());
 			
-			CustomerId customerId = new CustomerId();
-			customerId.setSerial(filter.getSerialCreate());
-			customerId.setBranch(sysUser.getBranch());
-			Customer customerCheck = customerService.find(customerId);
-			
-			if(customerCheck == null){
-				customerService.save(customer);
-			}
-			
+			customerService.merge(customer);
 			filter.init();
-			return "redirect:/secure/records?id=" + customer.getId().getSerial() + "&agency=" + customer.getId().getBranch();
+			
+			return "redirect:/secure/records?id=" + customer.getCustomerId();
 			
 		}else if(StringUtils.equals(action, "DELETE")){
-			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			String branch = ServletRequestUtils.getStringParameter(request, "agency", "");
-			CustomerId customerId = new CustomerId();
-			customerId.setSerial(id);
-			customerId.setBranch(branch);
-			
-			customerService.deleteById(customerId);
+			Integer id = ServletRequestUtils.getIntParameter(request, "id", 0);
+			customerService.deleteById(id);
 			
 		}else if(StringUtils.equals(action, "GO")){
 			filter.setPage(0);
@@ -157,13 +146,8 @@ public class CustomerController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
-		String id = ServletRequestUtils.getStringParameter(request, "id", "");
-		String branch = ServletRequestUtils.getStringParameter(request, "agency", "");
-		
-		CustomerId customerId = new CustomerId();
-		customerId.setSerial(id);
-		customerId.setBranch(branch);
-		Customer customer = customerService.find(customerId);
+		Integer id = ServletRequestUtils.getIntParameter(request, "id", 0);
+		Customer customer = customerService.find(id);
 		if(customer == null){
 			return "redirect:/secure/customer";
 		}
@@ -183,23 +167,19 @@ public class CustomerController {
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
-		String id = ServletRequestUtils.getStringParameter(request, "id", "");
-		String branch = ServletRequestUtils.getStringParameter(request, "agency", "");
-		
-		CustomerId customerId = new CustomerId();
-		customerId.setSerial(id);
-		customerId.setBranch(branch);
+		Integer id = ServletRequestUtils.getIntParameter(request, "id", 0);
 		
 		if(StringUtils.equals(action, "GO")){
-			Customer customer = customerService.find(customerId);
-			customer.setName(filter.getNameCreate().trim().toUpperCase());
+			Customer customer = customerService.find(id);
+			customer.setFullName(filter.getFullNameCreate().trim().toUpperCase());
+			customer.setFullNameEn(StringUtilz.unAccent(filter.getFullNameCreate().trim()).toUpperCase());
 			customer.setSex(filter.getSexCreate());
 			customer.setType(filter.getTypeCreate());
-			customer.setDateBirth(DateUtil.string2Date(filter.getDateBirthCreate(), "dd/MM/yyyy"));
-			customer.setTelephone(filter.getTelephoneCreate());
+			customer.setBirthday(DateUtil.string2Date(filter.getBirthdayCreate(), "dd/MM/yyyy"));
+			customer.setPhone(filter.getPhoneCreate());
 			customer.setEmail(filter.getEmailCreate());
 			customer.setAddress(filter.getAddressCreate().toUpperCase());
-			customer.setDateStart(DateUtil.string2Date(filter.getDateStartCreate(), "dd/MM/yyyy"));
+			customer.setArrivalDate(DateUtil.string2Date(filter.getArrivalDateCreate(), "dd/MM/yyyy"));
 			customer.setCause(filter.getCauseCreate().toUpperCase());
 			customer.setDentist(filter.getDentistCreate());
 			customer.setStatus(filter.getStatusCreate());
@@ -223,18 +203,16 @@ public class CustomerController {
 			}
 		}
 		
-		return "redirect:/secure/customer/detail?id=" + id + "&agency=" + branch;
+		return "redirect:/secure/customer/detail?id=" + id;
 	}
 	
 	@RequestMapping(value = "/secure/customer/errorCreate.json", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> doValidatorAgent(@ModelAttribute("customerFilter") CustomerFiler filter, BindingResult result, Model model, Locale locale){
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
 		HashMap<String, Object> rs = new HashMap<String, Object>();
 		int errCode = 0;
-		errCode = customerValidator.checkCustomerAdd(filter, sysUser, result);
+		errCode = customerValidator.checkCustomerAdd(filter, result);
 		if(errCode > 0){
 			rs.put("errCodeCreate", errCode);
 			List<ValidationError> lstErr = new ArrayList<ValidationError>();

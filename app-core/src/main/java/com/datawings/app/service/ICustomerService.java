@@ -30,5 +30,7 @@ public interface ICustomerService {
 	public Customer findByUser(String id, SysUser sysUser);
 
 	public List<Customer> getCustomer(String branch);
+	
+	public Integer maxSerial(SysUser sysUser);
 
 }

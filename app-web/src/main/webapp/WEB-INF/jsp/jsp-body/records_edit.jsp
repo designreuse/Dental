@@ -41,7 +41,7 @@
 	    });
 	});
 
-	function doEdit(){
+	function doEdit(action){
 		$.ajax({
 			url: "<spring:url value='/secure/records/errorEdit.json'/>",
 	        data: $('#form_modify').serialize(), 
@@ -61,6 +61,7 @@
                			$('#err_'+result.lstErr[i].propertyName).html(result.lstErr[i].message); 
               	 	}
 	        	}else{
+	        		document.forms[1].elements['action'].value = action;
 	        		$('#form_modify').submit();
 	        	}
 	        },
@@ -70,12 +71,11 @@
 </script>
 
 <form:form name="form_modify" id="form_modify" method="post" commandName="recordsFilter" action="records">
-	<input name="action" type="hidden" value="MODIFY">
+	<input name="action" type="hidden">
 	<c:set var="formatPattern" value="#,##0"/>
 	
-	<form:hidden path="recordIdEdit" value="${records.recordId }"/>
-	<form:hidden path="serialEdit" value="${records.serial }"/>
-	<form:hidden path="branchEdit" value="${records.branch }"/>
+	<form:hidden path="recordId" value="${records.recordId }"/>
+	<form:hidden path="customerId" value="${records.customerId }"/>
 	
    	<div class="form-group">
 		<div class="row">
@@ -89,9 +89,12 @@
 				<label id="err_dateExcuteEdit" class="text-danger"></label>
 			</div>
 			<div class="col-sm-6">
-				<label><spring:message code="records.teeth" text="!"/></label> <label class="text-danger">*</label>
-				<form:input path="teethEdit" value="${records.teeth}" type="text" cssClass="form-control textfield"/>
-					<label id="err_teethEdit" class="text-danger"></label>
+				<label><spring:message code="records.dentist" text="!"/></label>
+				<form:select path="dentistEdit" class="chosen-select" cssStyle="width:100%">
+					<c:forEach items="${dentists}" var="elm">
+						<option value="${elm.name }" <c:if test="${records.dentist == elm.name}">selected="selected"</c:if>>${elm.name }</option>
+					</c:forEach>
+				</form:select>
 			</div>
 		</div>
 	</div>
@@ -99,17 +102,14 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-sm-6">
+				<label><spring:message code="records.teeth" text="!"/></label> <label class="text-danger">*</label>
+				<form:input path="teethEdit" value="${records.teeth}" type="text" cssClass="form-control textfield"/>
+					<label id="err_teethEdit" class="text-danger"></label>
+			</div>
+			<div class="col-sm-6">
 				<label><spring:message code="records.content" text="!"/></label> <label class="text-danger">*</label>
 				<form:input path="contentEdit" value="${records.content}" type="text" cssClass="form-control textfield text-uppercase"/>
 				<label id="err_contentEdit" class="text-danger"></label>
-			</div>
-			<div class="col-sm-6">
-				<label><spring:message code="records.dentist" text="!"/></label>
-				<form:select path="dentistEdit" class="chosen-select" cssStyle="width:100%">
-					<c:forEach items="${dentists}" var="elm">
-						<option value="${elm.name }" <c:if test="${records.dentist == elm.name}">selected="selected"</c:if>>${elm.name }</option>
-					</c:forEach>
-				</form:select>
 			</div>
 		</div>
 	</div>
@@ -161,8 +161,11 @@
 				<button type="button" class="btn btn-w-m btn-default text-uppercase" data-dismiss="modal">
 					<i class="fa fa-close"></i> <spring:message code="button.close" text="!"/>
 				</button>
-				<button type="button" onclick="doEdit();" class="btn btn-w-m btn-success text-uppercase">
+				<button type="button" onclick="doEdit('MODIFY');" class="btn btn-w-m btn-success text-uppercase">
 					<i class="fa fa-save"></i> <spring:message code="button.save" text="!"/>
+				</button>
+				<button type="button" onclick="doEdit('PRINT');" class="btn btn-w-m btn-success text-uppercase">
+					<i class="fa fa-print  "></i> <spring:message code="button.save.printer" text="!"/>
 				</button>
 			</div>
 		</div>

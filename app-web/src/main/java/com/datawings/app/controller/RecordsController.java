@@ -1,10 +1,13 @@
 package com.datawings.app.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,21 +27,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.datawings.app.common.DateUtil;
-import com.datawings.app.common.IntegerUtil;
-import com.datawings.app.common.StringUtilz;
 import com.datawings.app.filter.RecordsFilter;
 import com.datawings.app.filter.ValidationError;
+import com.datawings.app.manager.CustomerManager;
+import com.datawings.app.model.Branches;
 import com.datawings.app.model.Customer;
-import com.datawings.app.model.CustomerId;
 import com.datawings.app.model.Dentist;
 import com.datawings.app.model.Records;
 import com.datawings.app.model.SysUser;
+import com.datawings.app.report.InvoicePdfA;
+import com.datawings.app.service.IBranchesService;
 import com.datawings.app.service.ICustomerService;
 import com.datawings.app.service.IDentistService;
 import com.datawings.app.service.IRecordsService;
 import com.datawings.app.validator.RecordsValidator;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Controller
 @SessionAttributes({ "recordsFilter" })
@@ -59,6 +68,12 @@ public class RecordsController {
 	@Autowired
 	private RecordsValidator recordsValidator ;
 	
+	@Autowired
+	private CustomerManager customerManager;
+	
+	@Autowired
+	private IBranchesService branchesService;
+	
 	@ModelAttribute("recordsFilter")
 	public RecordsFilter userFilter() {
 		RecordsFilter filter = new RecordsFilter();
@@ -70,12 +85,8 @@ public class RecordsController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
-		String id = ServletRequestUtils.getStringParameter(request, "id", "");
-		String branch = ServletRequestUtils.getStringParameter(request, "agency", "");
-		CustomerId customerId = new CustomerId();
-		customerId.setSerial(id);
-		customerId.setBranch(branch);
-		Customer customer = customerService.find(customerId);
+		Integer id = ServletRequestUtils.getIntParameter(request, "id", 0);
+		Customer customer = customerService.find(id);
 		if(customer == null){
 			return "redirect:/secure/customer";
 		}
@@ -92,37 +103,32 @@ public class RecordsController {
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
-		String id = ServletRequestUtils.getStringParameter(request, "id", "");
-		String branch = ServletRequestUtils.getStringParameter(request, "agency", "");
-		
-		CustomerId customerId = new CustomerId();
-		customerId.setSerial(id);
-		customerId.setBranch(branch);
+		Integer id = ServletRequestUtils.getIntParameter(request, "id", 0);
 
 		if(StringUtils.equals(action, "CREATE")){
 			
-			Customer customer = customerService.find(customerId);
+			Customer customer = customerService.find(id);
 			
 			Records records = new Records();
+			records.setCustomerId(customer.getCustomerId());
+			records.setSerial(customer.getSerial());
+			records.setBranch(customer.getBranch());
 			records.setDateExcute(DateUtil.string2Date(filter.getDateExcute(), "dd/MM/yyyy"));
-			records.setTeeth(filter.getTeeth());
-			records.setContent(filter.getContent().toUpperCase());
 			records.setDentist(filter.getDentist());
+			records.setDateNext(DateUtil.string2Date(filter.getDateNext(), "dd/MM/yyyy"));
+			/*records.setTeeth(filter.getTeeth());
+			records.setContent(filter.getContent().toUpperCase());
 			records.setGross(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getGross())));
 			records.setSale(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getSale())));
 			records.setPayment(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getPayment())));
 			records.setDateNext(DateUtil.string2Date(filter.getDateNext(), "dd/MM/yyyy"));
-			records.setContentNext(filter.getContentNext().toUpperCase());
+			records.setContentNext(filter.getContentNext().toUpperCase());*/
 			records.setNote(filter.getNote());
+			records.setStatus("W");
 			records.setCreatedBy(sysUser.getUsername());
 			records.setCreatedDate(new Date());
 			
-			records.setSerial(customer.getId().getSerial());
-			records.setBranch(customer.getId().getBranch());
-			records.setCustomer(customer);
-			customer.getRecords().add(records);
-			
-			if(StringUtils.isBlank(customer.getContent())){
+			/*if(StringUtils.isBlank(customer.getContent())){
 				customer.setContent(records.getContent());
 			}else {
 				customer.setContent(customer.getContent() + " + " + records.getContent());
@@ -130,15 +136,15 @@ public class RecordsController {
 			
 			customer.setGross(customer.getGross() + records.getGross());
 			customer.setSale(customer.getSale() + records.getSale());
-			customer.setPayment(customer.getPayment() + records.getPayment());
+			customer.setPayment(customer.getPayment() + records.getPayment());*/
 			
-			customerService.merge(customer);
+			recordsService.merge(records);
 			filter.init();
-			return "redirect:/secure/records?id=" + id + "&agency=" + branch;
+			return "redirect:/secure/records?id=" + id;
 			
 		} else if(StringUtils.equals(action, "DELETE")){
 			Integer idRecords = ServletRequestUtils.getIntParameter(request, "idRecords", 0);
-			Customer customer = customerService.find(customerId);
+			Customer customer = customerService.find(id);
 			Records records = recordsService.find(idRecords);
 			
 			recordsService.deleteById(idRecords);
@@ -152,7 +158,7 @@ public class RecordsController {
 			
 			customerService.merge(customer);
 			
-			return "redirect:/secure/records?id=" + id + "&agency=" + branch;
+			return "redirect:/secure/records?id=" + id;
 			
 		}else if(StringUtils.equals(action, "BACK")){
 			String fromPage = (String) request.getSession().getAttribute("FROM_PAGE");
@@ -167,38 +173,60 @@ public class RecordsController {
 				return "redirect:/secure/customer/reality";
 			}
 		}else if(StringUtils.equals(action, "MODIFY")){
-			CustomerId customerIdx = new CustomerId();
-			customerIdx.setSerial(filter.getSerialEdit());
-			customerIdx.setBranch(filter.getBranchEdit());
+			Customer customer = customerService.find(filter.getCustomerId());
+			Records records = recordsService.find(filter.getRecordId());
+			customerManager.modifyRecord(customer, records, filter, sysUser);
 			
-			Customer customer = customerService.find(customerIdx);
-			Records records = recordsService.find(filter.getRecordIdEdit());
+			return "redirect:/secure/records?id=" + filter.getCustomerId();
+		}else if(StringUtils.equals(action, "PRINT")){
+			Customer customer = customerService.find(filter.getCustomerId());
+			Records records = recordsService.find(filter.getRecordId());
+			customerManager.modifyRecord(customer, records, filter, sysUser);
 			
-			customer.setGross(customer.getGross() + IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getGrossEdit())) - records.getGross());
-			customer.setSale(customer.getSale() + IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getSaleEdit())) - records.getSale());
-			customer.setPayment(customer.getPayment() + IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getPaymentEdit())) - records.getPayment());
-			customerService.merge(customer);
-			
-			records.setDateExcute(DateUtil.string2Date(filter.getDateExcuteEdit(), "dd/MM/yyyy"));
-			records.setTeeth(filter.getTeethEdit());
-			records.setContent(filter.getContentEdit().toUpperCase());
-			records.setDentist(filter.getDentistEdit());
-			records.setGross(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getGrossEdit())));
-			records.setSale(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getSaleEdit())));
-			records.setPayment(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getPaymentEdit())));
-			records.setDateNext(DateUtil.string2Date(filter.getDateNextEdit(), "dd/MM/yyyy"));
-			records.setContentNext(filter.getContentNextEdit().toUpperCase());
-			records.setModifiedBy(sysUser.getUsername());
-			records.setModifiedDate(new Date());
-			
-			recordsService.merge(records);
-			
-			return "redirect:/secure/records?id=" + filter.getSerialEdit()+ "&agency=" + filter.getBranchEdit();
+			return "redirect:/secure/pdf?id=" + records.getRecordId();
 		}
 			
 			
-		return "redirect:/secure/records?id=" + id + "&agency=" + branch;
+		return "redirect:/secure/records?id=" + id;
 	}
+	
+	@RequestMapping(value = "secure/pdf", method = RequestMethod.GET)
+	public String getInvoicePdf(Model model, HttpServletRequest request){
+		int id = ServletRequestUtils.getIntParameter(request, "id", 0);
+		Records record = recordsService.find(id);
+		Customer customer = customerService.find(record.getCustomerId());
+		model.addAttribute("customer", customer);
+		model.addAttribute("record", record);
+		return "pdfPage";
+	}
+	
+	
+	@RequestMapping(value = "secure/print", method = RequestMethod.GET)
+	public ModelAndView getInvoicePdfview(Model model, HttpServletRequest request) throws DocumentException, IOException{
+		int id = ServletRequestUtils.getIntParameter(request, "id", 0);
+		Records record = recordsService.find(id);
+		Customer customer = customerService.find(record.getCustomerId());
+		Branches branch = branchesService.find(customer.getBranch());
+		
+		String pathImage = request.getSession().getServletContext().getRealPath("/static/images/logopdf.png"); 
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		Document document = new Document(PageSize.A4.rotate());
+		
+		PdfWriter writer = PdfWriter.getInstance(document, baos);
+		writer.setViewerPreferences(PdfWriter.ALLOW_PRINTING | PdfWriter.PageLayoutSinglePage);
+		
+		InvoicePdfA invoicePdf = new InvoicePdfA();
+		document.open();
+		document = invoicePdf.makePdf(document, request, record, customer, branch, pathImage);
+		document.close();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("document", document);
+		map.put("baos", baos);
+
+		return new ModelAndView("fileView", "map", map);
+	}
+	
 	
 	@RequestMapping(value = {"/secure/records/edit/{id}"}, method = RequestMethod.GET)
 	public String getDentist(@PathVariable Integer id, Model model) {
