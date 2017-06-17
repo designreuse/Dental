@@ -203,7 +203,7 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<label><spring:message code="sms.message" text="!"/></label>
-									<form:textarea path="messageSend" rows="2" class="form-control textfield"/>
+									<form:textarea maxlength="450" path="messageSend" rows="3" class="form-control textfield"/>
 								</div>
 							</div>
 						</div>
