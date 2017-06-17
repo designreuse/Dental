@@ -44,18 +44,23 @@
    		
 	<div class="form-group">
 		<div class="row">
-			<div class="col-sm-4">
-				<label>Key</label>
+			<div class="col-sm-12">
+				<label><spring:message code="params.key" text="!"/></label>
 				<form:input path="key" value="${paramsModel.key }" type="text" cssClass="form-control textfield"/>
 				<label id="err_key" class="text-danger"></label>
 			</div>
-			<div class="col-sm-4">
-				<label>Value</label>
-				<form:input path="value" value="${paramsModel.value }" type="text" cssClass="form-control textfield"/>			
+			<div class="col-sm-12">
+				<label><spring:message code="params.value" text="!"/></label>
+				<textarea name="value" class="form-control textfield">${paramsModel.value }</textarea>		
+				<label id="err_key" class="text-danger"></label>	
 			</div>
-			<div class="col-sm-4">
-				<label>Type</label>
-				<form:input path="type" value="${paramsModel.type }" type="text" cssClass="form-control textfield"/>
+			
+			<div class="col-sm-12">
+				<label><spring:message code="params.type" text="!"/></label>
+				<form:select path="type" class="chosen-select" cssStyle="width:100%">
+						<option value="SMS">SMS</option>
+				</form:select>
+				
 				<label id="err_type" class="text-danger"></label>
 			</div>
 		</div>

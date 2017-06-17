@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,13 +60,11 @@ public class ParamsController {
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
 		Params saveParam = new Params();
-		saveParam.setParamsId(params.getParamsId());
 		saveParam.setKey(params.getKey());
 		saveParam.setValue(params.getValue());
 		saveParam.setType(params.getType());
 		if(params.getParamsId() != null && params.getParamsId() > 0) {
-			saveParam.setCreatedBy(params.getCreatedBy());
-			saveParam.setCreatedDate(params.getCreatedDate());
+			saveParam.setParamsId(params.getParamsId());
 			saveParam.setModifiedBy(sysUser.getUsername());
 			saveParam.setModifiedDate(new Date());
 			paramsService.update(saveParam);
@@ -78,6 +77,13 @@ public class ParamsController {
 		
 		List<Params> listParams = paramsService.findAll();
 		model.addAttribute("listParams", listParams);
-		return "params";
+		return "redirect:/secure/params";
+	}
+	
+	@RequestMapping(value = "params/delete", method = RequestMethod.POST)
+	public String getUserModify(Model model,  HttpServletRequest request) {
+		String id = ServletRequestUtils.getStringParameter(request, "id", "");
+		paramsService.deleteById(Integer.parseInt(id));
+		return "redirect:/secure/params";
 	}
 }
