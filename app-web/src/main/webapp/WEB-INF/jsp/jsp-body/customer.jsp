@@ -87,10 +87,9 @@
 		});
 	};
 
-	function ConformDelete(id, branch) {
+	function ConformDelete(id, fullName) {
 	    swal({
-	        title: "<spring:message code="message.conform.delete" text="!"/>" + " [" + id + "] ?",
-	        type: "warning",
+	        title: "<spring:message code="message.conform.delete" text="!"/>" + " [" + fullName + "] ?",
 	        showCancelButton: true,
 	        confirmButtonColor: "#DD6B55",
 	        confirmButtonText: "<spring:message code="button.delete" text="!"/>",
@@ -99,7 +98,6 @@
 	      },function () {
 	   	 	document.forms[0].elements['action'].value='DELETE';
 	   	 	document.forms[0].elements['id'].value=id;
-	   	 	document.forms[0].elements['agency'].value = branch;
 			document.forms[0].submit();
 	    });
 	};
@@ -120,11 +118,11 @@
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.name" text="!"/></label>
-					<form:input path="name" class="form-control textfield"/>
+					<form:input path="fullName" class="form-control textfield"/>
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.telephone" text="!"/></label>
-					<form:input path="telephone" class="form-control textfield"/>
+					<form:input path="phone" class="form-control textfield"/>
 				</div>
 			</div>
 		</div>
@@ -135,14 +133,14 @@
 					<label><spring:message code="customer.date.start" text="!"/></label>
 					<div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <form:input path="dateStartFrom" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+                        <form:input path="arrivalDateFrom" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
 					</div>
 				</div>
 				<div class="col-sm-4">
 					<label>&nbsp;</label>
 					<div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <form:input path="dateStartTo" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+                        <form:input path="arrivalDateTo" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
 					</div>
 				</div>
 				<div class="col-sm-4">
@@ -181,12 +179,7 @@
 						</option>
 					</form:select>
 				</div>
-			</div>
-		</div>
-		
-		<sec:authorize access="hasRole('ADMIN')">
-			<div class="form-group">
-				<div class="row">
+				<sec:authorize access="hasRole('ADMIN')">
 					<div class="col-sm-4">
 						<label><spring:message code="customer.branch" text="!"/></label>
 						<form:select path="branch" class="chosen-select" cssStyle="width:100%">
@@ -198,9 +191,11 @@
 							</c:forEach>
 						</form:select>
 					</div>
-				</div>
+				</sec:authorize>
 			</div>
-		</sec:authorize>
+		</div>
+		
+		
 		
 		<div class="form-group">
 			<div class="row">
@@ -242,14 +237,29 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-sm-4">
-									<label><spring:message code="customer.id" text="!"/></label> <label class="text-danger">*</label>
-									<form:input path="serialCreate" type="text" cssClass="form-control textfield"/>
-									<label id="err_serialCreate" class="text-danger"></label>
+									<label><spring:message code="customer.name" text="!"/></label> <label class="text-danger">*</label>
+									<form:input path="fullNameCreate" type="text" cssClass="form-control textfield text-uppercase"/>
+									<label id="err_fullNameCreate" class="text-danger"></label>
 								</div>
 								<div class="col-sm-4">
-									<label><spring:message code="customer.name" text="!"/></label> <label class="text-danger">*</label>
-									<form:input path="nameCreate" type="text" cssClass="form-control textfield text-uppercase"/>
-									<label id="err_nameCreate" class="text-danger"></label>
+									<label><spring:message code="customer.telephone" text="!"/></label>
+									<form:input path="phoneCreate" type="text" cssClass="form-control textfield"/>
+								</div>
+								<div class="col-sm-4">
+									<label><spring:message code="customer.email" text="!"/></label>
+									<form:input path="emailCreate" type="text" cssClass="form-control textfield"/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-4">
+									<label><spring:message code="customer.date.birth" text="!"/></label> <label class="text-danger">*</label>
+									<div class="input-group date">
+				                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				                        <form:input path="birthdayCreate" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+									</div>
+									<label id="err_birthdayCreate" class="text-danger"></label>
 								</div>
 								<div class="col-sm-4">
 									<label><spring:message code="customer.sex" text="!"/></label><br>
@@ -262,10 +272,6 @@
                                         <label for="sexCreate2"> <spring:message code="customer.sex.women" text="!"/> </label>
                                     </div>
 								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="row">
 								<div class="col-sm-4">
 									<label><spring:message code="customer.type" text="!"/></label><br>
 									<div class="radio radio-primary radio-inline">
@@ -277,59 +283,13 @@
                                         <label for="typeCreate2"> <spring:message code="customer.type.guarantee" text="!"/> </label>
                                     </div>
 								</div>
-								<div class="col-sm-4">
-									<label><spring:message code="customer.date.birth" text="!"/></label> <label class="text-danger">*</label>
-									<div class="input-group date">
-				                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-				                        <form:input path="dateBirthCreate" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
-									</div>
-									<label id="err_dateBirthCreate" class="text-danger"></label>
-								</div>
-								<div class="col-sm-4">
-									<label><spring:message code="customer.telephone" text="!"/></label>
-									<form:input path="telephoneCreate" type="text" cssClass="form-control textfield"/>
-								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="row">
-								<div class="col-sm-4">
-									<label><spring:message code="customer.email" text="!"/></label>
-									<form:input path="emailCreate" type="text" cssClass="form-control textfield"/>
-								</div>
 								<div class="col-sm-8">
 									<label><spring:message code="customer.address" text="!"/></label><br>
 									<form:input path="addressCreate" type="text" cssClass="form-control textfield text-uppercase"/>
-								</div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<div class="row">
-								<div class="col-sm-4">
-									<label><spring:message code="customer.date.start" text="!"/></label> <label class="text-danger">*</label>
-									<div class="input-group date">
-				                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-				                        <form:input path="dateStartCreate" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
-									</div>
-									<label id="err_dateStartCreate" class="text-danger"></label>
-								</div>
-								<div class="col-sm-8">
-									<label><spring:message code="customer.cause" text="!"/></label>
-									<form:input path="causeCreate" type="text" cssClass="form-control textfield text-uppercase"/>
-								</div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<div class="row">
-								<div class="col-sm-4">
-									<label><spring:message code="customer.dentist" text="!"/></label>
-									<form:select path="dentistCreate" class="chosen-select" cssStyle="width:100%">
-										<c:forEach items="${dentists}" var="elm">
-											<option value="${elm.name }">${elm.name }</option>
-										</c:forEach>
-									</form:select>
 								</div>
 								<div class="col-sm-4">
 									<label><spring:message code="customer.status" text="!"/></label>
@@ -344,6 +304,31 @@
 											<spring:message code="customer.status.F" text="!"/>
 										</option>
 									</form:select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-4">
+									<label><spring:message code="customer.date.start" text="!"/></label> <label class="text-danger">*</label>
+									<div class="input-group date">
+				                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				                        <form:input path="arrivalDateCreate" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+									</div>
+									<label id="err_arrivalDateCreate" class="text-danger"></label>
+								</div>
+								<div class="col-sm-4">
+									<label><spring:message code="customer.dentist" text="!"/></label>
+									<form:select path="dentistCreate" class="chosen-select" cssStyle="width:100%">
+										<c:forEach items="${dentists}" var="elm">
+											<option value="${elm.name }">${elm.name }</option>
+										</c:forEach>
+									</form:select>
+								</div>
+								<div class="col-sm-4">
+									<label><spring:message code="customer.cause" text="!"/></label>
+									<form:input path="causeCreate" type="text" cssClass="form-control textfield text-uppercase"/>
 								</div>
 							</div>
 						</div>

@@ -17,4 +17,6 @@ public interface ICustomerDao extends IBaseDao<Customer, CustomerId>{
 
 	List<Customer> getCustomer(String branch);
 
+	Integer maxSerial(SysUser sysUser);
+
 }

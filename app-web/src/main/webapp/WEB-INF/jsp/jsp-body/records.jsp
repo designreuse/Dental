@@ -38,6 +38,12 @@
 	document.getElementById("manager").className = "active";
 
 	$(function(){
+
+		 $('#grossEdit').mask("000.000.000.000", { reverse: true });
+		 $('#saleEdit').mask("000.000.000.000", { reverse: true });
+		 $('#paymentEdit').mask("000.000.000.000", { reverse: true });
+
+		 
 	    $('.input-group.date').datepicker({
 	    	todayHighlight: true,
 			todayBtn: "linked",
@@ -81,7 +87,6 @@
 	function ConformDelete(id, date) {
 	    swal({
 	        title: "<spring:message code="message.conform.delete" text="!"/>" + " [" + date + "] ?",
-	        type: "warning",
 	        showCancelButton: true,
 	        confirmButtonColor: "#DD6B55",
 	        confirmButtonText: "<spring:message code="button.delete" text="!"/>",
@@ -117,8 +122,7 @@
 			<div class="row">
 				<div class="col-sm-8">
 					<c:url value="/secure/customer/detail"  var="linkCustomer">
-						<c:param name="id" value="${customer.id.serial}"/>
-						<c:param name="agency" value="${customer.id.branch}"/>
+						<c:param name="id" value="${customer.customerId}"/>
 					</c:url>
 					<a href="${linkCustomer }" class="btn btn-w-m btn-default text-uppercase">
 						<i class="fa fa-user"></i> <spring:message code="customer.general" text="!"/>
@@ -153,9 +157,9 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>${customer.id.serial}</td>
-							<td>${customer.name}</td>
-							<td>${customer.telephone}</td>
+							<td>${customer.serial}</td>
+							<td>${customer.fullName}</td>
+							<td>${customer.phone}</td>
 							<td>${customer.dentist}</td>
 							<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${customer.gross}"/></td>
 							<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${customer.sale}"/></td>
@@ -214,9 +218,14 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${customer.records}" var="elm" varStatus="stt">
+							<c:url value="/secure/print" var ="print">
+								<c:param name="id" value="${elm.recordId }"></c:param>
+							</c:url>
+							
 							<tr id="${elm.recordId}">
 								<td class="text-center">${stt.index + 1}</td>
 								<td class="text-center text-nowrap">
+									<a href="${print }"  target="_blank" title="<spring:message code="button.printer" text="!"/>"><i class="fa fa-2x fa-print"></i></a>
 									<c:choose>
 										<c:when test="${customer.status eq 'F'}">
 											<a style="color: #bababa"><i class="fa fa-2x fa-edit"></i></a>
@@ -287,21 +296,6 @@
 									<label id="err_dateExcute" class="text-danger"></label>
 								</div>
 								<div class="col-sm-6">
-									<label><spring:message code="records.teeth" text="!"/></label> <label class="text-danger">*</label>
-									<form:input path="teeth" type="text" cssClass="form-control textfield"/>
-									<label id="err_teeth" class="text-danger"></label>
-								</div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<div class="row">
-								<div class="col-sm-6">
-									<label><spring:message code="records.content" text="!"/></label> <label class="text-danger">*</label>
-									<form:input path="content" type="text" cssClass="form-control textfield text-uppercase"/>
-									<label id="err_content" class="text-danger"></label>
-								</div>
-								<div class="col-sm-6">
 									<label><spring:message code="records.dentist" text="!"/></label>
 									<form:select path="dentist" class="chosen-select" cssStyle="width:100%">
 										<c:forEach items="${dentists}" var="elm">
@@ -314,18 +308,33 @@
 						
 						<div class="form-group">
 							<div class="row">
+								<div class="col-sm-6">
+									<label><spring:message code="records.teeth" text="!"/></label>
+									<form:input path="teeth" type="text" cssClass="form-control textfield"/>
+									<label id="err_teeth" class="text-danger"></label>
+								</div>
+								<div class="col-sm-6">
+									<label><spring:message code="records.content" text="!"/></label>
+									<form:input path="content" type="text" cssClass="form-control textfield text-uppercase"/>
+									<label id="err_content" class="text-danger"></label>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
 								<div class="col-sm-4">
-									<label><spring:message code="records.amount.extra" text="!"/></label> <label class="text-danger">*</label>
+									<label><spring:message code="records.amount.extra" text="!"/></label>
 									<form:input path="gross" type="text" cssClass="form-control textfield text-right"/>
 									<label id="err_gross" class="text-danger"></label>
 								</div>
 								<div class="col-sm-4">
-									<label><spring:message code="records.sale" text="!"/></label> <label class="text-danger">*</label>
+									<label><spring:message code="records.sale" text="!"/></label>
 									<form:input path="sale" type="text" cssClass="form-control textfield text-right"/>
 									<label id="err_sale" class="text-danger"></label>
 								</div>
 								<div class="col-sm-4">
-									<label><spring:message code="records.payment" text="!"/></label> <label class="text-danger">*</label>
+									<label><spring:message code="records.payment" text="!"/></label>
 									<form:input path="payment" type="text" cssClass="form-control textfield text-right"/>
 									<label id="err_payment" class="text-danger"></label>
 								</div>

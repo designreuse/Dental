@@ -52,8 +52,8 @@
 					<th><spring:message code="customer.id" text="!"/></th>
 					<th><spring:message code="customer.name" text="!"/></th>
 					<th><spring:message code="customer.address" text="!"/></th>
-					<th><spring:message code="customer.date.start" text="!"/></th>
 					<th><spring:message code="customer.telephone" text="!"/></th>
+					<th><spring:message code="customer.date.start" text="!"/></th>
 					<th class="text-right"><spring:message code="customer.amount" text="!"/></th>
 					<th class="text-right"><spring:message code="customer.sale" text="!"/></th>
 					<th class="text-right"><spring:message code="customer.payment" text="!"/></th>
@@ -66,19 +66,18 @@
 				<c:forEach items="${customers}" var="elm" varStatus="stt">
 					<tr>
 						<c:url value="/secure/records"  var="linkCustomerDetail">
-							<c:param name="id" value="${elm.id.serial}"/>
-							<c:param name="agency" value="${elm.id.branch}"/>
+							<c:param name="id" value="${elm.customerId}"/>
 						</c:url>
 						
 						<td class="text-center">${row + stt.index + 1}</td>
 						<td class="text-center text-nowrap">
-							<a onclick="ConformDelete('${elm.id.serial}', '${elm.id.branch}')" title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i></a>
+							<a onclick="ConformDelete('${elm.customerId}', '${elm.fullName}')" title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i></a>
 						</td>
-						<td><a href="${linkCustomerDetail }">${elm.id.serial}</a></td>
-						<td><a href="${linkCustomerDetail }">${elm.name}</a></td>
+						<td><a href="${linkCustomerDetail }">${elm.serial}</a></td>
+						<td><a href="${linkCustomerDetail }">${elm.fullName}</a></td>
 						<td>${elm.address}</td>
-						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateStart}" /></td>
-						<td>${elm.telephone}</td>
+						<td>${elm.phone}</td>
+						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.arrivalDate}" /></td>
 						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross}"/></td>
 						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.sale}"/></td>
 						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.payment}"/></td>

@@ -24,6 +24,12 @@
 	
 	<definition name="marketingEdit" template="/WEB-INF/jsp/jsp-body/marketing_edit.jsp"></definition>
 	
+	<definition name="marketingCreate" template="/WEB-INF/jsp/jsp-body/marketing_create.jsp"></definition>
+	
+	<definition name="pdfPage" extends="modelGeneral">
+		<put-attribute name="body" value="/WEB-INF/jsp/jsp-body/pdf_page.jsp" type="template" />
+	</definition>
+	
 	
 	<definition name="dashboardLoadPage" template="/WEB-INF/jsp/jsp-body/dasboard_load_page.jsp"></definition>
 	

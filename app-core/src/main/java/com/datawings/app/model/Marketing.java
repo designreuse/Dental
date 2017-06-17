@@ -15,10 +15,6 @@ import com.datawings.app.common.BeanUtil;
 @Entity
 @Table(name = "marketing")
 public class Marketing extends Base {
-
-	public static String status_W = "";
-	
-	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -28,6 +24,9 @@ public class Marketing extends Base {
 
 	@Column(name = "full_name")
 	private String fullName;
+	
+	@Column(name = "full_name_en")
+	private String fullNameEn;
 
 	@Column(name = "sex")
 	private String sex;
@@ -82,6 +81,14 @@ public class Marketing extends Base {
 
 	public void init() {
 		BeanUtil.initSimplePropertyBean(this);
+	}
+
+	public String getFullNameEn() {
+		return fullNameEn;
+	}
+
+	public void setFullNameEn(String fullNameEn) {
+		this.fullNameEn = fullNameEn;
 	}
 
 	public Integer getMarketingId() {

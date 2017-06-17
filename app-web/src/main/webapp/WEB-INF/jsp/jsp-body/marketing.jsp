@@ -40,6 +40,10 @@
 	var pageNo = ${marketingFilter.page};
 	
 	$(function(){
+		 $('#phoneCreate').mask("00000000000", { reverse: true });
+		 $('#phoneEdit').mask("00000000000", { reverse: true });
+		 $('#phoneAdd').mask("00000000000", { reverse: true });
+		 
 		fnLoadPage();
 
 	    $('.input-group.date').datepicker({
@@ -75,7 +79,8 @@
 	        	if(result.errCodeCreate > 0){
 	        		$('#err_fullNameCreate').html('');
 		        	$('#err_arrivalDateCreate').html('');
-        			
+		        	$('#err_birthdayCreate').html('');
+		        	
 	           	 	var len = $.map(result.lstErr, function(n, i) { return i; }).length;
 	           	 	for(var i=0;i<len;i++) {
                			$('#err_'+result.lstErr[i].propertyName).html(result.lstErr[i].message); 
@@ -112,6 +117,16 @@
  	        }
  	    });
  	}
+
+	function doCustomer(id) {
+ 	    $.ajax({ 
+ 	    	url: "<spring:url value='/secure/marketing/create/'/>" + id,
+ 	        cache: false,
+ 	        success: function (reponse) {
+ 	            $("div#customer-result").html(reponse);
+ 	        }
+ 	    });
+ 	}
 </script>
 
 <div id="body">
@@ -127,7 +142,7 @@
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.telephone" text="!"/></label>
-					<form:input path="phone" class="form-control textfield"/>
+					<form:input path="phone" maxlength="11" class="form-control textfield"/>
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.address" text="!"/></label>
@@ -138,6 +153,20 @@
 		
 		<div class="form-group">
 			<div class="row">
+				<div class="col-sm-4">
+					<label><spring:message code="customer.status" text="!"/></label>
+					<form:select path="status" class="chosen-select" cssStyle="width:100%">
+						<option value="" <c:if test="${'' == marketingFilter.status}">selected="selected"</c:if>>
+							<spring:message code="commom.all" text="!"/>
+						</option>
+						<option value="WATTING" <c:if test="${'WATTING' == marketingFilter.status}">selected="selected"</c:if>>
+							<spring:message code="marketing.status_WATTING" text="!"/>
+						</option>
+						<option value="FINISH" <c:if test="${'FINISH' == marketingFilter.status}">selected="selected"</c:if>>
+							<spring:message code="marketing.status_FINISH" text="!"/>
+						</option>
+					</form:select>
+				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.branch" text="!"/></label>
 					<form:select path="branch" class="chosen-select" cssStyle="width:100%">
@@ -151,34 +180,15 @@
 						</c:forEach>
 					</form:select>
 				</div>
-				<div class="col-sm-4">
-					<label><spring:message code="customer.status" text="!"/></label>
-					<form:select path="status" class="chosen-select" cssStyle="width:100%">
-						<option value="" <c:if test="${'' == marketingFilter.status}">selected="selected"</c:if>>
-							<spring:message code="commom.all" text="!"/>
-						</option>
-						<option value="WATTING" <c:if test="${'WATTING' == marketingFilter.status}">selected="selected"</c:if>>
-							<spring:message code="marketing.status_WATTING" text="!"/>
-						</option>
-						<option value="NOTYET" <c:if test="${'NOTYET' == marketingFilter.status}">selected="selected"</c:if>>
-							<spring:message code="marketing.status_NOTYET" text="!"/>
-						</option>
-						<option value="FINISH" <c:if test="${'FINISH' == marketingFilter.status}">selected="selected"</c:if>>
-							<spring:message code="marketing.status_FINISH" text="!"/>
-						</option>
-					</form:select>
-				</div>
-				
 			</div>
 		</div>
-		
 		
 		<div class="form-group">
 			<div class="row">
 				<div class="col-sm-4">
 					<sec:authorize access="hasAnyRole('MARKETING','ADMIN')">
 						<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
-							<i class="fa fa-plus-square"> <spring:message code="customer.create" text="!"/></i>
+							<i class="fa fa-plus-square"> <spring:message code="marketing.create" text="!"/></i>
 						</button>
 					</sec:authorize>
 				</div>
@@ -206,7 +216,7 @@
 			<div class="modal-content animated bounceInRight">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
-					<h5 class="modal-title text-uppercase"><spring:message code="customer.create" text="!"/></h5>
+					<h5 class="modal-title text-uppercase"><spring:message code="marketing.create" text="!"/></h5>
 				</div>
 				<div class="modal-body">
 					<form:form id="form-add" name="form-add" method="post" commandName="marketingFilter" action="marketing">
@@ -221,7 +231,7 @@
 								</div>
 								<div class="col-sm-4">
 									<label><spring:message code="customer.telephone" text="!"/></label>
-									<form:input path="phoneCreate" type="text" cssClass="form-control textfield text-uppercase"/>
+									<form:input path="phoneCreate" maxlength="11" type="text" cssClass="form-control textfield text-uppercase"/>
 								</div>
 								<div class="col-sm-4">
 									<label><spring:message code="customer.sex" text="!"/></label><br>
@@ -240,10 +250,18 @@
 						<div class="form-group">
 							<div class="row">
 								<div class="col-sm-4">
+									<label><spring:message code="customer.date.birth" text="!"/></label>
+									<div class="input-group date">
+				                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				                        <form:input path="birthdayCreate" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+									</div>
+									<label id="err_birthdayCreate" class="text-danger"></label>
+								</div>
+								<div class="col-sm-4">
 									<label><spring:message code="customer.email" text="!"/></label>
 									<form:input path="emailCreate" type="text" cssClass="form-control textfield"/>
 								</div>
-								<div class="col-sm-8">
+								<div class="col-sm-4">
 									<label><spring:message code="customer.address" text="!"/></label><br>
 									<form:input path="addressCreate" type="text" cssClass="form-control textfield text-uppercase"/>
 								</div>
@@ -313,6 +331,21 @@
 				</div>
 				<div class="modal-body">
 					<div id="edit-result"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- ------------------------------------------- ADD CUSTOMER  ----------------------------------------------------- -->
+	<div class="modal inmodal" id="formCustomer" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" style="width: 900px;">
+			<div class="modal-content animated bounceInRight">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
+					<h5 class="modal-title text-uppercase"><spring:message code="customer.create" text="!"/></h5>
+				</div>
+				<div class="modal-body">
+					<div id="customer-result"></div>
 				</div>
 			</div>
 		</div>

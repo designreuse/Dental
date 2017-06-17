@@ -53,7 +53,7 @@
 				</ul>
 			</li>
 			
-			<li id="invoice">
+			<%-- <li id="invoice">
 				<a href="#">
 					<i class="fa fa-files-o"></i><span class="nav-label"><spring:message code="menu.invoice" text="!"/></span><span class="fa arrow"></span>
 				</a>
@@ -69,7 +69,7 @@
 		             	</a>
 					</li>
 				</ul>
-			</li>
+			</li> --%>
             <sec:authorize access="hasRole('ADMIN')">
 			<li id="param">
 				<a href="#">

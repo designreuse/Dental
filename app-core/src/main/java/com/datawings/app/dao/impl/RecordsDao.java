@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.SQLQuery;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -15,7 +14,6 @@ import com.datawings.app.common.SqlUtil;
 import com.datawings.app.dao.IRecordsDao;
 import com.datawings.app.filter.CustomerFiler;
 import com.datawings.app.filter.RecordsFilter;
-import com.datawings.app.model.Customer;
 import com.datawings.app.model.Records;
 import com.datawings.app.model.SysUser;
 
@@ -40,10 +38,10 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 			criteria.add(Restrictions.eq("serial", filter.getSerial()));
 		}
 		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("c.name", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
+			criteria.add(Restrictions.like("c.fullName", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
 		}
 		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("c.telephone", filter.getTelephone()));
+			criteria.add(Restrictions.eq("c.phone", filter.getTelephone()));
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
 			criteria.add(Restrictions.like("dentist", filter.getDentist()));
@@ -77,10 +75,10 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 			criteria.add(Restrictions.eq("serial", filter.getSerial()));
 		}
 		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("c.name", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
+			criteria.add(Restrictions.like("c.fullName", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
 		}
 		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("c.telephone", filter.getTelephone()));
+			criteria.add(Restrictions.eq("c.phone", filter.getTelephone()));
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
 			criteria.add(Restrictions.like("dentist", filter.getDentist()));
@@ -95,7 +93,7 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 	public Integer getCountCustomerReality(CustomerFiler filter, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 		
-		if(StringUtils.isNotBlank(filter.getName()) || StringUtils.isNotBlank(filter.getTelephone())){
+		if(StringUtils.isNotBlank(filter.getFullName()) || StringUtils.isNotBlank(filter.getPhone())){
 			criteria.createAlias("customer", "c", Criteria.INNER_JOIN);
 		}
 		
@@ -109,17 +107,17 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 		if(StringUtils.isNotBlank(filter.getSerial())){
 			criteria.add(Restrictions.eq("serial", filter.getSerial()));
 		}
-		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("c.name", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
+		if(StringUtils.isNotBlank(filter.getFullName())){
+			criteria.add(Restrictions.like("c.name", filter.getFullName().toUpperCase(), MatchMode.ANYWHERE));
 		}
-		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("c.telephone", filter.getTelephone()));
+		if(StringUtils.isNotBlank(filter.getPhone())){
+			criteria.add(Restrictions.eq("c.telephone", filter.getPhone()));
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
 			criteria.add(Restrictions.like("dentist", filter.getDentist()));
 		}
 		
-		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getDateStartFrom(), filter.getDateStartTo(), criteria);
+		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), criteria);
 		
 		return ((Number) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
 	}
@@ -128,7 +126,7 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 	public List<Records> getCustomerReality(CustomerFiler filter, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 		
-		if(StringUtils.isNotBlank(filter.getName()) || StringUtils.isNotBlank(filter.getTelephone())){
+		if(StringUtils.isNotBlank(filter.getFullName()) || StringUtils.isNotBlank(filter.getPhone())){
 			criteria.createAlias("customer", "c", Criteria.INNER_JOIN);
 		}
 		
@@ -142,17 +140,17 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 		if(StringUtils.isNotBlank(filter.getSerial())){
 			criteria.add(Restrictions.eq("serial", filter.getSerial()));
 		}
-		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("c.name", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
+		if(StringUtils.isNotBlank(filter.getFullName())){
+			criteria.add(Restrictions.like("c.name", filter.getFullName().toUpperCase(), MatchMode.ANYWHERE));
 		}
-		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("c.telephone", filter.getTelephone()));
+		if(StringUtils.isNotBlank(filter.getPhone())){
+			criteria.add(Restrictions.eq("c.telephone", filter.getPhone()));
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
 			criteria.add(Restrictions.like("dentist", filter.getDentist()));
 		}
 		
-		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getDateStartFrom(), filter.getDateStartTo(), criteria);
+		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), criteria);
 		
 		criteria.addOrder(Order.desc("dateExcute"));
 		criteria.addOrder(Order.desc("serial"));
@@ -165,7 +163,7 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 	public Integer getTotalCustomerReality(CustomerFiler filter, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 		
-		if(StringUtils.isNotBlank(filter.getName()) || StringUtils.isNotBlank(filter.getTelephone())){
+		if(StringUtils.isNotBlank(filter.getFullName()) || StringUtils.isNotBlank(filter.getPhone())){
 			criteria.createAlias("customer", "c", Criteria.INNER_JOIN);
 		}
 		criteria.setProjection(Projections.sum("payment"));
@@ -180,17 +178,17 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 		if(StringUtils.isNotBlank(filter.getSerial())){
 			criteria.add(Restrictions.eq("serial", filter.getSerial()));
 		}
-		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("c.name", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
+		if(StringUtils.isNotBlank(filter.getFullName())){
+			criteria.add(Restrictions.like("c.name", filter.getFullName().toUpperCase(), MatchMode.ANYWHERE));
 		}
-		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("c.telephone", filter.getTelephone()));
+		if(StringUtils.isNotBlank(filter.getPhone())){
+			criteria.add(Restrictions.eq("c.telephone", filter.getPhone()));
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
 			criteria.add(Restrictions.like("dentist", filter.getDentist()));
 		}
 		
-		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getDateStartFrom(), filter.getDateStartTo(), criteria);
+		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), criteria);
 		
 		Long tmp = (Long) criteria.uniqueResult();
 		
@@ -238,16 +236,6 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 		criteria.setMaxResults(filter.getPageSize());
 		criteria.setFirstResult(filter.getOffset());
 		return criteria.list();
-	}
-
-	@SuppressWarnings("deprecation")
-	public void updateName(Customer customer) {
-		StringBuffer sql = new StringBuffer();
-		sql.append("update records set name ='" + customer.getName() + "' , telephone='" + customer.getTelephone() + "'" );
-		sql.append(" , address ='" + customer.getAddress() + "'" );
-		sql.append(" where serial = '" + customer.getId().getSerial() + "' and branch='" + customer.getId().getBranch() + "'");
-		SQLQuery query = this.getSession().createSQLQuery(sql.toString());
-		query.executeUpdate();
 	}
 
 }

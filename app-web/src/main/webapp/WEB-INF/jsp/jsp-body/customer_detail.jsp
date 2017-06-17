@@ -84,8 +84,7 @@
 					</a>
 					
 					<c:url value="/secure/records"  var="linkCustomer">
-						<c:param name="id" value="${customer.id.serial}"/>
-						<c:param name="agency" value="${customer.id.branch}"/>
+						<c:param name="id" value="${customer.customerId}"/>
 					</c:url>
 					<a href="${linkCustomer }" class="btn btn-w-m btn-default text-uppercase">
 						<i class="fa fa-list-ol"></i> <spring:message code="customer.records" text="!"/>
@@ -103,11 +102,11 @@
 			<div class="row">
 				<div class="col-sm-4">
 					<label><spring:message code="customer.id" text="!"/></label>
-					<form:input path="serialCreate" value="${customer.id.serial }"  disabled = "true" type="text" cssClass="form-control textfield"/>
+					<input value="${customer.serial }"  disabled = "disabled" type="text" class="form-control textfield"/>
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.name" text="!"/></label> <label class="text-danger">*</label>
-					<form:input path="nameCreate" value="${customer.name }" type="text" cssClass="form-control textfield text-uppercase"/>
+					<form:input path="fullNameCreate" value="${customer.fullName }" type="text" cssClass="form-control textfield text-uppercase"/>
 					<label id="err_nameCreate" class="text-danger"></label>
 				</div>
 				<div class="col-sm-4">
@@ -138,16 +137,16 @@
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.date.birth" text="!"/></label> <label class="text-danger">*</label>
-					<fmt:formatDate pattern="dd/MM/yyyy" value="${customer.dateBirth}" var="dateBirth"/>
+					<fmt:formatDate pattern="dd/MM/yyyy" value="${customer.birthday}" var="birthday"/>
 					<div class="input-group date">
                     	<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                       	<form:input path="dateBirthCreate" value="${dateBirth }" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+                       	<form:input path="birthdayCreate" value="${birthday }" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
 					</div>
-					<label id="err_dateBirthCreate" class="text-danger"></label>
+					<label id="err_birthdayCreate" class="text-danger"></label>
 				</div>
 				<div class="col-sm-4">
 					<label><spring:message code="customer.telephone" text="!"/></label>
-					<form:input path="telephoneCreate" value="${customer.telephone }" type="text" cssClass="form-control textfield"/>
+					<form:input path="phoneCreate" value="${customer.phone }" type="text" cssClass="form-control textfield"/>
 				</div>
 			</div>
 		</div>
@@ -168,12 +167,12 @@
 			<div class="row">
 				<div class="col-sm-4">
 					<label><spring:message code="customer.date.start" text="!"/></label> <label class="text-danger">*</label>
-					<fmt:formatDate pattern="dd/MM/yyyy" value="${customer.dateStart}" var="dateStart"/>
+					<fmt:formatDate pattern="dd/MM/yyyy" value="${customer.arrivalDate}" var="arrivalDate"/>
 					<div class="input-group date">
 	                       <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-	                       <form:input path="dateStartCreate" value="${dateStart }" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+	                       <form:input path="arrivalDateCreate" value="${arrivalDate }" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
 					</div>
-					<label id="err_dateStartCreate" class="text-danger"></label>
+					<label id="err_arrivalDateCreate" class="text-danger"></label>
 				</div>
 				<div class="col-sm-8">
 					<label><spring:message code="customer.cause" text="!"/></label>

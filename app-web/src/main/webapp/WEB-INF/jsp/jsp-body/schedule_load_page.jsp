@@ -46,9 +46,9 @@
 			<thead>
 				<tr>
 					<th class="text-center">#</th>
-					<th><spring:message code="schedule.date" text="!Action"/></th>
 					<th><spring:message code="schedule.serial" text="!"/></th>
 					<th><spring:message code="schedule.name" text="!"/></th>
+					<th><spring:message code="schedule.date" text="!Action"/></th>
 					<th><spring:message code="schedule.telephone" text="!"/></th>
 					<th><spring:message code="schedule.content" text="!"/></th>
 					<th><spring:message code="schedule.content.next" text="!"/></th>
@@ -62,16 +62,15 @@
 			<tbody>
 				<c:forEach items="${records}" var="elm" varStatus="stt">
 					<c:url value="/secure/records"  var="linkCustomer">
-						<c:param name="id" value="${elm.serial}"/>
-						<c:param name="agency" value="${elm.branch}"/>
+						<c:param name="id" value="${elm.customerId}"/>
 					</c:url>
 					
 					<tr>
 						<td class="text-center">${row + stt.index + 1}</td>
-						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateNext}" /></td>
 						<td><a href="${linkCustomer }">${elm.serial}</a></td>
-						<td><a href="${linkCustomer }">${elm.customer.name}</a></td>
-						<td>${elm.customer.telephone}</td>
+						<td><a href="${linkCustomer }">${elm.customer.fullName}</a></td>
+						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateNext}" /></td>
+						<td>${elm.customer.phone}</td>
 						<td>${elm.customer.content}</td>
 						<td>${elm.contentNext}</td>
 						<td>${elm.dentist}</td>

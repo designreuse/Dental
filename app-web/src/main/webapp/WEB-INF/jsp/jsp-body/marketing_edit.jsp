@@ -82,7 +82,7 @@
 			</div>
 			<div class="col-sm-4">
 				<label><spring:message code="customer.telephone" text="!" /></label>
-				<form:input path="phoneEdit" value="${marketing.phone }" type="text" cssClass="form-control textfield text-uppercase" />
+				<form:input path="phoneEdit" value="${marketing.phone }" maxlength="11" type="text" cssClass="form-control textfield text-uppercase" />
 			</div>
 			<div class="col-sm-4">
 				<label><spring:message code="customer.sex" text="!" /></label><br>
@@ -101,10 +101,19 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-sm-4">
+				<fmt:formatDate pattern="dd/MM/yyyy" value="${marketing.birthday}" var="birthday"/>
+				<label><spring:message code="customer.date.birth" text="!"/></label>
+				<div class="input-group date">
+                       <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                       <form:input path="birthdayEdit" value="${birthday }" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+				</div>
+				<label id="err_birthdayEdit" class="text-danger"></label>
+			</div>
+			<div class="col-sm-4">
 				<label><spring:message code="customer.email" text="!" /></label>
 				<form:input path="emailEdit" value="${marketing.email }" type="text" cssClass="form-control textfield" />
 			</div>
-			<div class="col-sm-8">
+			<div class="col-sm-4">
 				<label><spring:message code="customer.address" text="!" /></label>
 				<form:input path="addressEdit" value="${marketing.address }" type="text" cssClass="form-control textfield text-uppercase" />
 			</div>

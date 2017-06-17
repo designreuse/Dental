@@ -6,9 +6,10 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -23,14 +24,25 @@ public class Customer extends Base {
 
 	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private CustomerId id;
-	
-	@Column(name = "name")
-	private String name;
+	@Id
+	@GeneratedValue()
+	@Column(name = "customer_id", unique = true, nullable = false)
+	private Integer customerId;
 
-	@Column(name = "date_birth")
-	private Date dateBirth;
+	@Column(name = "serial")
+	private Integer serial;
+
+	@Column(name = "branch")
+	private String branch;
+
+	@Column(name = "full_name")
+	private String fullName;
+
+	@Column(name = "full_name_en")
+	private String fullNameEn;
+
+	@Column(name = "birthday")
+	private Date birthday;
 
 	@Column(name = "type")
 	private String type;
@@ -41,8 +53,8 @@ public class Customer extends Base {
 	@Column(name = "address")
 	private String address;
 
-	@Column(name = "telephone")
-	private String telephone;
+	@Column(name = "phone")
+	private String phone;
 
 	@Column(name = "email")
 	private String email;
@@ -50,8 +62,8 @@ public class Customer extends Base {
 	@Column(name = "dentist")
 	private String dentist;
 
-	@Column(name = "date_start")
-	private Date dateStart;
+	@Column(name = "arrival_date")
+	private Date arrivalDate;
 
 	@Column(name = "cause")
 	private String cause;
@@ -61,10 +73,10 @@ public class Customer extends Base {
 
 	@Column(name = "note")
 	private String note;
-	
+
 	@Column(name = "content")
 	private String content;
-	
+
 	@Column(name = "gross")
 	private Integer gross;
 
@@ -73,7 +85,10 @@ public class Customer extends Base {
 
 	@Column(name = "payment")
 	private Integer payment;
-	
+
+	@Column(name = "source")
+	private String source;
+
 	@Column(name = "created_by")
 	private String createdBy;
 
@@ -98,7 +113,6 @@ public class Customer extends Base {
 
 	private void init() {
 		BeanUtil.initSimplePropertyBean(this);
-		this.id = new CustomerId();
 	}
 
 	public Set<Records> getRecords() {
@@ -107,22 +121,6 @@ public class Customer extends Base {
 
 	public void setRecords(Set<Records> records) {
 		this.records = records;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Date getDateBirth() {
-		return dateBirth;
-	}
-
-	public void setDateBirth(Date dateBirth) {
-		this.dateBirth = dateBirth;
 	}
 
 	public String getType() {
@@ -149,14 +147,6 @@ public class Customer extends Base {
 		this.address = address;
 	}
 
-	public String getTelephone() {
-		return telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -173,12 +163,44 @@ public class Customer extends Base {
 		this.dentist = dentist;
 	}
 
-	public Date getDateStart() {
-		return dateStart;
+	public String getFullName() {
+		return fullName;
 	}
 
-	public void setDateStart(Date dateStart) {
-		this.dateStart = dateStart;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getFullNameEn() {
+		return fullNameEn;
+	}
+
+	public void setFullNameEn(String fullNameEn) {
+		this.fullNameEn = fullNameEn;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Date getArrivalDate() {
+		return arrivalDate;
+	}
+
+	public void setArrivalDate(Date arrivalDate) {
+		this.arrivalDate = arrivalDate;
 	}
 
 	public String getCause() {
@@ -269,12 +291,36 @@ public class Customer extends Base {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public CustomerId getId() {
-		return id;
+	public Integer getCustomerId() {
+		return customerId;
 	}
 
-	public void setId(CustomerId id) {
-		this.id = id;
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+	public Integer getSerial() {
+		return serial;
+	}
+
+	public void setSerial(Integer serial) {
+		this.serial = serial;
+	}
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
 	}
 
 }

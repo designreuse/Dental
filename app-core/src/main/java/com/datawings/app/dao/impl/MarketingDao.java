@@ -26,7 +26,8 @@ public class MarketingDao extends BaseDao<Marketing, Integer> implements IMarket
 		}
 	
 		if(StringUtils.isNotBlank(filter.getFullName())){
-			criteria.add(Restrictions.like("fullName", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE));
+			criteria.add(Restrictions.or(Restrictions.like("fullName", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE), 
+					Restrictions.like("fullNameEn", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE)));
 		}
 		
 		if(StringUtils.isNotBlank(filter.getAddress())){
@@ -52,7 +53,8 @@ public class MarketingDao extends BaseDao<Marketing, Integer> implements IMarket
 		}
 	
 		if(StringUtils.isNotBlank(filter.getFullName())){
-			criteria.add(Restrictions.like("fullName", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE));
+			criteria.add(Restrictions.or(Restrictions.like("fullName", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE), 
+					Restrictions.like("fullNameEn", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE)));
 		}
 		
 		if(StringUtils.isNotBlank(filter.getAddress())){

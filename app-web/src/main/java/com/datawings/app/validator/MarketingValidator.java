@@ -19,6 +19,11 @@ public class MarketingValidator {
 			erroCode = 1;
 		}
 		
+		if (StringUtils.isNotBlank(filter.getBirthdayCreate()) && !DateUtil.checkDateAsString(filter.getBirthdayCreate(), "dd/MM/yyyy")) {
+			errors.rejectValue("birthdayCreate", "message.valid", "!");
+			erroCode = 1;
+		}
+		
 		if (StringUtils.isNotBlank(filter.getArrivalDateCreate()) && !DateUtil.checkDateAsString(filter.getArrivalDateCreate(), "dd/MM/yyyy")) {
 			errors.rejectValue("arrivalDateCreate", "message.valid", "!");
 			erroCode = 1;

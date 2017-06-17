@@ -64,7 +64,7 @@
 						<td class="text-center">${row + stt.index + 1}</td>
 						<td class="text-center text-nowrap">
 							<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
-								<a onclick='doEdit("${elm.marketingId}")' data-toggle="modal" data-target="#formEdit"
+								<a onclick='doCustomer("${elm.marketingId}")' data-toggle="modal" data-target="#formCustomer"
 									title="<spring:message code="button.go" text="!"/>"><i class="fa fa-2x fa-user-plus"></i>
 								</a>
 							</sec:authorize>

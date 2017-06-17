@@ -71,4 +71,9 @@ public class CustomerService implements ICustomerService{
 	public List<Customer> getCustomer(String branch) {
 		return dao.getCustomer(branch);
 	}
+
+	@Transactional
+	public Integer maxSerial(SysUser sysUser) {
+		return dao.maxSerial(sysUser);
+	}
 }

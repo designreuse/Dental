@@ -8,7 +8,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,12 +26,15 @@ public class Records extends Base {
 	@Column(name = "record_id", unique = true, nullable = false)
 	private Integer recordId;
 
-	@Column(name = "serial")
-	private String serial;
+	@Column(name = "customer_id")
+	private Integer customerId;
 	
+	@Column(name = "serial")
+	private Integer serial;
+
 	@Column(name = "branch")
 	private String branch;
-	
+
 	@Column(name = "date_excute")
 	private Date dateExcute;
 
@@ -63,6 +65,9 @@ public class Records extends Base {
 	@Column(name = "payment")
 	private Integer payment;
 
+	@Column(name = "status")
+	private String status;
+	
 	@Column(name = "created_by")
 	private String createdBy;
 
@@ -78,10 +83,7 @@ public class Records extends Base {
 	private Date modifiedDate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumns({
-		@JoinColumn(name="serial", referencedColumnName="serial", nullable = false, insertable = false, updatable = false),
-		@JoinColumn(name="branch", referencedColumnName="branch", nullable = false, insertable = false, updatable = false)
-	}) 
+	@JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false, insertable = false, updatable = false)
 	private Customer customer;
 
 	public Records() {
@@ -92,15 +94,31 @@ public class Records extends Base {
 		BeanUtil.initSimplePropertyBean(this);
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public Integer getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Integer customerId) {
+		this.customerId = customerId;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public Customer getCustomer() {
 		return customer;
 	}
 
-	public String getSerial() {
+	public Integer getSerial() {
 		return serial;
 	}
 
-	public void setSerial(String serial) {
+	public void setSerial(Integer serial) {
 		this.serial = serial;
 	}
 
@@ -235,6 +253,5 @@ public class Records extends Base {
 	public void setBranch(String branch) {
 		this.branch = branch;
 	}
-
 
 }
