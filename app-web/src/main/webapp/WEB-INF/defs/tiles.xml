@@ -120,4 +120,6 @@
 		<put-attribute name="body" value="/WEB-INF/jsp/jsp-body/sms_statistic.jsp" type="template" />
 	</definition>
 	
+	<definition name="smsForm" template="/WEB-INF/jsp/jsp-body/sms_form.jsp"></definition>
+	
 </tiles-definitions>

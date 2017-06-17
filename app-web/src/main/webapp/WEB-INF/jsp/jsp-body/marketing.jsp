@@ -350,4 +350,19 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- ------------------------------------------- ADD CUSTOMER  ----------------------------------------------------- -->
+	<div class="modal inmodal" id="formSendSms" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" style="width: 900px;">
+			<div class="modal-content animated bounceInRight">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
+					<h5 class="modal-title text-uppercase"><spring:message code="sms.create" text="!"/></h5>
+				</div>
+				<div class="modal-body">
+					<div id="sms-send-result"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

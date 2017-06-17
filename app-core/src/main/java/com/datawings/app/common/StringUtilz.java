@@ -95,9 +95,14 @@ public class StringUtilz {
 		return true;
 	}
 
-	 public static String unAccent(String s) {
-         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
-         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-         return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replaceAll("đ", "d");
- }
+	public static String unAccent(String s) {
+		String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		return pattern.matcher(temp).replaceAll("").replaceAll("Đ", "D").replaceAll("đ", "d");
+	}
+	
+	public static String referrer(String s) {
+		String rs = StringUtils.substringAfter(s, "/secure");
+		return "/secure" + rs;
+	}
 }

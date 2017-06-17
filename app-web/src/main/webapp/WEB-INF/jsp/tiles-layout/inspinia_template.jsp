@@ -225,6 +225,16 @@
 	 	    });
 	 	}
 	 	
+	 	function doFormSms(phone) {
+	 	    $.ajax({ 
+	 	    	url: "<spring:url value='/secure/sms/form/'/>",
+	 	        cache: false,
+	 	        data: {phone : phone},
+	 	        success: function (reponse) {
+	 	            $("div#sms-send-result").html(reponse);
+	 	        }
+	 	    });
+	 	}
 	</script>
 	
 	<div id="wrapper">
@@ -239,10 +249,6 @@
 				</div>
 				<tiles:insertAttribute name="footer"></tiles:insertAttribute>
 	        </div>
-	        
-				
-			<tiles:insertAttribute name="sms"></tiles:insertAttribute>
-							
         </div>  
    </div>
 </body>
