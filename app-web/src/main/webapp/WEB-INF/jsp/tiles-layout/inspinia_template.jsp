@@ -230,15 +230,19 @@
 	<div id="wrapper">
 		<tiles:insertAttribute name="menu"></tiles:insertAttribute>
         <div id="page-wrapper" class="white-bg">
-		<tiles:insertAttribute name="banner"></tiles:insertAttribute>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="wrapper wrapper-content">
-	                <tiles:insertAttribute name="body"></tiles:insertAttribute>
-                </div>
-			</div>
-			<tiles:insertAttribute name="footer"></tiles:insertAttribute>
-        </div>
+			<tiles:insertAttribute name="banner"></tiles:insertAttribute>
+	        <div class="row">
+	            <div class="col-lg-12">
+	                <div class="wrapper wrapper-content">
+		                <tiles:insertAttribute name="body"></tiles:insertAttribute>
+	                </div>
+				</div>
+				<tiles:insertAttribute name="footer"></tiles:insertAttribute>
+	        </div>
+	        
+				
+			<tiles:insertAttribute name="sms"></tiles:insertAttribute>
+							
         </div>  
    </div>
 </body>

@@ -10,6 +10,7 @@
 		<put-attribute name="banner" value="/WEB-INF/jsp/component/inspinia/banner.jsp" type="template" />
 		<put-attribute name="footer" value="/WEB-INF/jsp/component/inspinia/footer.jsp" type="template" />
 		<put-attribute name="setting" value="/WEB-INF/jsp/component/inspinia/skin-config.jsp" type="template" />
+		<put-attribute name="sms" value="/WEB-INF/jsp/component/inspinia/sms.jsp" type="template" />
 	</definition>
 	
 	<definition name="dashboard" extends="modelGeneral">
@@ -50,10 +51,14 @@
 	<definition name="user" extends="modelGeneral">
 		<put-attribute name="body" value="/WEB-INF/jsp/jsp-body/user.jsp" type="template" />
 	</definition>
+	<definition name="params" extends="modelGeneral">
+		<put-attribute name="body" value="/WEB-INF/jsp/jsp-body/params.jsp" type="template" />
+	</definition>
 	
 	<definition name="userLoadPage" template="/WEB-INF/jsp/jsp-body/user_load_page.jsp"></definition>
 	
 	<definition name="userModel" template="/WEB-INF/jsp/jsp-body/user_edit.jsp"></definition>
+	<definition name="paramsModel" template="/WEB-INF/jsp/jsp-body/params_edit.jsp"></definition>
 	
 	<definition name="customer" extends="modelGeneral">
 		<put-attribute name="body" value="/WEB-INF/jsp/jsp-body/customer.jsp" type="template" />

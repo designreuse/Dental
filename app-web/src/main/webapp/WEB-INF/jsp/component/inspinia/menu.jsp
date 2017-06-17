@@ -91,6 +91,11 @@
 	                     	<i class="fa fa-user"></i> <spring:message code="menu.setting.user" text="!"/>
                      	</a>
 					</li>
+					<li id="param_param">
+						<a href="<c:url value="/secure/params"/>">
+	                     	<i class="fa fa-user"></i> <spring:message code="menu.setting.params" text="!"/>
+                     	</a>
+					</li>
 				</ul>
 			</li>
 			</sec:authorize>
