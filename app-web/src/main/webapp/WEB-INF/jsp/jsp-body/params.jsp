@@ -40,6 +40,22 @@
 	        }
 	    });
 	}
+	
+	function ConformDelete(id) {
+	    swal({
+	        title: "<spring:message code="message.conform.delete" text="!"/>" + " [" + id +"] ?",
+	        type: "warning",
+	        showCancelButton: true,
+	        confirmButtonColor: "#DD6B55",
+	        confirmButtonText: "<spring:message code="button.delete" text="!"/>",
+	        cancelButtonText: "<spring:message code="button.cancel" text="!"/>",
+	        closeOnConfirm: false
+	    }, function () {
+			 document.forms[0].elements['id'].value=id;
+			 document.forms[0].submit();
+	    });
+	};
+	
 </script>
 <div class="row">
 	<div class="col-sm-12">
@@ -49,7 +65,7 @@
 	</div>
 </div>
 <div id="body">
-	<form:form id="form" name="form" method="post" modelAttribute="userFilter">
+	<form:form id="form" name="form" method="post" modelAttribute="userFilter" action="params/delete">
 		<input name="action" type="hidden">
 		<input name="id" type="hidden">
 	
@@ -61,10 +77,10 @@
 						<thead>
 							<tr>
 								<th class="text-center">#</th>
-								<th class="text-center"><spring:message code="commom.action" text="!Action"/></th>
-								<th>Key</th>
-								<th>Value</th>
-								<th>Type</th>
+								<th class="text-center"></th>
+								<th><spring:message code="params.key" text="!"/></th>
+								<th><spring:message code="params.value" text="!"/></th>
+								<th><spring:message code="params.type" text="!"/></th>
 							</tr>
 						</thead>
 						<tbody>
