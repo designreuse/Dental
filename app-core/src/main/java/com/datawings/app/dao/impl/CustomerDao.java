@@ -93,9 +93,9 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 	}
 
 	@SuppressWarnings("deprecation")
-	public Customer findByUser(String id, SysUser sysUser) {
+	public Customer findByUser(Integer serial, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		criteria.add(Restrictions.eq("serial", id));
+		criteria.add(Restrictions.eq("serial", serial));
 		if(StringUtils.equals(sysUser.getRole(), "USER")){
 			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
 		}

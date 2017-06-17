@@ -27,8 +27,8 @@ public class SmsDao extends BaseDao<Sms, Integer> implements ISmsDao{
 	@SuppressWarnings("deprecation")
 	public Integer getSmsRowCount(SmsFilter filter, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("serial", filter.getSerial().trim()));
+		if(filter.getSerial() != null && filter.getSerial() > 0){
+			criteria.add(Restrictions.eq("serial", filter.getSerial()));
 		}
 		if(StringUtils.isNotBlank(filter.getFullName())){
 			criteria.add(Restrictions.or(Restrictions.like("fullName", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE), 
@@ -51,8 +51,8 @@ public class SmsDao extends BaseDao<Sms, Integer> implements ISmsDao{
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Sms> getlistSms(SmsFilter filter, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("serial", filter.getSerial().trim()));
+		if(filter.getSerial() != null && filter.getSerial() > 0){
+			criteria.add(Restrictions.eq("serial", filter.getSerial()));
 		}
 		if(StringUtils.isNotBlank(filter.getFullName())){
 			criteria.add(Restrictions.or(Restrictions.like("fullName", filter.getFullName().toUpperCase().trim(), MatchMode.ANYWHERE), 

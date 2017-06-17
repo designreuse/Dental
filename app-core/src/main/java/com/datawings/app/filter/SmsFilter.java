@@ -3,7 +3,7 @@ package com.datawings.app.filter;
 public class SmsFilter extends BaseFilter {
 	private String phone;
 	private String type;
-	private String serial;
+	private Integer serial;
 	private String fullName;
 	private String address;
 	private String status;
@@ -90,11 +90,11 @@ public class SmsFilter extends BaseFilter {
 		this.type = type;
 	}
 
-	public String getSerial() {
+	public Integer getSerial() {
 		return serial;
 	}
 
-	public void setSerial(String serial) {
+	public void setSerial(Integer serial) {
 		this.serial = serial;
 	}
 

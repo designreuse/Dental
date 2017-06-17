@@ -13,10 +13,10 @@ public interface ICustomerDao extends IBaseDao<Customer, CustomerId>{
 
 	List<Customer> getCustomers(CustomerFiler filter, SysUser sysUser);
 
-	Customer findByUser(String id, SysUser sysUser);
+	Customer findByUser(Integer serial, SysUser sysUser);
 
 	List<Customer> getCustomer(String branch);
 
 	Integer maxSerial(SysUser sysUser);
-
+	
 }

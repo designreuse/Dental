@@ -63,8 +63,8 @@ public class CustomerService implements ICustomerService{
 		return dao.getCustomers(filter, sysUser);
 	}
 
-	public Customer findByUser(String id, SysUser sysUser) {
-		return dao.findByUser(id, sysUser);
+	public Customer findByUser(Integer serial, SysUser sysUser) {
+		return dao.findByUser(serial, sysUser);
 	}
 
 	@Transactional

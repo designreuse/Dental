@@ -32,7 +32,7 @@ public class Sms extends Base {
 	private String type;
 
 	@Column(name = "serial")
-	private String serial;
+	private Integer serial;
 
 	@Column(name = "full_name")
 	private String fullName;
@@ -54,7 +54,7 @@ public class Sms extends Base {
 	private String createdBy;
 	
 	@Column(name = "date_sent")
-	private String dateSent;
+	private Date dateSent;
 	
 	@Column(name = "count")
 	private Integer count;
@@ -78,8 +78,14 @@ public class Sms extends Base {
 		BeanUtil.initSimplePropertyBean(this);
 	}
 
-	public String getDateSent() {
+	
+
+	public Date getDateSent() {
 		return dateSent;
+	}
+
+	public void setDateSent(Date dateSent) {
+		this.dateSent = dateSent;
 	}
 
 	public Integer getCount() {
@@ -90,10 +96,7 @@ public class Sms extends Base {
 		this.count = count;
 	}
 
-	public void setDateSent(String dateSent) {
-		this.dateSent = dateSent;
-	}
-
+	
 	public Integer getSmsId() {
 		return smsId;
 	}
@@ -126,11 +129,11 @@ public class Sms extends Base {
 		this.type = type;
 	}
 
-	public String getSerial() {
+	public Integer getSerial() {
 		return serial;
 	}
 
-	public void setSerial(String serial) {
+	public void setSerial(Integer serial) {
 		this.serial = serial;
 	}
 
@@ -171,7 +174,27 @@ public class Sms extends Base {
 	}
 
 	public void setStatus(String status) {
-		this.status = status;
+		if ("100".equals(status)) {
+			this.status = "Request thành công";
+		}else
+		if ("99".equals(status)) {
+			this.status = "Lỗi không xác định , thử lại sau";
+		}else
+		if ("101".equals(status)) {
+			this.status = "Đăng nhập thất bại (api key hoặc secrect key không đúng )";
+		}else
+		if ("102".equals(status)) {
+			this.status = "Tài khoản đã bị khóa";
+		}else
+		if ("103".equals(status)) {
+			this.status = "Số dư tài khoản không đủ dể gửi tin";
+		}else
+		if ("104".equals(status)) {
+			this.status = "Mã Brandname không đúng";
+		}else {
+			this.status = "Error";
+		}
+		
 	}
 
 	public String getCreatedBy() {

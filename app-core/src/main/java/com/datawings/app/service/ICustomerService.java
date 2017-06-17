@@ -27,7 +27,7 @@ public interface ICustomerService {
 
 	public List<Customer> getCustomers(CustomerFiler filter, SysUser sysUser);
 
-	public Customer findByUser(String id, SysUser sysUser);
+	public Customer findByUser(Integer serial, SysUser sysUser);
 
 	public List<Customer> getCustomer(String branch);
 	
