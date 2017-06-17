@@ -1,12 +1,7 @@
-
 app-web/.project
-
 app-web/.classpath
-
 app-core/.project
-
 app-core/.classpath
-
 *.prefs
-
+.project
 app-core/bin/
