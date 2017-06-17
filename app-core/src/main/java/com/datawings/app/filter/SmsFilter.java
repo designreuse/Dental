@@ -10,6 +10,9 @@ public class SmsFilter extends BaseFilter {
 	private String dateFrom;
 	private String dateTo;
 	
+	private String phoneSend;
+	private String messageSend;
+	
 	private Integer unit;
 	private Integer count;
 	private Integer gross;
@@ -20,6 +23,22 @@ public class SmsFilter extends BaseFilter {
 
 	public void init() {
 		super.init();
+	}
+
+	public String getPhoneSend() {
+		return phoneSend;
+	}
+
+	public void setPhoneSend(String phoneSend) {
+		this.phoneSend = phoneSend;
+	}
+
+	public String getMessageSend() {
+		return messageSend;
+	}
+
+	public void setMessageSend(String messageSend) {
+		this.messageSend = messageSend;
 	}
 
 	public Integer getUnit() {

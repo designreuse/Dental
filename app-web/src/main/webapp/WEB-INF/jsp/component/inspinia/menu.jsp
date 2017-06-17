@@ -60,12 +60,12 @@
 				<ul class="nav nav-second-level">
 					<li id="sms_send">
 		             	<a href="<c:url value="/secure/sms"/>">
-		             		<i class="fa fa-list-ul"></i><span class="nav-label"><spring:message code="menu.sms.send" text="!"/></span>
+		             		<i class="fa fa-envelope"></i><span class="nav-label"><spring:message code="menu.sms.send" text="!"/></span>
 		             	</a>
 					</li>
 					<li id="sms_statistic">
 		             	<a href="<c:url value="/secure/sms/statistic"/>">
-		             		<i class="fa fa-calendar"></i><span class="nav-label"><spring:message code="menu.sms.statistic" text="!"/></span>
+		             		<i class="fa fa-list-ul"></i><span class="nav-label"><spring:message code="menu.sms.statistic" text="!"/></span>
 		             	</a>
 					</li>
 				</ul>
