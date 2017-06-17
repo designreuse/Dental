@@ -53,6 +53,24 @@
 				</ul>
 			</li>
 			
+			<li id="sms">
+				<a href="#">
+					<i class="fa fa-mobile"></i><span class="nav-label"><spring:message code="menu.sms" text="!"/></span><span class="fa arrow"></span>
+				</a>
+				<ul class="nav nav-second-level">
+					<li id="sms_send">
+		             	<a href="<c:url value="/secure/sms"/>">
+		             		<i class="fa fa-list-ul"></i><span class="nav-label"><spring:message code="menu.sms.send" text="!"/></span>
+		             	</a>
+					</li>
+					<li id="sms_statistic">
+		             	<a href="<c:url value="/secure/sms/statistic"/>">
+		             		<i class="fa fa-calendar"></i><span class="nav-label"><spring:message code="menu.sms.statistic" text="!"/></span>
+		             	</a>
+					</li>
+				</ul>
+			</li>
+			
 			<%-- <li id="invoice">
 				<a href="#">
 					<i class="fa fa-files-o"></i><span class="nav-label"><spring:message code="menu.invoice" text="!"/></span><span class="fa arrow"></span>

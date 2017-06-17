@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.datawings.app.dao.ISmsDao;
-import com.datawings.app.model.Params;
+import com.datawings.app.filter.SmsFilter;
 import com.datawings.app.model.Sms;
+import com.datawings.app.model.SysUser;
 import com.datawings.app.service.ISmsService;
 
 @Service
@@ -51,9 +52,25 @@ public class SmsService implements ISmsService {
 	public void deleteById(Serializable id) {
 		dao.deleteById(id);
 	}
+	
 	@Transactional
 	public List<Sms> findAll() {
 		return dao.findAll();
+	}
+
+	@Transactional
+	public Integer getSmsRowCount(SmsFilter filter, SysUser sysUser) {
+		return dao.getSmsRowCount(filter, sysUser);
+	}
+
+	@Transactional
+	public List<Sms> getlistSms(SmsFilter filter, SysUser sysUser) {
+		return dao.getlistSms(filter, sysUser);
+	}
+
+	@Transactional
+	public List<SmsFilter> getSmsStatistic(SmsFilter filter, SysUser sysUser) {
+		return dao.getSmsStatistic(filter, sysUser);
 	}
 	
 }

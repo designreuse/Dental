@@ -110,4 +110,14 @@
 	
 	<definition name="billLoadPage" template="/WEB-INF/jsp/jsp-body/bill_load_page.jsp"></definition>
 	
+	<definition name="sms" extends="modelGeneral">
+		<put-attribute name="body" value="/WEB-INF/jsp/jsp-body/sms.jsp" type="template" />
+	</definition>
+	
+	<definition name="smsLoadPage" template="/WEB-INF/jsp/jsp-body/sms_load_page.jsp"></definition>
+	
+	<definition name="smsStatistic" extends="modelGeneral">
+		<put-attribute name="body" value="/WEB-INF/jsp/jsp-body/sms_statistic.jsp" type="template" />
+	</definition>
+	
 </tiles-definitions>
