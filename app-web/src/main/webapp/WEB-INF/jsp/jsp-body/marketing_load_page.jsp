@@ -78,7 +78,11 @@
 							</sec:authorize>
 						</td>
 						<td>${elm.fullName}</td>
-						<td>${elm.phone}</td>
+						<td>
+							<a onclick='sendSMS"${elm.marketingId}")' data-toggle="modal" data-target="#smsPopup"
+								title="<spring:message code="message.edit" text="!"/>">${elm.phone}
+							</a>
+						</td>
 						<td>${elm.address}</td>
 						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.arrivalDate}" /></td>
 						<td>${elm.content}</td>
