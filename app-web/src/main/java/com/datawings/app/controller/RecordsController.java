@@ -124,6 +124,7 @@ public class RecordsController {
 			records.setDateNext(DateUtil.string2Date(filter.getDateNext(), "dd/MM/yyyy"));
 			records.setContentNext(filter.getContentNext().toUpperCase());*/
 			records.setNote(filter.getNote());
+			records.setCausePayment(filter.getCausePayment());
 			records.setStatus("W");
 			records.setCreatedBy(sysUser.getUsername());
 			records.setCreatedDate(new Date());

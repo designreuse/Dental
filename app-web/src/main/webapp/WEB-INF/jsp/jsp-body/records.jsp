@@ -210,6 +210,7 @@
 							<th><spring:message code="records.content" text="!"/></th>
 							<th><spring:message code="records.dateNext" text="!"/></th>
 							<th><spring:message code="records.contentNext" text="!"/></th>
+							<th><spring:message code="customer.dentist" text="!"/></th>
 							<th class="text-right"><spring:message code="records.amount.extra" text="!"/></th>
 							<th class="text-right"><spring:message code="records.sale" text="!"/></th>
 							<th class="text-right"><spring:message code="records.net" text="!"/></th>
@@ -246,6 +247,7 @@
 								<td>${elm.content}</td>
 								<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateNext}" /></td>
 								<td>${elm.contentNext}</td>
+								<td>${elm.dentist}</td>
 								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross}"/></td>
 								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.sale}"/></td>
 								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross -  elm.sale}"/></td>
@@ -323,20 +325,15 @@
 						
 						<div class="form-group">
 							<div class="row">
-								<div class="col-sm-4">
+								<div class="col-sm-6">
 									<label><spring:message code="records.amount.extra" text="!"/></label>
 									<form:input path="gross" type="text" cssClass="form-control textfield text-right"/>
 									<label id="err_gross" class="text-danger"></label>
 								</div>
-								<div class="col-sm-4">
+								<div class="col-sm-6">
 									<label><spring:message code="records.sale" text="!"/></label>
 									<form:input path="sale" type="text" cssClass="form-control textfield text-right"/>
 									<label id="err_sale" class="text-danger"></label>
-								</div>
-								<div class="col-sm-4">
-									<label><spring:message code="records.payment" text="!"/></label>
-									<form:input path="payment" type="text" cssClass="form-control textfield text-right"/>
-									<label id="err_payment" class="text-danger"></label>
 								</div>
 							</div>
 						</div>
@@ -358,6 +355,21 @@
 							</div>
 						</div>
 						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-6">
+									<label><spring:message code="invoice.cause" text="!"/></label>
+									<form:input path="causePayment" type="text" cssClass="form-control textfield"/>
+								</div>
+								<div class="col-sm-6">
+									<label><spring:message code="records.payment" text="!"/></label>
+									<form:input path="payment" type="text" cssClass="form-control textfield text-right"/>
+									<label id="err_payment" class="text-danger"></label>
+								</div>
+							</div>
+						</div>
+						
+								
 						<%-- <div class="form-group">
 							<div class="row">
 								<div class="col-sm-12">

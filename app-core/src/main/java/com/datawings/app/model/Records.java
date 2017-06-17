@@ -68,6 +68,9 @@ public class Records extends Base {
 	@Column(name = "status")
 	private String status;
 	
+	@Column(name = "cause_payment")
+	private String causePayment;
+	
 	@Column(name = "created_by")
 	private String createdBy;
 
@@ -92,6 +95,14 @@ public class Records extends Base {
 
 	private void init() {
 		BeanUtil.initSimplePropertyBean(this);
+	}
+
+	public String getCausePayment() {
+		return causePayment;
+	}
+
+	public void setCausePayment(String causePayment) {
+		this.causePayment = causePayment;
 	}
 
 	public String getStatus() {

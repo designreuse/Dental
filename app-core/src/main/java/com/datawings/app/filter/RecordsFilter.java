@@ -22,6 +22,7 @@ public class RecordsFilter extends BaseFilter {
 	private String sale;
 	private String payment;
 	private String branch;
+	private String causePayment;
 
 	private Integer customerId;
 	private Integer recordId;
@@ -37,6 +38,7 @@ public class RecordsFilter extends BaseFilter {
 	private String grossEdit;
 	private String saleEdit;
 	private String paymentEdit;
+	private String causePaymentEdit;
 
 	public RecordsFilter() {
 		init();
@@ -46,6 +48,22 @@ public class RecordsFilter extends BaseFilter {
 		super.init();
 		this.sale = "0";
 		this.dateExcute = DateUtil.date2String(new Date(), "dd/MM/yyyy");
+	}
+
+	public String getCausePayment() {
+		return causePayment;
+	}
+
+	public void setCausePayment(String causePayment) {
+		this.causePayment = causePayment;
+	}
+
+	public String getCausePaymentEdit() {
+		return causePaymentEdit;
+	}
+
+	public void setCausePaymentEdit(String causePaymentEdit) {
+		this.causePaymentEdit = causePaymentEdit;
 	}
 
 	public String getBranchEdit() {
