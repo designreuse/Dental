@@ -8,3 +8,5 @@ app-core/.project
 app-core/.classpath
 
 *.prefs
+
+app-core/bin/
