@@ -81,7 +81,7 @@ public class SmsDao extends BaseDao<Sms, Integer> implements ISmsDao{
 		StringBuffer hql = new StringBuffer();
 		hql.append("select type, sum(count) as count");
 		hql.append(" from sms");
-		hql.append(" where status = 'F'");
+		hql.append(" where status_code = '5'");
 		
 		if(StringUtils.isNotBlank(filter.getDateFrom().trim()) && StringUtils.isNotBlank(filter.getDateTo().trim()) ){
 			if(DateUtil.checkDateAsString(filter.getDateFrom().trim(), "dd/MM/yyyy") 
