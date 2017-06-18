@@ -69,7 +69,7 @@
 						<td><spring:message code="sms.type.${elm.type}" text="!"/></td>
 						<td>${elm.message}</td>
 						<td>${elm.count}</td>
-						<td><spring:message code="sms.status.${elm.status}" text="!"/></td>
+						<td>${elm.status}</td>
 						<td>${elm.createdBy}</td>
 						<td><fmt:formatDate pattern="dd/MM/yyyy HH:mm" value="${elm.createdDate}" /></td>
 					</tr>

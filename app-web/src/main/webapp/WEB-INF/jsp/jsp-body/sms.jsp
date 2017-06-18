@@ -181,11 +181,11 @@
 								<div class="col-sm-4">
 									<label><spring:message code="sms.type" text="!"/></label>
 									<form:select path="typeSend" class="chosen-select" cssStyle="width:100%">
-										<option value="1" <c:if test="${'1' == smsFilter.typeSend}">selected="selected"</c:if>>
-											<spring:message code="sms.type.1" text="!"/>
+										<option value="7" <c:if test="${'7' == smsFilter.typeSend}">selected="selected"</c:if>>
+											<spring:message code="sms.type.7" text="!"/>
 										</option>
-										<option value="2" <c:if test="${'1' == smsFilter.typeSend}">selected="selected"</c:if>>
-											<spring:message code="sms.type.2" text="!"/>
+										<option value="0" <c:if test="${'0' == smsFilter.typeSend}">selected="selected"</c:if>>
+											<spring:message code="sms.type.0" text="!"/>
 										</option>
 									</form:select>
 								</div>

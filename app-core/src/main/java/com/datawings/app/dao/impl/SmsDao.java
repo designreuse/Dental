@@ -112,5 +112,23 @@ public class SmsDao extends BaseDao<Sms, Integer> implements ISmsDao{
 
 		return result;
 	}
+
+	@Override
+	public List<Sms> getAllWaitingSMS() {
+		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+		
+		criteria.add(Restrictions.isNotNull("smsCode"));
+		criteria.add(Restrictions.or(
+						Restrictions.or(
+							Restrictions.eq("statusCode","1"), 
+							Restrictions.eq("statusCode","2")
+						),
+						Restrictions.or(
+								Restrictions.eq("statusCode","3"), 
+								Restrictions.eq("statusCode","100")
+						)));
+
+		return  criteria.list();
+	}
 	
 }

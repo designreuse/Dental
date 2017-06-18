@@ -77,11 +77,11 @@
 			<div class="col-sm-4">
 				<label><spring:message code="sms.type" text="!"/></label>
 				<select id="typeSms" name="typeSms" class="chosen-select" style="width:100%">
-					<option value="1">
-						<spring:message code="sms.type.1" text="!"/>
+					<option value="7">
+						<spring:message code="sms.type.7" text="!"/>
 					</option>
-					<option value="2">
-						<spring:message code="sms.type.2" text="!"/>
+					<option value="0">
+						<spring:message code="sms.type.0" text="!"/>
 					</option>
 				</select>
 			</div>

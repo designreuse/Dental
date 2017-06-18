@@ -14,4 +14,6 @@ public interface ISmsDao extends IBaseDao<Sms, Integer>{
 
 	List<SmsFilter> getSmsStatistic(SmsFilter filter, SysUser sysUser);
 
+	List<Sms> getAllWaitingSMS();
+
 }
