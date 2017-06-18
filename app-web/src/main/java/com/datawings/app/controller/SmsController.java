@@ -23,11 +23,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.datawings.app.common.DateUtil;
 import com.datawings.app.common.StringUtilz;
 import com.datawings.app.filter.SmsFilter;
-
 import com.datawings.app.manager.SmsManager;
 import com.datawings.app.model.Customer;
-import com.datawings.app.model.Params;
-
 import com.datawings.app.model.Sms;
 import com.datawings.app.model.SysUser;
 import com.datawings.app.service.ICustomerService;
@@ -97,7 +94,7 @@ public class SmsController {
 	public String getDentistLoadPage(@ModelAttribute("smsFilter") SmsFilter filter, Integer pageNo, Model model){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
-		
+		smsManager.updateSmsStatus();
 		filter.setPage(pageNo);
 		List<Sms> listSms = smsService.getlistSms(filter, sysUser);
 		model.addAttribute("listSms", listSms);
@@ -187,6 +184,8 @@ public class SmsController {
 	
 	@RequestMapping(value = "/secure/smsSend", method = RequestMethod.POST)
 	public String sendSms(Model model , HttpServletRequest request) throws IOException {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		SysUser sysUser = (SysUser) auth.getPrincipal();
 		String referrer = ((HttpServletRequest) request).getHeader("referer");
 		String ridirect = StringUtilz.referrer(referrer);
 		
@@ -194,9 +193,11 @@ public class SmsController {
 		String typeSms = request.getParameter("typeSms");
 		String contentSms = request.getParameter("messageSms");
 		
-		//Thong send message
-		System.out.println(phoneSms + typeSms + contentSms);
-		
+		SmsFilter smsFilter = new SmsFilter();
+		smsFilter.setPhoneSend(phoneSms);
+		smsFilter.setMessageSend(contentSms);
+		smsFilter.setTypeSend(typeSms);
+		smsManager.sendSms(smsFilter, sysUser);
 		
 		return "redirect:" + ridirect;
 	}

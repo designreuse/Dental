@@ -72,5 +72,10 @@ public class SmsService implements ISmsService {
 	public List<SmsFilter> getSmsStatistic(SmsFilter filter, SysUser sysUser) {
 		return dao.getSmsStatistic(filter, sysUser);
 	}
+
+	@Override
+	public List<Sms> getAllWaitingSMS() {
+		return dao.getAllWaitingSMS();
+	}
 	
 }

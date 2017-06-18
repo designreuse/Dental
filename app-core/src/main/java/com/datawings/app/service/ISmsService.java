@@ -30,4 +30,6 @@ public interface ISmsService {
 	public List<Sms> getlistSms(SmsFilter filter, SysUser sysUser);
 
 	public List<SmsFilter> getSmsStatistic(SmsFilter filter, SysUser sysUser);
+
+	public List<Sms> getAllWaitingSMS();
 }
