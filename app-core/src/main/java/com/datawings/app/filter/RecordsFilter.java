@@ -39,7 +39,8 @@ public class RecordsFilter extends BaseFilter {
 	private String saleEdit;
 	private String paymentEdit;
 	private String causePaymentEdit;
-
+	private String statusEdit;
+	
 	public RecordsFilter() {
 		init();
 	}
@@ -52,6 +53,14 @@ public class RecordsFilter extends BaseFilter {
 
 	public String getCausePayment() {
 		return causePayment;
+	}
+
+	public String getStatusEdit() {
+		return statusEdit;
+	}
+
+	public void setStatusEdit(String statusEdit) {
+		this.statusEdit = statusEdit;
 	}
 
 	public void setCausePayment(String causePayment) {

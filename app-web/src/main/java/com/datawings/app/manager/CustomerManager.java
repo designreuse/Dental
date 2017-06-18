@@ -35,7 +35,7 @@ public class CustomerManager {
 	private IRecordsService recordsService;
 	
 	@Transactional
-	public Integer addCustomer(CustomerFiler filter,SysUser sysUser, Integer id) {
+	public Integer addCustomer(CustomerFiler filter, SysUser sysUser, Integer id) {
 		Integer serial = customerService.maxSerial(sysUser);
 		
 		Customer customer = new Customer();
@@ -60,9 +60,69 @@ public class CustomerManager {
 		
 		customerService.save(customer);
 		
+		//Add records
+		
+		Records records = new Records();
+		records.setCustomerId(customer.getCustomerId());
+		records.setSerial(customer.getSerial());
+		records.setBranch(customer.getBranch());
+		records.setDateExcute(DateUtil.string2Date(filter.getArrivalDateAdd(), "dd/MM/yyyy"));
+		records.setDentist(filter.getDentistAdd());
+		records.setDateNext(null);
+		records.setNote(filter.getNoteAdd().trim());
+		records.setStatus("W");
+		records.setCreatedBy(sysUser.getUsername());
+		records.setCreatedDate(new Date());
+		
+		recordsService.merge(records);
+		
+		//Update marketing
 		Marketing marketing = marketingService.find(id);
 		marketing.setStatus(DentalUtils.status_FINISH);
 		marketingService.merge(marketing);
+		
+		return customer.getCustomerId();
+	}
+	
+	@Transactional
+	public Integer addCustomerGuest(CustomerFiler filter, SysUser sysUser) {
+		Integer serial = customerService.maxSerial(sysUser);
+		
+		Customer customer = new Customer();
+		customer.setSerial(serial + 1);
+		customer.setFullName(filter.getFullNameCreate().trim().toUpperCase());
+		customer.setFullNameEn(StringUtilz.unAccent(filter.getFullNameCreate().trim()).toUpperCase());
+		customer.setSex(filter.getSexCreate());
+		customer.setType(filter.getTypeCreate());
+		customer.setBirthday(DateUtil.string2Date(filter.getBirthdayCreate(), "dd/MM/yyyy"));
+		customer.setPhone(filter.getPhoneCreate());
+		customer.setEmail(filter.getEmailCreate());
+		customer.setAddress(filter.getAddressCreate().toUpperCase());
+		customer.setArrivalDate(DateUtil.string2Date(filter.getArrivalDateCreate(), "dd/MM/yyyy"));
+		customer.setCause(filter.getCauseCreate().toUpperCase());
+		customer.setDentist(filter.getDentistCreate());
+		customer.setStatus(filter.getStatusCreate());
+		customer.setBranch(sysUser.getBranch());
+		customer.setNote(filter.getNoteCreate().trim());
+		customer.setCreatedBy(sysUser.getUsername());
+		customer.setCreatedDate(new Date());
+		
+		customerService.save(customer);
+		
+		//Add records
+		
+		Records records = new Records();
+		records.setCustomerId(customer.getCustomerId());
+		records.setSerial(customer.getSerial());
+		records.setBranch(customer.getBranch());
+		records.setDateExcute(DateUtil.string2Date(filter.getArrivalDateCreate(), "dd/MM/yyyy"));
+		records.setDentist(filter.getDentistCreate());
+		records.setDateNext(null);
+		records.setStatus("W");
+		records.setCreatedBy(sysUser.getUsername());
+		records.setCreatedDate(new Date());
+		
+		recordsService.merge(records);
 		
 		return customer.getCustomerId();
 	}
@@ -94,8 +154,9 @@ public class CustomerManager {
 		records.setPayment(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getPaymentEdit())));
 		records.setDateNext(DateUtil.string2Date(filter.getDateNextEdit(), "dd/MM/yyyy"));
 		records.setContentNext(filter.getContentNextEdit().toUpperCase());
-		records.setModifiedBy(sysUser.getUsername());
 		records.setCausePayment(filter.getCausePaymentEdit());
+		records.setStatus(filter.getStatusEdit());
+		records.setModifiedBy(sysUser.getUsername());
 		records.setModifiedDate(new Date());
 		recordsService.merge(records);
 	}

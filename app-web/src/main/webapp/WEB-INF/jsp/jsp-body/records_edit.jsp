@@ -24,6 +24,10 @@
      .chosen-container {
         width: 100% !important;
     }
+    
+    .form-group {
+    	margin-bottom: 5px; */
+	}
 </style>
 
 <script type="text/javascript">
@@ -104,7 +108,7 @@
 			<div class="col-sm-6">
 				<label><spring:message code="records.teeth" text="!"/></label> <label class="text-danger">*</label>
 				<form:input path="teethEdit" value="${records.teeth}" type="text" cssClass="form-control textfield"/>
-					<label id="err_teethEdit" class="text-danger"></label>
+				<label id="err_teethEdit" class="text-danger"></label>
 			</div>
 			<div class="col-sm-6">
 				<label><spring:message code="records.content" text="!"/></label> <label class="text-danger">*</label>
@@ -151,15 +155,24 @@
 		
 	<div class="form-group">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 				<label><spring:message code="invoice.cause" text="!"/></label>
 				<form:input path="causePaymentEdit" type="text" cssClass="form-control textfield"/>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 				<fmt:formatNumber pattern="${formatPattern}" value="${records.payment}" var="payment"/>
 				<label><spring:message code="records.payment" text="!"/></label> <label class="text-danger">*</label>
 				<form:input path="paymentEdit" value="${payment }" type="text" cssClass="form-control textfield text-right"/>
 				<label id="err_paymentEdit" class="text-danger"></label>
+			</div>
+			<div class="col-sm-4">
+				<label><spring:message code="records.finish" text="!"/></label>
+				 <div class="checkbox checkbox-primary">
+                     <input name="statusEdit" id="checkbox2" type="checkbox" value="F">
+                     <label for="checkbox2">
+                         <spring:message code="customer.status.F" text="!"/>
+                     </label>
+                 </div>
 			</div>
 		</div>
 	</div>
