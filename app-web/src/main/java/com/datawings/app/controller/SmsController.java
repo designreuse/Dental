@@ -142,7 +142,7 @@ public class SmsController {
 		
 		SmsFilter totalSms = new SmsFilter();
 		for (SmsFilter elm : smsStatistic) {
-			if(StringUtils.equals(elm.getType(), "1")){
+			if(StringUtils.equals(elm.getType(), "7")){
 				elm.setUnit(unit_spam);
 				elm.setGross(elm.getCount() * elm.getUnit());
 				totalSms.setCount(totalSms.getCount() + elm.getCount());
