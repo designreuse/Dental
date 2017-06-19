@@ -113,7 +113,7 @@ public class SmsDao extends BaseDao<Sms, Integer> implements ISmsDao{
 		return result;
 	}
 
-	@Override
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public List<Sms> getAllWaitingSMS() {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 		

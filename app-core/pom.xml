@@ -158,14 +158,7 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.0</version>
 		</dependency>
-		
-		<!-- Java Mail -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>${javax.mail.version}</version>
-		</dependency>
-		
+				
 		<dependency>
 		   <groupId>com.lowagie</groupId>
 		   <artifactId>itext</artifactId>

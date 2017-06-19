@@ -100,8 +100,10 @@
 			<div class="col-sm-4">
 				<label><spring:message code="user.role" text="!"/></label>
 				<form:select path="roleModify" class="chosen-select" cssStyle="width:100%">
+					<option value="RECEPTION" <c:if test="${sysUser.role == 'RECEPTION'}"> selected="selected"</c:if>>RECEPTION</option>
+					<option value="MARKETING" <c:if test="${sysUser.role == 'MARKETING'}"> selected="selected"</c:if>>MARKETING</option>
+					<option value="DOCTOR" <c:if test="${sysUser.role == 'DOCTOR'}"> selected="selected"</c:if>>DOCTOR</option>
 					<option value="ADMIN" <c:if test="${sysUser.role == 'ADMIN'}"> selected="selected"</c:if>>ADMIN</option>
-					<option value="USER" <c:if test="${sysUser.role == 'USER'}"> selected="selected"</c:if>>USER</option>
 				</form:select>
 			</div>
 			<div class="col-sm-4">

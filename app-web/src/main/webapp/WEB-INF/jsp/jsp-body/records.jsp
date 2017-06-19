@@ -178,7 +178,7 @@
 				</table>
 			</div>
 		</div>
-		
+		<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
 		<div class="form-group">
 			<div class="row">
 				<div class="col-lg-12">
@@ -197,7 +197,7 @@
 				</div>
 			</div>
 		</div>
-		
+		</sec:authorize>
 		<div class="row">
 			<div class="col-sm-12">
 				<table class="table table-striped table-bordered table-hover table-result" style="width:100%;">
@@ -235,19 +235,29 @@
 							<tr id="${elm.recordId}" class="${color }">
 								<td class="text-center">${stt.index + 1}</td>
 								<td class="text-center text-nowrap">
+									<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
 									<a href="${print }"  target="_blank" title="<spring:message code="button.printer" text="!"/>"><i class="fa fa-2x fa-print"></i></a>
+									</sec:authorize>
 									<c:choose>
 										<c:when test="${customer.status eq 'F'}">
+											<sec:authorize access="hasAnyRole('DOCTOR','RECEPTION','ADMIN')">
 											<a style="color: #bababa"><i class="fa fa-2x fa-edit"></i></a>
+											</sec:authorize>
+											<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
 											<a style="color: #bababa"><i class="fa fa-2x fa-trash-o"></i></a>
+											</sec:authorize>
 										</c:when>
 										<c:otherwise>
+											<sec:authorize access="hasAnyRole('DOCTOR','RECEPTION','ADMIN')">
 											<a onclick='doEditRecords("${elm.recordId}")' data-toggle="modal" data-target="#formEdit"
 												title="<spring:message code="message.edit" text="!"/>"><i class="fa fa-2x fa-edit"></i>
 											</a>
+											</sec:authorize>
+											<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
 											<a onclick="ConformDelete('${elm.recordId}', '<fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateExcute}" />')" 
 												title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i>
 											</a>
+											</sec:authorize>
 										</c:otherwise>
 									</c:choose>
 								</td>
@@ -296,28 +306,26 @@
 					<form:form id="form-add" name="form-add" method="post" commandName="recordsFilter">
 						<input type="hidden" name="action" value="CREATE">
 						
-						<div class="form-group">
-							<div class="row">
-								<div class="col-sm-6">
-									<label><spring:message code="records.dateExcute" text="!"/></label> <label class="text-danger">*</label>
-									<div class="input-group date">
-				                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-				                        <form:input path="dateExcute" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
-									</div>
-									<label id="err_dateExcute" class="text-danger"></label>
+						<div class="row">
+							<div class="col-sm-6">
+								<label><spring:message code="records.dateExcute" text="!"/></label> <label class="text-danger">*</label>
+								<div class="input-group date">
+			                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+			                        <form:input path="dateExcute" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
 								</div>
-								<div class="col-sm-6">
-									<label><spring:message code="records.dentist" text="!"/></label>
-									<form:select path="dentist" class="chosen-select" cssStyle="width:100%">
-										<c:forEach items="${dentists}" var="elm">
-											<option value="${elm.name }" <c:if test="${customer.dentist == elm.name}">selected="selected"</c:if>>${elm.name }</option>
-										</c:forEach>
-									</form:select>
-								</div>
+								<label id="err_dateExcute" class="text-danger"></label>
+							</div>
+							<div class="col-sm-6">
+								<label><spring:message code="records.dentist" text="!"/></label>
+								<form:select path="dentist" class="chosen-select" cssStyle="width:100%">
+									<c:forEach items="${dentists}" var="elm">
+										<option value="${elm.name }" <c:if test="${customer.dentist == elm.name}">selected="selected"</c:if>>${elm.name }</option>
+									</c:forEach>
+								</form:select>
 							</div>
 						</div>
 						
-						<div class="form-group">
+						<%-- <div class="form-group">
 							<div class="row">
 								<div class="col-sm-6">
 									<label><spring:message code="records.teeth" text="!"/></label>
@@ -376,17 +384,17 @@
 									<label id="err_payment" class="text-danger"></label>
 								</div>
 							</div>
-						</div>
+						</div> --%>
 						
 								
-						<%-- <div class="form-group">
+						<div class="form-group">
 							<div class="row">
 								<div class="col-sm-12">
 									<label><spring:message code="records.note" text="!"/></label>
 									<form:textarea path="note" rows="2" class="form-control textfield"/>
 								</div>
 							</div>
-						</div> --%>
+						</div>
 						
 						<div class="form-group">
 							<div class="row">

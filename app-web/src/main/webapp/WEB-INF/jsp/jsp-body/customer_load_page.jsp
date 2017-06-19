@@ -48,7 +48,9 @@
 			<thead>
 				<tr>
 					<th class="text-center">#</th>
-					<th class="text-center"></th>
+					<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
+						<th class="text-center"></th>
+					</sec:authorize>
 					<th><spring:message code="customer.id" text="!"/></th>
 					<th><spring:message code="customer.name" text="!"/></th>
 					<th><spring:message code="customer.address" text="!"/></th>
@@ -70,9 +72,11 @@
 						</c:url>
 						
 						<td class="text-center">${row + stt.index + 1}</td>
-						<td class="text-center text-nowrap">
-							<a onclick="ConformDelete('${elm.customerId}', '${elm.fullName}')" title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i></a>
-						</td>
+						<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
+							<td class="text-center text-nowrap">
+								<a onclick="ConformDelete('${elm.customerId}', '${elm.fullName}')" title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i></a>
+							</td>
+						</sec:authorize>
 						<td><a href="${linkCustomerDetail }">${elm.serial}</a></td>
 						<td><a href="${linkCustomerDetail }">${elm.fullName}</a></td>
 						<td>${elm.address}</td>

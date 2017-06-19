@@ -179,6 +179,20 @@
 						</option>
 					</form:select>
 				</div>
+				<div class="col-sm-4">
+					<label><spring:message code="customer.source" text="!"/></label>
+					<form:select path="source" class="chosen-select" cssStyle="width:100%">
+						<option value="" <c:if test="${'' == customerFilter.source}">selected="selected"</c:if>>
+							<spring:message code="commom.all" text="!"/>
+						</option>
+						<option value="MARKETING" <c:if test="${'MARKETING' == customerFilter.source}">selected="selected"</c:if>>
+							<spring:message code="customer.source.marketing" text="!"/>
+						</option>
+						<option value="GUEST" <c:if test="${'GUEST' == customerFilter.source}">selected="selected"</c:if>>
+							<spring:message code="customer.source.guest" text="!"/>
+						</option>
+					</form:select>
+				</div>
 				<sec:authorize access="hasRole('ADMIN')">
 					<div class="col-sm-4">
 						<label><spring:message code="customer.branch" text="!"/></label>
@@ -195,14 +209,14 @@
 			</div>
 		</div>
 		
-		
-		
 		<div class="form-group">
 			<div class="row">
 				<div class="col-sm-4">
-					<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
-						<i class="fa fa-plus-square"> <spring:message code="customer.create" text="!"/></i>
-					</button>
+					<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
+						<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
+							<i class="fa fa-plus-square"> <spring:message code="customer.create" text="!"/></i>
+						</button>
+					</sec:authorize>
 				</div>
 				<div class="col-sm-8 text-right">
 					<a onclick="javascript:doSubmit('RESET');" class="btn btn-w-m btn-default text-uppercase">
