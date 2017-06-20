@@ -4,15 +4,17 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import com.datawings.app.common.DentalUtils;
 import com.datawings.app.common.SqlUtil;
 import com.datawings.app.dao.ICustomerDao;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.model.Customer;
 import com.datawings.app.model.CustomerId;
 import com.datawings.app.model.SysUser;
@@ -21,10 +23,10 @@ import com.datawings.app.model.SysUser;
 public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICustomerDao{
 
 	@SuppressWarnings("deprecation")
-	public Integer getCustomerRowCount(CustomerFiler filter, SysUser sysUser) {
+	public Integer getCustomerRowCount(CustomerFilter filter, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 		
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
 			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
@@ -56,9 +58,9 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<Customer> getCustomers(CustomerFiler filter, SysUser sysUser) {
+	public List<Customer> getCustomers(CustomerFilter filter, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
 			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
@@ -96,7 +98,7 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 	public Customer findByUser(Integer serial, SysUser sysUser) {
 		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
 		criteria.add(Restrictions.eq("serial", serial));
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
 			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
 		}
 		return (Customer) criteria.uniqueResult();
@@ -122,6 +124,15 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 			return 0;
 		}
 		return rs;
+	}
+
+	public void updateContent(Customer customer) {
+		StringBuffer hql =new StringBuffer();
+		hql.append("update customer set content = '" + customer.getContent() + "'");
+		hql.append(" where customer_id =" + customer.getCustomerId());
+		
+		SQLQuery query = getSessionFactory().openSession().createSQLQuery(hql.toString());
+		query.executeUpdate();
 	}
 
 }

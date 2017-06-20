@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -32,8 +33,8 @@ import com.datawings.app.service.IParamsService;
 import com.datawings.app.service.ISmsService;
 
 @Controller
-/*@PreAuthorize(value = "hasRole('ADMIN')")*/
 @SessionAttributes({ "smsFilter",  "smsStatisticFilter" })
+@PreAuthorize(value = "hasAnyRole('ADMIN', 'RECEPTION', 'MARKETING')")
 public class SmsController {
 	private static Integer unit_spam = 400;
 	private static Integer unit_trademark = 600;

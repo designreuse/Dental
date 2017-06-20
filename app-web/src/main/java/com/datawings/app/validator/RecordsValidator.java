@@ -8,6 +8,7 @@ import com.datawings.app.common.DateUtil;
 import com.datawings.app.common.IntegerUtil;
 import com.datawings.app.common.StringUtilz;
 import com.datawings.app.filter.RecordsFilter;
+import com.datawings.app.model.SysUser;
 
 @Component
 public class RecordsValidator {
@@ -66,7 +67,7 @@ public class RecordsValidator {
 		return erroCode;
 	}
 
-	public int checkRecordsEdit(Object target, Errors errors) {
+	public int checkRecordsEdit(Object target, Errors errors, SysUser sysUser) {
 		RecordsFilter filter = (RecordsFilter) target;
 		Integer erroCode = 0;
 		
@@ -104,17 +105,19 @@ public class RecordsValidator {
 			erroCode = 1;
 		}
 		
-		if (StringUtils.isBlank(filter.getPaymentEdit())) {
-			errors.rejectValue("paymentEdit", "message.empty", "!");
-			erroCode = 1;
-		} else if (StringUtils.isNotBlank(filter.getPaymentEdit()) && !IntegerUtil.isInteger(StringUtilz.replaceMoney(filter.getPaymentEdit()))) {
-			errors.rejectValue("paymentEdit", "message.valid", "!");
-			erroCode = 1;
-		}
-		
 		if (StringUtils.isNotBlank(filter.getDateNextEdit()) && !DateUtil.checkDateAsString(filter.getDateNextEdit(), "dd/MM/yyyy")) {
 			errors.rejectValue("dateNextEdit", "message.valid", "!");
 			erroCode = 1;
+		}
+		
+		if(!StringUtils.equals(sysUser.getRole(), "DOCTOR")){
+			if (StringUtils.isBlank(filter.getPaymentEdit())) {
+				errors.rejectValue("paymentEdit", "message.empty", "!");
+				erroCode = 1;
+			} else if (StringUtils.isNotBlank(filter.getPaymentEdit()) && !IntegerUtil.isInteger(StringUtilz.replaceMoney(filter.getPaymentEdit()))) {
+				errors.rejectValue("paymentEdit", "message.valid", "!");
+				erroCode = 1;
+			}
 		}
 		
 		return erroCode;

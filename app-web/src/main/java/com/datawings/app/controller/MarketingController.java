@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.datawings.app.common.DateUtil;
 import com.datawings.app.common.DentalUtils;
 import com.datawings.app.common.StringUtilz;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.filter.MarketingFilter;
 import com.datawings.app.filter.SmsFilter;
 import com.datawings.app.filter.ValidationError;
@@ -47,6 +48,7 @@ import com.datawings.app.validator.MarketingValidator;
 
 @Controller
 @SessionAttributes({ "marketingFilter", "CMFilter" })
+@PreAuthorize(value = "hasAnyRole('ADMIN', 'RECEPTION', 'MARKETING')")
 public class MarketingController {
 
 	@Autowired
@@ -80,8 +82,8 @@ public class MarketingController {
 	}
 	
 	@ModelAttribute("CMFilter")
-	public CustomerFiler CMFilter() {
-		CustomerFiler filter = new CustomerFiler();
+	public CustomerFilter CMFilter() {
+		CustomerFilter filter = new CustomerFilter();
 		filter.setArrivalDateAdd(DateUtil.date2String(new Date(), "dd/MM/yyyy"));
 		return filter;
 	}
@@ -246,7 +248,7 @@ public class MarketingController {
 	}
 	
 	@RequestMapping(value = "/secure/marketingcustomer", method = RequestMethod.POST)
-	public String postAddCustomer(@ModelAttribute("CMFilter") CustomerFiler filter, Model model, HttpServletRequest request) throws ServletRequestBindingException {
+	public String postAddCustomer(@ModelAttribute("CMFilter") CustomerFilter filter, Model model, HttpServletRequest request) throws ServletRequestBindingException {
 		
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		Integer id = ServletRequestUtils.getIntParameter(request, "id", 0);
@@ -262,7 +264,7 @@ public class MarketingController {
 	
 	@RequestMapping(value = "/secure/marketing/errorCustomer.json", method = RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, Object> doValidatorCustomer(@ModelAttribute("CMFilter") CustomerFiler filter, BindingResult result, Model model, Locale locale){		
+	public HashMap<String, Object> doValidatorCustomer(@ModelAttribute("CMFilter") CustomerFilter filter, BindingResult result, Model model, Locale locale){		
 		HashMap<String, Object> rs = new HashMap<String, Object>();
 		int errCode = 0;
 		errCode = customerValidator.checkCustomerFromMarketing(filter, result);

@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.datawings.app.bean.CustomerBean;
 import com.datawings.app.dao.IRecordsDao;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.filter.RecordsFilter;
 import com.datawings.app.model.Records;
 import com.datawings.app.model.SysUser;
@@ -54,8 +55,8 @@ public class RecordsService implements IRecordsService{
 		dao.deleteById(id);
 	}
 
-	//@Transactional
-	public List<Records> getSchedule(RecordsFilter filter, SysUser sysUser) {
+	@Transactional
+	public List<CustomerBean> getSchedule(RecordsFilter filter, SysUser sysUser) {
 		return dao.getSchedule(filter, sysUser);
 	}
 
@@ -65,27 +66,23 @@ public class RecordsService implements IRecordsService{
 	}
 
 	@Transactional
-	public Integer getCountCustomerReality(CustomerFiler filter, SysUser sysUser) {
+	public Integer getCountCustomerReality(CustomerFilter filter, SysUser sysUser) {
 		return dao.getCountCustomerReality(filter, sysUser);
 	}
 
-	//@Transactional
-	public List<Records> getCustomerReality(CustomerFiler filter, SysUser sysUser) {
+	@Transactional
+	public List<CustomerBean> getCustomerReality(CustomerFilter filter, SysUser sysUser) {
 		return dao.getCustomerReality(filter, sysUser);
 	}
 
 	@Transactional
-	public Integer getTotalCustomerReality(CustomerFiler filter, SysUser sysUser) {
+	public CustomerBean getTotalCustomerReality(CustomerFilter filter, SysUser sysUser) {
 		return dao.getTotalCustomerReality(filter, sysUser);
 	}
 
-	//@Transactional
-	public List<Records> getScheduleDashboard(RecordsFilter filter, SysUser sysUser, Integer pageNo) {
-		return dao.getScheduleDashboard(filter, sysUser, pageNo);
+	@Transactional
+	public List<CustomerBean> getRecordDoctor(CustomerFilter filter, SysUser sysUser) {
+		return dao.getRecordDoctor(filter, sysUser);
 	}
 
-	@Override
-	public Integer getCountScheduleDashboard(RecordsFilter filter, SysUser sysUser) {
-		return dao.getCountScheduleDashboard(filter, sysUser);
-	}
 }

@@ -31,6 +31,9 @@
     }
 </style>
 <script type="text/javascript">
+	document.getElementById("param").className = "active";
+	document.getElementById("param_param").className = "active";
+
 	function doEditParam(id) {
 	    $.ajax({ 
 	     	url: "<spring:url value='/secure/params/edit/'/>" + id,

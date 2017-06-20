@@ -1,18 +1,21 @@
 package com.datawings.app.dao.impl;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
+import org.hibernate.type.DateType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 import org.springframework.stereotype.Repository;
 
+import com.datawings.app.bean.CustomerBean;
+import com.datawings.app.common.DentalUtils;
 import com.datawings.app.common.SqlUtil;
 import com.datawings.app.dao.IRecordsDao;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.filter.RecordsFilter;
 import com.datawings.app.model.Records;
 import com.datawings.app.model.SysUser;
@@ -20,222 +23,255 @@ import com.datawings.app.model.SysUser;
 @Repository
 public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao{
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
-	public List<Records> getSchedule(RecordsFilter filter, SysUser sysUser) {
-		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
+	@SuppressWarnings({ "unchecked" })
+	public List<CustomerBean> getSchedule(RecordsFilter filter, SysUser sysUser) {
 		
-		if(StringUtils.isNotBlank(filter.getName()) || StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.createAlias("customer", "c", Criteria.INNER_JOIN);
-		}
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
+		StringBuffer hql =new StringBuffer();
+		hql.append("select c.customer_id as customerId, c.serial as serial, full_name as fullName, phone as phone, r.date_next as dateExcute");
+		hql.append(", c.content as content, r.content_next as contentNext, r.dentist as dentist, r.branch as branch"); 
+		hql.append(", c.gross as gross, c.sale as sale, c.payment as payment"); 
+		hql.append(" from customer c, records r");
+		hql.append(" where c.customer_id = r.customer_id ");
+		hql.append(" and date_next is not null");
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
+			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("branch", filter.getBranch()));
+				hql.append(" and c.branch = '" + filter.getBranch() + "'");
 			}
 		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("serial", filter.getSerial()));
+			hql.append(" and c.serial = '" + filter.getSerial() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("c.fullName", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
+			hql.append(" and (full_name like '%" + filter.getName().toUpperCase() + "%' or full_name_en like '%" + filter.getName().toUpperCase() + "%')");
 		}
 		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("c.phone", filter.getTelephone()));
+			hql.append(" and phone = '" + filter.getTelephone() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
-			criteria.add(Restrictions.like("dentist", filter.getDentist()));
+			hql.append(" and r.dentist = '" + filter.getDentist() + "'");
 		}
-		criteria.add(Restrictions.isNotNull("dateNext"));
+		SqlUtil.buildDatesBetweenLikeHql("date_next", filter.getDateNextFrom(), filter.getDateNextTo(), hql);
+		hql.append(" order by serial");
+		hql.append(" limit " +  filter.getPageSize() + " offset "+ filter.getOffset());
 		
-		SqlUtil.buildDatesBetweenLikeCrit("date_next", filter.getDateNextFrom(), filter.getDateNextTo(), criteria);
 		
-		criteria.addOrder(Order.asc("dateNext"));
-		criteria.addOrder(Order.asc("serial"));
-		criteria.setMaxResults(filter.getPageSize());
-		criteria.setFirstResult(filter.getOffset());
-		return criteria.list();
+		SQLQuery query = getSessionFactory().openSession().createSQLQuery(hql.toString());
+		
+		List<CustomerBean> result = query
+				.addScalar("customerId", IntegerType.INSTANCE)
+				.addScalar("serial", StringType.INSTANCE)
+				.addScalar("fullName", StringType.INSTANCE)
+				.addScalar("phone", StringType.INSTANCE)
+				.addScalar("dateExcute", DateType.INSTANCE)
+				.addScalar("content", StringType.INSTANCE)
+				.addScalar("contentNext", StringType.INSTANCE)
+				.addScalar("dentist", StringType.INSTANCE)
+				.addScalar("branch", StringType.INSTANCE)
+				.addScalar("gross", IntegerType.INSTANCE)
+				.addScalar("sale", IntegerType.INSTANCE)
+				.addScalar("payment", IntegerType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(CustomerBean.class)).list();
+		return result;
 	}
 
-	@SuppressWarnings("deprecation")
 	public Integer getScheduleRowCount(RecordsFilter filter, SysUser sysUser) {
-		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		
-		if(StringUtils.isNotBlank(filter.getName()) || StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.createAlias("customer", "c", Criteria.INNER_JOIN);
-		}
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
+		StringBuffer hql =new StringBuffer();
+		hql.append("select count(*)");
+		hql.append(" from customer c, records r");
+		hql.append(" where c.customer_id = r.customer_id ");
+		hql.append(" and date_next is not null");
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
+			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("branch", filter.getBranch()));
+				hql.append(" and c.branch = '" + filter.getBranch() + "'");
 			}
 		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("serial", filter.getSerial()));
+			hql.append(" and c.serial = '" + filter.getSerial() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getName())){
-			criteria.add(Restrictions.like("c.fullName", filter.getName().toUpperCase(), MatchMode.ANYWHERE));
+			hql.append(" and (full_name like '%" + filter.getName().toUpperCase() + "%' or full_name_en like '%" + filter.getName().toUpperCase() + "%')");
 		}
 		if(StringUtils.isNotBlank(filter.getTelephone())){
-			criteria.add(Restrictions.eq("c.phone", filter.getTelephone()));
+			hql.append(" and phone = '" + filter.getTelephone() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
-			criteria.add(Restrictions.like("dentist", filter.getDentist()));
+			hql.append(" and r.dentist = '" + filter.getDentist() + "'");
 		}
-		criteria.add(Restrictions.isNotNull("dateNext"));
-		SqlUtil.buildDatesBetweenLikeCrit("date_next", filter.getDateNextFrom(), filter.getDateNextTo(), criteria);
+		SqlUtil.buildDatesBetweenLikeHql("date_next", filter.getDateNextFrom(), filter.getDateNextTo(), hql);
 		
-		return ((Number) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+		SQLQuery query = getSessionFactory().openSession().createSQLQuery(hql.toString());
+		return ((BigInteger) query.uniqueResult()).intValue();
 	}
 
-	@SuppressWarnings("deprecation")
-	public Integer getCountCustomerReality(CustomerFiler filter, SysUser sysUser) {
-		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		
-		if(StringUtils.isNotBlank(filter.getFullName()) || StringUtils.isNotBlank(filter.getPhone())){
-			criteria.createAlias("customer", "c", Criteria.INNER_JOIN);
-		}
-		
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
+	public Integer getCountCustomerReality(CustomerFilter filter, SysUser sysUser) {
+		StringBuffer hql =new StringBuffer();
+		hql.append("select count(*)");
+		hql.append(" from customer c, records r");
+		hql.append(" where c.customer_id = r.customer_id ");
+		hql.append(" and date_next is not null");
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
+			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("branch", filter.getBranch()));
+				hql.append(" and c.branch = '" + filter.getBranch() + "'");
 			}
 		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("serial", filter.getSerial()));
+			hql.append(" and c.serial = '" + filter.getSerial() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getFullName())){
-			criteria.add(Restrictions.like("c.name", filter.getFullName().toUpperCase(), MatchMode.ANYWHERE));
+			hql.append(" and (full_name like '%" + filter.getFullName().toUpperCase() + "%' or full_name_en like '%" + filter.getFullName().toUpperCase() + "%')");
 		}
 		if(StringUtils.isNotBlank(filter.getPhone())){
-			criteria.add(Restrictions.eq("c.telephone", filter.getPhone()));
+			hql.append(" and phone = '" + filter.getPhone() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
-			criteria.add(Restrictions.like("dentist", filter.getDentist()));
+			hql.append(" and r.dentist = '" + filter.getDentist() + "'");
 		}
+		if(StringUtils.isNotBlank(filter.getSource())){
+			hql.append(" and c.source = '" + filter.getSource() + "'");
+		}
+		SqlUtil.buildDatesBetweenLikeHql("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), hql);
 		
-		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), criteria);
-		
-		return ((Number) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
+		SQLQuery query = getSessionFactory().openSession().createSQLQuery(hql.toString());
+		return ((BigInteger) query.uniqueResult()).intValue();
 	}
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<Records> getCustomerReality(CustomerFiler filter, SysUser sysUser) {
-		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		
-		if(StringUtils.isNotBlank(filter.getFullName()) || StringUtils.isNotBlank(filter.getPhone())){
-			criteria.createAlias("customer", "c", Criteria.INNER_JOIN);
-		}
-		
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
+	@SuppressWarnings({ "unchecked" })
+	public List<CustomerBean> getCustomerReality(CustomerFilter filter, SysUser sysUser) {
+		StringBuffer hql =new StringBuffer();
+		hql.append("select c.customer_id as customerId, c.serial as serial, full_name as fullName, phone as phone, r.date_excute as dateExcute");
+		hql.append(", r.content as content, r.dentist as dentist, r.branch as branch"); 
+		hql.append(", r.payment as payment"); 
+		hql.append(" from customer c, records r");
+		hql.append(" where c.customer_id = r.customer_id ");
+		hql.append(" and date_next is not null");
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
+			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("branch", filter.getBranch()));
+				hql.append(" and c.branch = '" + filter.getBranch() + "'");
 			}
 		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("serial", filter.getSerial()));
+			hql.append(" and c.serial = '" + filter.getSerial() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getFullName())){
-			criteria.add(Restrictions.like("c.name", filter.getFullName().toUpperCase(), MatchMode.ANYWHERE));
+			hql.append(" and (full_name like '%" + filter.getFullName().toUpperCase() + "%' or full_name_en like '%" + filter.getFullName().toUpperCase() + "%')");
 		}
 		if(StringUtils.isNotBlank(filter.getPhone())){
-			criteria.add(Restrictions.eq("c.telephone", filter.getPhone()));
+			hql.append(" and phone = '" + filter.getPhone() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
-			criteria.add(Restrictions.like("dentist", filter.getDentist()));
+			hql.append(" and r.dentist = '" + filter.getDentist() + "'");
 		}
+		if(StringUtils.isNotBlank(filter.getSource())){
+			hql.append(" and c.source = '" + filter.getSource() + "'");
+		}
+		SqlUtil.buildDatesBetweenLikeHql("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), hql);
+		hql.append(" order by date_excute desc");
+		hql.append(" limit " +  filter.getPageSize() + " offset "+ filter.getOffset());
 		
-		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), criteria);
+		SQLQuery query = getSessionFactory().openSession().createSQLQuery(hql.toString());
 		
-		criteria.addOrder(Order.desc("dateExcute"));
-		criteria.addOrder(Order.desc("serial"));
-		criteria.setMaxResults(filter.getPageSize());
-		criteria.setFirstResult(filter.getOffset());
-		return criteria.list();
+		List<CustomerBean> result = query
+				.addScalar("customerId", IntegerType.INSTANCE)
+				.addScalar("serial", StringType.INSTANCE)
+				.addScalar("fullName", StringType.INSTANCE)
+				.addScalar("phone", StringType.INSTANCE)
+				.addScalar("dateExcute", DateType.INSTANCE)
+				.addScalar("content", StringType.INSTANCE)
+				.addScalar("dentist", StringType.INSTANCE)
+				.addScalar("branch", StringType.INSTANCE)
+				.addScalar("payment", IntegerType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(CustomerBean.class)).list();
+		return result;
 	}
 
-	@SuppressWarnings("deprecation")
-	public Integer getTotalCustomerReality(CustomerFiler filter, SysUser sysUser) {
-		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		
-		if(StringUtils.isNotBlank(filter.getFullName()) || StringUtils.isNotBlank(filter.getPhone())){
-			criteria.createAlias("customer", "c", Criteria.INNER_JOIN);
-		}
-		criteria.setProjection(Projections.sum("payment"));
-		
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
+	public CustomerBean getTotalCustomerReality(CustomerFilter filter, SysUser sysUser) {
+		StringBuffer hql =new StringBuffer();
+		hql.append("select sum(r.payment) as payment");
+		hql.append(" from customer c, records r");
+		hql.append(" where c.customer_id = r.customer_id ");
+		hql.append(" and date_next is not null");
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
+			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("branch", filter.getBranch()));
+				hql.append(" and c.branch = '" + filter.getBranch() + "'");
 			}
 		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
-			criteria.add(Restrictions.eq("serial", filter.getSerial()));
+			hql.append(" and c.serial = '" + filter.getSerial() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getFullName())){
-			criteria.add(Restrictions.like("c.name", filter.getFullName().toUpperCase(), MatchMode.ANYWHERE));
+			hql.append(" and (full_name like '%" + filter.getFullName().toUpperCase() + "%' or full_name_en like '%" + filter.getFullName().toUpperCase() + "%')");
 		}
 		if(StringUtils.isNotBlank(filter.getPhone())){
-			criteria.add(Restrictions.eq("c.telephone", filter.getPhone()));
+			hql.append(" and phone = '" + filter.getPhone() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getDentist())){
-			criteria.add(Restrictions.like("dentist", filter.getDentist()));
+			hql.append(" and r.dentist = '" + filter.getDentist() + "'");
 		}
-		
-		SqlUtil.buildDatesBetweenLikeCrit("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), criteria);
-		
-		Long tmp = (Long) criteria.uniqueResult();
-		
-		Integer rs = 0;
-		if(tmp != null){
-			rs = tmp.intValue();
+		if(StringUtils.isNotBlank(filter.getSource())){
+			hql.append(" and c.source = '" + filter.getSource() + "'");
 		}
-		return rs;
+		SqlUtil.buildDatesBetweenLikeHql("date_excute", filter.getArrivalDateFrom(), filter.getArrivalDateTo(), hql);
+		
+		SQLQuery query = getSessionFactory().openSession().createSQLQuery(hql.toString());
+		CustomerBean result = (CustomerBean) query
+				.addScalar("payment", IntegerType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(CustomerBean.class)).uniqueResult();
+		return result;
 	}
 
-	@SuppressWarnings("deprecation")
-	public Integer getCountScheduleDashboard(RecordsFilter filter, SysUser sysUser) {
-		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
+	@SuppressWarnings("unchecked")
+	public List<CustomerBean> getRecordDoctor(CustomerFilter filter, SysUser sysUser) {
+		StringBuffer hql =new StringBuffer();
+		hql.append("select c.customer_id as customerId, c.serial as serial, full_name as fullName, r.date_excute as dateExcute, c.content as content");
+		hql.append(", r.dentist as dentist, r.branch as branch");
+		hql.append(" from customer c, records r");
+		hql.append(" where c.customer_id = r.customer_id ");
+		hql.append(" and r.status = 'W'");
+		hql.append(" and date_excute = " + "str_to_date('" + filter.getArrivalDateFrom() + "','%d/%m/%Y') ");
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_ADMIN)){
+			hql.append(" and r.dentist = '" + filter.getDentist() + "'");
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("branch", filter.getBranch()));
+				hql.append(" and r.dentist = '" + sysUser.getName() + "'");
 			}
 		}
-		criteria.add(Restrictions.isNotNull("dateNext"));
-		SqlUtil.buildDatesBetweenLikeCrit("date_next", filter.getDateNextFrom(), filter.getDateNextTo(), criteria);
-		
-		return ((Number) criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
-	}
-
-	@SuppressWarnings({ "unchecked", "deprecation" })
-	public List<Records> getScheduleDashboard(RecordsFilter filter, SysUser sysUser, Integer pageNo) {
-		Criteria criteria = this.getSession().createCriteria(this.getPersistentClass());
-		
-		if(StringUtils.equals(sysUser.getRole(), "USER")){
-			criteria.add(Restrictions.eq("branch", sysUser.getBranch()));
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_ADMIN)){
+			hql.append(" and c.branch = '" + filter.getBranch() + "'");
 		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				criteria.add(Restrictions.eq("branch", filter.getBranch()));
+				hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 			}
 		}
-		criteria.add(Restrictions.isNotNull("dateNext"));
+		if(StringUtils.isNotBlank(filter.getSerial())){
+			hql.append(" and c.serial = '" + filter.getSerial() + "'");
+		}
+		if(StringUtils.isNotBlank(filter.getFullName())){
+			hql.append(" and (full_name like '%" + filter.getFullName().toUpperCase() + "%' or full_name_en like '%" + filter.getFullName().toUpperCase() + "%')");
+		}
 		
-		SqlUtil.buildDatesBetweenLikeCrit("date_next", filter.getDateNextFrom(), filter.getDateNextTo(), criteria);
+		hql.append(" order by serial");
 		
-		criteria.addOrder(Order.asc("dateNext"));
-		criteria.addOrder(Order.asc("serial"));
-		criteria.setMaxResults(filter.getPageSize());
-		criteria.setFirstResult(filter.getOffset());
-		return criteria.list();
+		SQLQuery query = getSessionFactory().openSession().createSQLQuery(hql.toString());
+		
+		List<CustomerBean> result = query
+				.addScalar("customerId", IntegerType.INSTANCE)
+				.addScalar("serial", StringType.INSTANCE)
+				.addScalar("fullName", StringType.INSTANCE)
+				.addScalar("dateExcute", DateType.INSTANCE)
+				.addScalar("dentist", StringType.INSTANCE)
+				.addScalar("branch", StringType.INSTANCE)
+				.addScalar("content", StringType.INSTANCE)
+				.setResultTransformer(Transformers.aliasToBean(CustomerBean.class)).list();
+		return result;
 	}
-
 }

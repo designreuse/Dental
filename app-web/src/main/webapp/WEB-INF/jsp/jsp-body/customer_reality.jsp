@@ -65,13 +65,6 @@
 	    	"disable_search": true
 	    });
 	});
-
-	function doView(action, id, branch){	
-		document.forms[0].elements['action'].value = action;	
-		document.forms[0].elements['id'].value = id;
-		document.forms[0].elements['agency'].value = branch;
-		document.forms[0].submit();
-	}	
 </script>
 
 <div id="body">
@@ -82,38 +75,19 @@
 		
 		<div class="form-group">
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<label><spring:message code="customer.id" text="!"/></label>
 					<form:input path="serial" class="form-control textfield"/>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<label><spring:message code="customer.name" text="!"/></label>
 					<form:input path="fullName" class="form-control textfield"/>
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<label><spring:message code="customer.telephone" text="!"/></label>
 					<form:input path="phone" class="form-control textfield"/>
 				</div>
-			</div>
-		</div>
-		
-		<div class="form-group">
-			<div class="row">
-				<div class="col-sm-4">
-					<label><spring:message code="customer.date.start" text="!"/></label>
-					<div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <form:input path="arrivalDateFrom" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<label>&nbsp;</label>
-					<div class="input-group date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <form:input path="arrivalDateTo" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
-					</div>
-				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-3">
 					<label><spring:message code="schedule.dentist" text="!"/></label>
 					<form:select path="dentist" class="chosen-select" cssStyle="width:100%">
 						<option value="" <c:if test="${customerRealityFilter.dentist == ''}">selected="selected"</c:if>>
@@ -129,7 +103,21 @@
 		
 		<div class="form-group">
 			<div class="row">
-				<div class="col-sm-4">
+				<div class="col-sm-3">
+					<label><spring:message code="customer.date.start" text="!"/></label>
+					<div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <form:input path="arrivalDateFrom" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<label>&nbsp;</label>
+					<div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <form:input path="arrivalDateTo" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
+					</div>
+				</div>
+				<div class="col-sm-3">
 					<label><spring:message code="customer.source" text="!"/></label>
 					<form:select path="source" class="chosen-select" cssStyle="width:100%">
 						<option value="" <c:if test="${'' == customerFilter.source}">selected="selected"</c:if>>
@@ -145,7 +133,7 @@
 				</div>
 				
 				<sec:authorize access="hasRole('ADMIN')">
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						<label><spring:message code="customer.branch" text="!"/></label>
 						<form:select path="branch" class="chosen-select" cssStyle="width:100%">
 							<option value="" <c:if test="${'' == customerRealityFilter.branch}">selected="selected"</c:if>>

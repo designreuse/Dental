@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.datawings.app.bean.CustomerBean;
 import com.datawings.app.common.DateUtil;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.model.Branches;
 import com.datawings.app.model.Dentist;
-import com.datawings.app.model.Records;
 import com.datawings.app.model.SysUser;
 import com.datawings.app.service.IBranchesService;
 import com.datawings.app.service.IDentistService;
@@ -41,8 +41,8 @@ public class CustomerRealityController {
 	private IRecordsService recordsService;
 	
 	@ModelAttribute("customerRealityFilter")
-	public CustomerFiler customerFilter() {
-		CustomerFiler filter = new CustomerFiler();
+	public CustomerFilter customerFilter() {
+		CustomerFilter filter = new CustomerFilter();
 		String tmp = DateUtil.date2String(new Date(), "MM/yyyy");
 		Date start = DateUtil.string2Date(tmp, "MM/yyyy");
 		Date end  = DateUtil.endMonth(start);
@@ -53,9 +53,10 @@ public class CustomerRealityController {
 	}
 	
 	@RequestMapping(value = "/secure/customer/reality", method = RequestMethod.GET)
-	public String getDentist(@ModelAttribute("customerRealityFilter") CustomerFiler filter, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String getDentist(@ModelAttribute("customerRealityFilter") CustomerFilter filter, Model model, HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
+		request.getSession().setAttribute("FROM_PAGE", "REALITY");
 		
 		Integer rowCount = recordsService.getCountCustomerReality(filter, sysUser);
 		filter.setRowCount(rowCount);
@@ -68,12 +69,12 @@ public class CustomerRealityController {
 	}
 	
 	@RequestMapping(value = "secure/customer/reality/loadpage", method = RequestMethod.GET)
-	public String getDentistLoadPage(@ModelAttribute("customerRealityFilter") CustomerFiler filter, Integer pageNo, Model model){
+	public String getDentistLoadPage(@ModelAttribute("customerRealityFilter") CustomerFilter filter, Integer pageNo, Model model){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		filter.setPage(pageNo);
-		List<Records> records = recordsService.getCustomerReality(filter, sysUser);
-		Integer totalPayment = recordsService.getTotalCustomerReality(filter, sysUser);
+		List<CustomerBean> records = recordsService.getCustomerReality(filter, sysUser);
+		CustomerBean totalPayment = recordsService.getTotalCustomerReality(filter, sysUser);
 		
 		model.addAttribute("row", (filter.getPage()) * filter.getPageSize());
 		model.addAttribute("records", records);
@@ -82,18 +83,18 @@ public class CustomerRealityController {
 	}
 	
 	@RequestMapping(value = "/secure/customer/reality", method = RequestMethod.POST)
-	public String postRdv(@ModelAttribute("customerRealityFilter") CustomerFiler filter, Model model, HttpServletRequest request) {
+	public String postRdv(@ModelAttribute("customerRealityFilter") CustomerFilter filter, Model model, HttpServletRequest request) {
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		
 		if(StringUtils.equals(action, "GO")){
 			filter.setPage(0);
 		}else if(StringUtils.equals(action, "RESET")){
 			filter.init();
-		}else if(StringUtils.equals(action, "VIEW")){
-			request.getSession().setAttribute("FROM_PAGE", "REALITY");
-			String id = ServletRequestUtils.getStringParameter(request, "id", "");
-			String branch = ServletRequestUtils.getStringParameter(request, "agency", "");
-			return "redirect:/secure/records?id=" + id + "&agency=" + branch;
+			String tmp = DateUtil.date2String(new Date(), "MM/yyyy");
+			Date start = DateUtil.string2Date(tmp, "MM/yyyy");
+			Date end  = DateUtil.endMonth(start);
+			filter.setArrivalDateFrom(DateUtil.date2String(start, "dd/MM/yyyy"));
+			filter.setArrivalDateTo(DateUtil.date2String(end, "dd/MM/yyyy"));
 		}
 		return "redirect:/secure/customer/reality";
 	}

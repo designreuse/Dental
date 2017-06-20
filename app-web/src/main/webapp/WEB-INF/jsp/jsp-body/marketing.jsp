@@ -181,6 +181,8 @@
 						</option>
 					</form:select>
 				</div>
+				
+				<sec:authorize access="hasAnyRole('MARKETING','ADMIN')">
 				<div class="col-sm-4">
 					<label><spring:message code="customer.branch" text="!"/></label>
 					<form:select path="branch" class="chosen-select" cssStyle="width:100%">
@@ -194,6 +196,9 @@
 						</c:forEach>
 					</form:select>
 				</div>
+
+				</sec:authorize>
+
 				<div class="col-sm-4 text-left">
 					<label class="text-left" style="width:100%;"></label>
 					<a onclick="javascript:doSubmit('RESET');" class="btn btn-w-m btn-default text-uppercase">
@@ -203,6 +208,7 @@
 						<i class="fa fa-search"></i> <spring:message code="button.search" text="!"/>
 					</a>
 				</div>
+
 			</div>
 		</div>
 		

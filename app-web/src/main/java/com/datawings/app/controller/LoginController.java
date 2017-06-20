@@ -2,6 +2,7 @@ package com.datawings.app.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,11 +27,17 @@ public class LoginController {
 		
 		request.getSession().setAttribute("sysUser", sysUser);
 		
-		if(sysUser.getRole() != null){
-			return "redirect:/secure/dashboard";
-		}else{
+		if(sysUser.getRole() == null ){
 			return "login";
-		}		
+		}
+		
+		if(StringUtils.equals(sysUser.getRole(), "DOCTOR")){
+			return "redirect:/secure/doctor";
+		}else if(StringUtils.equals(sysUser.getRole(), "MARKETING")){
+			return "redirect:/secure/marketing";
+		}else{
+			return "redirect:/secure/dashboard";
+		}
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

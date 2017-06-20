@@ -147,6 +147,23 @@ public class SqlUtil {
 		}		
 	}
 	
+	public static void buildDatesBetweenLikeHql(String propertyName, String dateFrom, String dateTo, StringBuffer sql){
+		if (StringUtils.isNotBlank(dateFrom.trim()) && DateUtil.checkDateAsString(dateFrom.trim(), "dd/MM/yyyy")
+				&& StringUtils.isNotBlank(dateTo.trim()) && DateUtil.checkDateAsString(dateTo.trim(), "dd/MM/yyyy")){
+			sql.append(" and " + propertyName  + " between " + "str_to_date('" + dateFrom.trim() + "', '%d/%m/%Y') " + " and str_to_date('" + dateTo.trim() + "', '%d/%m/%Y')");				
+		}
+		else if (StringUtils.isNotBlank(dateFrom.trim()) && DateUtil.checkDateAsString(dateFrom.trim(), "dd/MM/yyyy") && StringUtils.isBlank(dateTo.trim())){
+			sql.append(" and " + propertyName  + " >= " + "str_to_date('" + dateFrom.trim() + "', '%d/%m/%Y') ");
+		}
+		else if (StringUtils.isBlank(dateFrom.trim())  && StringUtils.isNotBlank(dateTo.trim()) && DateUtil.checkDateAsString(dateTo.trim(), "dd/MM/yyyy")){
+			sql.append(" and " + propertyName  + " <= " + "str_to_date('" + dateTo.trim() + "','%d/%m/%Y') ");
+		}
+		else{
+			sql.append("");
+		}
+}
+
+	
 	public static void buildDatesBetweenLikeSql(String propertyName, String dateFrom, String dateTo, StringBuffer sql){
 			if (StringUtils.isNotBlank(dateFrom.trim()) && DateUtil.checkDateAsString(dateFrom.trim(), "dd/MM/yyyy")
 					&& StringUtils.isNotBlank(dateTo.trim()) && DateUtil.checkDateAsString(dateTo.trim(), "dd/MM/yyyy")){
