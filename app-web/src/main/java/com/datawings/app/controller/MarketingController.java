@@ -78,6 +78,7 @@ public class MarketingController {
 	@ModelAttribute("marketingFilter")
 	public MarketingFilter marketingFilter() {
 		MarketingFilter filter = new MarketingFilter();
+		filter.setStatus(DentalUtils.status_WATTING);
 		return filter;
 	}
 	
@@ -181,6 +182,7 @@ public class MarketingController {
 			filter.setPage(0);
 		}else if(StringUtils.equals(action, "RESET")){
 			filter.init();
+			filter.setStatus(DentalUtils.status_WATTING);
 		}
 		return "redirect:/secure/marketing";
 	}

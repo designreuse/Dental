@@ -120,13 +120,13 @@
 				<div class="col-sm-3">
 					<label><spring:message code="customer.source" text="!"/></label>
 					<form:select path="source" class="chosen-select" cssStyle="width:100%">
-						<option value="" <c:if test="${'' == customerFilter.source}">selected="selected"</c:if>>
+						<option value="" <c:if test="${'' == customerRealityFilter.source}">selected="selected"</c:if>>
 							<spring:message code="commom.all" text="!"/>
 						</option>
-						<option value="MARKETING" <c:if test="${'MARKETING' == customerFilter.source}">selected="selected"</c:if>>
+						<option value="MARKETING" <c:if test="${'MARKETING' == customerRealityFilter.source}">selected="selected"</c:if>>
 							<spring:message code="customer.source.marketing" text="!"/>
 						</option>
-						<option value="GUEST" <c:if test="${'GUEST' == customerFilter.source}">selected="selected"</c:if>>
+						<option value="GUEST" <c:if test="${'GUEST' == customerRealityFilter.source}">selected="selected"</c:if>>
 							<spring:message code="customer.source.guest" text="!"/>
 						</option>
 					</form:select>

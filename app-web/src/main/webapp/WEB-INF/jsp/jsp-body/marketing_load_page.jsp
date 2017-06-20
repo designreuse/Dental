@@ -61,7 +61,6 @@
 			<thead>
 				<tr>
 					<th class="text-center">#</th>
-					<th class="text-center"></th>
 					<th class="text-center">
 					<div class="checkbox checkbox-primary">
 		                     <input name="selectAll" id="selectAll" onchange="selectAllSms(this);" type="checkbox" value="F">
@@ -70,6 +69,7 @@
 		                     </label>
 		                 </div>
 					</th>
+					<th class="text-center"></th>
 					<th><spring:message code="customer.name" text="!"/></th>
 					<th><spring:message code="customer.telephone" text="!"/></th>
 					<th><spring:message code="customer.address" text="!"/></th>
@@ -84,6 +84,14 @@
 					<tr>
 						<td class="text-center">${row + stt.index + 1}</td>
 						<td class="text-center text-nowrap">
+						<div class="checkbox checkbox-primary">
+		                     <input name="sendSms" id="sendSms" type="checkbox" value="F">
+		                     <label for="checkbox2">
+		                         
+		                     </label>
+		                 </div>
+						</td>
+						<td class="text-center text-nowrap">
 							<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
 								<a onclick='doCustomer("${elm.marketingId}")' data-toggle="modal" data-target="#formCustomer"
 									title="<spring:message code="button.go" text="!"/>"><i class="fa fa-2x fa-user-plus"></i>
@@ -97,14 +105,6 @@
 									title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i>
 								</a>
 							</sec:authorize>
-						</td>
-						<td class="text-center text-nowrap">
-						<div class="checkbox checkbox-primary">
-		                     <input name="sendSms" id="sendSms" type="checkbox" value="F">
-		                     <label for="checkbox2">
-		                         
-		                     </label>
-		                 </div>
 						</td>
 						<td>${elm.fullName}</td>
 						<td>

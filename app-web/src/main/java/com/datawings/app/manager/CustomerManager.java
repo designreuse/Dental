@@ -1,8 +1,6 @@
 package com.datawings.app.manager;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,20 +153,5 @@ public class CustomerManager {
 		records.setModifiedBy(sysUser.getUsername());
 		records.setModifiedDate(new Date());
 		recordsService.merge(records);
-		
-		//update content
-		
-		List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
-		customer.setContent("");
-		for (int i = 0; i< listRecords.size(); i++) {
-			Records elm = listRecords.get(i);
-			if(i < listRecords.size() - 1){
-				customer.setContent(customer.getContent() +  elm.getContent() + " + ");
-			}else{
-				customer.setContent(customer.getContent() + elm.getContent());
-			}
-		}
-		
-		customerService.updateContent(customer);
 	}
 }

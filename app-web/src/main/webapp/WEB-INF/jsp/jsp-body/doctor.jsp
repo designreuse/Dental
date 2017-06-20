@@ -69,7 +69,12 @@
 		
 		<div class="form-group">
 			<div class="row">
-				<div class="col-sm-12 text-right">
+				<div class="col-sm-4">
+					<a href='<c:url value="/secure/doctor"></c:url>' class="btn btn-w-m btn-success text-uppercase">
+						<i class="fa fa-refresh"></i> <spring:message code="button.refresh" text="!"/>
+					</a>
+				</div>
+				<div class="col-sm-8 text-right">
 					<a onclick="javascript:doSubmit('RESET');" class="btn btn-w-m btn-default text-uppercase">
 						<i class="fa fa-undo"></i> <spring:message code="button.reset" text="!"/>
 					</a>
