@@ -32,6 +32,7 @@ import com.datawings.app.common.DentalUtils;
 import com.datawings.app.common.StringUtilz;
 import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.filter.MarketingFilter;
+import com.datawings.app.filter.SmsFilter;
 import com.datawings.app.filter.ValidationError;
 import com.datawings.app.manager.CustomerManager;
 import com.datawings.app.model.Branches;
@@ -86,9 +87,19 @@ public class MarketingController {
 		filter.setArrivalDateAdd(DateUtil.date2String(new Date(), "dd/MM/yyyy"));
 		return filter;
 	}
-	
+	@ModelAttribute("smsFilter")
+	public SmsFilter smsFilter() {
+		SmsFilter filter = new SmsFilter();
+		String tmp = DateUtil.date2String(new Date(), "MM/yyyy");
+		Date start = DateUtil.string2Date(tmp, "MM/yyyy");
+		Date end  = DateUtil.endMonth(start);
+		filter.setDateFrom(DateUtil.date2String(start, "dd/MM/yyyy"));
+		filter.setDateTo(DateUtil.date2String(end, "dd/MM/yyyy"));
+		
+		return filter;
+	}
 	@RequestMapping(value = "/secure/marketing", method = RequestMethod.GET)
-	public String getMarketing(@ModelAttribute("marketingFilter") MarketingFilter filter, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String getMarketing(@ModelAttribute("smsFilter") SmsFilter smsFilter, @ModelAttribute("marketingFilter") MarketingFilter filter, Model model, HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 	
