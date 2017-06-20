@@ -5,7 +5,20 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
-
+<style>
+.checkbox {
+    padding-left: 5px;
+}
+</style>
+<script type="text/javascript">
+	function selectAllSms(elm){
+		if($(elm).is(':checked')){
+			$('input#sendSms').prop("checked",true);
+		}else{
+			$('input#sendSms').prop("checked",false);
+		}
+	}
+</script>
 <div class="row">
 	<div class="col-lg-5">
 		<label class="label label-success" style="font-size:14px">${marketingFilter.rowCount} <spring:message code="message.result" text="!Result(s)"/></label>
@@ -49,6 +62,14 @@
 				<tr>
 					<th class="text-center">#</th>
 					<th class="text-center"></th>
+					<th class="text-center">
+					<div class="checkbox checkbox-primary">
+		                     <input name="selectAll" id="selectAll" onchange="selectAllSms(this);" type="checkbox" value="F">
+		                     <label for="checkbox2">
+		                         
+		                     </label>
+		                 </div>
+					</th>
 					<th><spring:message code="customer.name" text="!"/></th>
 					<th><spring:message code="customer.telephone" text="!"/></th>
 					<th><spring:message code="customer.address" text="!"/></th>
@@ -76,6 +97,14 @@
 									title="<spring:message code="button.delete" text="!Delete"/>"><i class="fa fa-2x fa-trash-o"></i>
 								</a>
 							</sec:authorize>
+						</td>
+						<td class="text-center text-nowrap">
+						<div class="checkbox checkbox-primary">
+		                     <input name="sendSms" id="sendSms" type="checkbox" value="F">
+		                     <label for="checkbox2">
+		                         
+		                     </label>
+		                 </div>
 						</td>
 						<td>${elm.fullName}</td>
 						<td>
