@@ -103,6 +103,7 @@ public class CustomerManager {
 		customer.setDentist(filter.getDentistCreate());
 		customer.setStatus(filter.getStatusCreate());
 		customer.setBranch(sysUser.getBranch());
+		customer.setSource("GUEST");
 		customer.setNote(filter.getNoteCreate().trim());
 		customer.setCreatedBy(sysUser.getUsername());
 		customer.setCreatedDate(new Date());
@@ -154,7 +155,7 @@ public class CustomerManager {
 		records.setPayment(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getPaymentEdit())));
 		records.setDateNext(DateUtil.string2Date(filter.getDateNextEdit(), "dd/MM/yyyy"));
 		records.setContentNext(filter.getContentNextEdit().toUpperCase());
-		records.setCausePayment(filter.getCausePaymentEdit());
+		records.setCausePayment(filter.getCausePaymentEdit().toUpperCase());
 		records.setStatus(filter.getStatusEdit());
 		records.setModifiedBy(sysUser.getUsername());
 		records.setModifiedDate(new Date());

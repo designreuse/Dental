@@ -108,7 +108,7 @@
 					</tr>
 					<tr>
 						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${record.dateExcute }"/></td>
-						<td class="text-uppercase">${record.content }</td>
+						<td class="text-uppercase">${record.causePayment }</td>
 						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${record.payment}"/></td>
 						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${customer.gross - customer.payment - customer.sale}"/></td>
 					</tr>

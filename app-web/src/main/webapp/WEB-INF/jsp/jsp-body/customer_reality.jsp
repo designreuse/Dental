@@ -126,9 +126,25 @@
 				</div>
 			</div>
 		</div>
-		<sec:authorize access="hasRole('ADMIN')">
-			<div class="form-group">
-				<div class="row">
+		
+		<div class="form-group">
+			<div class="row">
+				<div class="col-sm-4">
+					<label><spring:message code="customer.source" text="!"/></label>
+					<form:select path="source" class="chosen-select" cssStyle="width:100%">
+						<option value="" <c:if test="${'' == customerFilter.source}">selected="selected"</c:if>>
+							<spring:message code="commom.all" text="!"/>
+						</option>
+						<option value="MARKETING" <c:if test="${'MARKETING' == customerFilter.source}">selected="selected"</c:if>>
+							<spring:message code="customer.source.marketing" text="!"/>
+						</option>
+						<option value="GUEST" <c:if test="${'GUEST' == customerFilter.source}">selected="selected"</c:if>>
+							<spring:message code="customer.source.guest" text="!"/>
+						</option>
+					</form:select>
+				</div>
+				
+				<sec:authorize access="hasRole('ADMIN')">
 					<div class="col-sm-4">
 						<label><spring:message code="customer.branch" text="!"/></label>
 						<form:select path="branch" class="chosen-select" cssStyle="width:100%">
@@ -140,9 +156,9 @@
 							</c:forEach>
 						</form:select>
 					</div>
-				</div>
+				</sec:authorize>
 			</div>
-		</sec:authorize>
+		</div>
 		
 		<div class="form-group">
 			<div class="row">

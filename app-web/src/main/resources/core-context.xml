@@ -57,30 +57,11 @@
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 	
-	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.gmail.com" />
-		<property name="port" value="587" />
-		<property name="username" value="mail.datawings@gmail.com" />
-		<property name="password" value="maildatawings" />
-	
-		<property name="javaMailProperties">
-			<props>
-				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
-				<prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
-			</props>
-		</property>
-	</bean>
-	
 	<context:annotation-config />
  	<context:component-scan base-package="com.datawings" />
 	
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
 		<property name="defaultLocale" value="fr" />
-	</bean>
-
-	<bean id="customeMailMessage" class="org.springframework.mail.SimpleMailMessage">
-		<property name="from" value="mail.datawings@gmail.com" />
 	</bean>
 </beans>

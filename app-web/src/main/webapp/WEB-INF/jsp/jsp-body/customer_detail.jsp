@@ -216,7 +216,7 @@
 				</div>
 			</div>
 		</div>
-		
+		<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
 		<div class="form-group">
 			<div class="row">
 				<div class="col-sm-12 text-right">
@@ -229,5 +229,6 @@
 				</div>
 			</div>
 		</div>
+		</sec:authorize>
 	</form:form>
 </div>

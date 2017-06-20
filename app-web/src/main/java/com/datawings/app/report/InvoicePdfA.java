@@ -164,12 +164,12 @@ public class InvoicePdfA extends APdfPageEvent{
 		
 		font = new Font(fontNormal, 12f);
 		addCellCenterBorder(table, font, DateUtil.date2String(records.getDateExcute(), "dd/MM/yyyy"));
-		addCellLeftBorder(table, font, records.getContent().toUpperCase());
+		addCellLeftBorder(table, font, records.getCausePayment().toUpperCase());
 		addCellRightBorder(table, font, IntegerUtil.formatWithLang(records.getPayment(), local) + " " + prop.getProperty("invoice.money"));
 		addCellRightBorder(table, font, IntegerUtil.formatWithLang(customer.getGross() - customer.getPayment() - customer.getSale(), local) + " " + prop.getProperty("invoice.money"));
 		addCellLeft(table, new Font(fontNormal, 11f), "");
 		addCellCenterBorder(table, font, DateUtil.date2String(records.getDateExcute(), "dd/MM/yyyy"));
-		addCellLeftBorder(table, font, records.getContent().toUpperCase());
+		addCellLeftBorder(table, font, records.getCausePayment().toUpperCase());
 		addCellRightBorder(table, font, IntegerUtil.formatWithLang(records.getPayment(), local) + " " + prop.getProperty("invoice.money"));
 		addCellRightBorder(table, font, IntegerUtil.formatWithLang(customer.getGross() - customer.getPayment() - customer.getSale(), local) + " " + prop.getProperty("invoice.money"));
 		

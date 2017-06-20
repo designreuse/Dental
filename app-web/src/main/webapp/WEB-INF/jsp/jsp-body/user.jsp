@@ -133,8 +133,10 @@
 						<option value="" <c:if test="${'' == userFilter.branch}">selected="selected"</c:if>>
 							<spring:message code="commom.all" text="!"/>
 						</option>
+						<option value="MARKETING" <c:if test="${'MARKETING' == userFilter.role}">selected="selected"</c:if>>MARKETING</option>
+						<option value="RECEPTION" <c:if test="${'RECEPTION' == userFilter.role}">selected="selected"</c:if>>RECEPTION</option>
+						<option value="DOCTOR" <c:if test="${'DOCTOR' == userFilter.role}">selected="selected"</c:if>>DOCTOR</option>
 						<option value="ADMIN" <c:if test="${'ADMIN' == userFilter.role}">selected="selected"</c:if>>ADMIN</option>
-						<option value="USER" <c:if test="${'USER' == userFilter.role}">selected="selected"</c:if>>USER</option>
 					</form:select>
 				</div>
 				<div class="col-sm-4">
@@ -221,8 +223,10 @@
 								<div class="col-sm-4">
 									<label><spring:message code="user.role" text="!"/></label>
 									<form:select path="roleCreate" class="chosen-select" cssStyle="width:100%">
+										<option selected="selected" value="RECEPTION">RECEPTION</option>
+										<option value="MARKETING">MARKETING</option>
+										<option value="DOCTOR">DOCTOR</option>
 										<option value="ADMIN">ADMIN</option>
-										<option selected="selected" value="USER">USER</option>
 									</form:select>
 								</div>
 								<div class="col-sm-4">

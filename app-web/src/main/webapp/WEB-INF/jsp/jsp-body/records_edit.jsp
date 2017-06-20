@@ -4,6 +4,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 
 <style type="text/css">
 	.chosen-container-single .chosen-single {
@@ -24,10 +25,6 @@
      .chosen-container {
         width: 100% !important;
     }
-    
-    .form-group {
-    	margin-bottom: 5px; */
-	}
 </style>
 
 <script type="text/javascript">
@@ -101,9 +98,7 @@
 				</form:select>
 			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
 		<div class="row">
 			<div class="col-sm-6">
 				<label><spring:message code="records.teeth" text="!"/></label> <label class="text-danger">*</label>
@@ -116,9 +111,7 @@
 				<label id="err_contentEdit" class="text-danger"></label>
 			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
 		<div class="row">
 			<div class="col-sm-6">
 				<fmt:formatNumber pattern="${formatPattern}" value="${records.gross}" var="gross"/>
@@ -133,9 +126,7 @@
 				<label id="err_saleEdit" class="text-danger"></label>
 			</div>
 		</div>
-	</div>
 
-	<div class="form-group">
 		<div class="row">
 			<div class="col-sm-6">
 				<fmt:formatDate pattern="dd/MM/yyyy" value="${records.dateNext}" var = "dateNext"/>
@@ -151,13 +142,12 @@
 				<form:input path="contentNextEdit" value="${records.contentNext }" type="text" cssClass="form-control textfield text-uppercase"/>
 			</div>
 		</div>
-	</div>
 		
-	<div class="form-group">
+		<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
 		<div class="row">
 			<div class="col-sm-4">
 				<label><spring:message code="invoice.cause" text="!"/></label>
-				<form:input path="causePaymentEdit" type="text" cssClass="form-control textfield"/>
+				<form:input path="causePaymentEdit" type="text" cssClass="form-control textfield text-uppercase"/>
 			</div>
 			<div class="col-sm-4">
 				<fmt:formatNumber pattern="${formatPattern}" value="${records.payment}" var="payment"/>
@@ -167,28 +157,33 @@
 			</div>
 			<div class="col-sm-4">
 				<label><spring:message code="records.finish" text="!"/></label>
-				 <div class="checkbox checkbox-primary">
-                     <input name="statusEdit" id="checkbox2" type="checkbox" value="F">
-                     <label for="checkbox2">
-                         <spring:message code="customer.status.F" text="!"/>
-                     </label>
-                 </div>
+				<form:select path="statusEdit" class="chosen-select" cssStyle="width:100%">
+					<option value="W" <c:if test="${'W' == records.status}">selected="selected"</c:if>>
+						<spring:message code="customer.status.W" text="!"/>
+					</option>
+					<option value="F" <c:if test="${'F' == records.status}">selected="selected"</c:if>>
+						<spring:message code="customer.status.F" text="!"/>
+					</option>
+				</form:select>
 			</div>
 		</div>
-	</div>
+		</sec:authorize>
 		
-	<div class="form-group">
 		<div class="row">
 			<div class="col-sm-12 text-right">
 				<button type="button" class="btn btn-w-m btn-default text-uppercase" data-dismiss="modal">
 					<i class="fa fa-close"></i> <spring:message code="button.close" text="!"/>
 				</button>
+				<sec:authorize access="hasAnyRole('DOCTOR','RECEPTION','ADMIN')">
 				<button type="button" onclick="doEdit('MODIFY');" class="btn btn-w-m btn-success text-uppercase">
 					<i class="fa fa-save"></i> <spring:message code="button.save" text="!"/>
 				</button>
+				</sec:authorize>
+				<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
 				<button type="button" onclick="doEdit('PRINT');" class="btn btn-w-m btn-success text-uppercase">
 					<i class="fa fa-print  "></i> <spring:message code="button.save.printer" text="!"/>
 				</button>
+				</sec:authorize>
 			</div>
 		</div>
 	</div>
