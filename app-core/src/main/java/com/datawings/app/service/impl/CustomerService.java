@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.datawings.app.dao.ICustomerDao;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.model.Customer;
 import com.datawings.app.model.SysUser;
 import com.datawings.app.service.ICustomerService;
@@ -55,11 +55,11 @@ public class CustomerService implements ICustomerService{
 	}
 
 	@Transactional
-	public Integer getCustomerRowCount(CustomerFiler filter, SysUser sysUser) {
+	public Integer getCustomerRowCount(CustomerFilter filter, SysUser sysUser) {
 		return dao.getCustomerRowCount(filter, sysUser);
 	}
 
-	public List<Customer> getCustomers(CustomerFiler filter, SysUser sysUser) {
+	public List<Customer> getCustomers(CustomerFilter filter, SysUser sysUser) {
 		return dao.getCustomers(filter, sysUser);
 	}
 
@@ -75,5 +75,10 @@ public class CustomerService implements ICustomerService{
 	@Transactional
 	public Integer maxSerial(SysUser sysUser) {
 		return dao.maxSerial(sysUser);
+	}
+
+	@Transactional
+	public void updateContent(Customer customer) {
+		dao.updateContent(customer);
 	}
 }

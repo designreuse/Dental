@@ -1,6 +1,6 @@
 package com.datawings.app.filter;
 
-public class CustomerFiler extends BaseFilter {
+public class CustomerFilter extends BaseFilter {
 	public String serial;
 	public String fullName;
 	public String phone;
@@ -40,7 +40,7 @@ public class CustomerFiler extends BaseFilter {
 	private String birthdayAdd;
 	private String noteAdd;
 
-	public CustomerFiler() {
+	public CustomerFilter() {
 		init();
 	}
 

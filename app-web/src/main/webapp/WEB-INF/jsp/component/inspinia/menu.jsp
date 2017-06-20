@@ -18,17 +18,30 @@
 					<span><img alt="image" src="<c:url value="/static/images/logosmall.png"/>"/></span>
 				</div>
 			</li>
+			<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
             <li id="dashboard">
              	<a href="<c:url value="/secure/dashboard"/>">
              		<i class="fa fa-th-large"></i><span class="nav-label"><spring:message code="menu.dashboard" text="!"/></span>
              	</a>
 			</li>
+			</sec:authorize>
 			
+			<sec:authorize access="hasAnyRole('MARKETING','RECEPTION','ADMIN')">
 			<li id="marketing">
              	<a href="<c:url value="/secure/marketing"/>">
              		<i class="fa fa-university"></i><span class="nav-label"><spring:message code="menu.marketing" text="!"/></span>
              	</a>
 			</li>
+			</sec:authorize>
+			
+			<sec:authorize access="hasAnyRole('DOCTOR','ADMIN')">
+			<li id="doctor">
+             	<a href="<c:url value="/secure/doctor"/>">
+             		<i class="fa fa-user-md"></i><span class="nav-label"><spring:message code="menu.doctor" text="!"/></span>
+             	</a>
+			</li>
+			</sec:authorize>
+			
 			
 			<li id="customer">
 				<a href="#">
@@ -40,6 +53,8 @@
 		             		<i class="fa fa-list-ul"></i><span class="nav-label"><spring:message code="menu.customer.manager" text="!"/></span>
 		             	</a>
 					</li>
+					
+					<sec:authorize access="hasAnyRole('MARKETING','RECEPTION','ADMIN')">
 					<li id="schedule">
 		             	<a href="<c:url value="/secure/schedule"/>">
 		             		<i class="fa fa-calendar"></i><span class="nav-label"><spring:message code="menu.customer.schedule" text="!"/></span>
@@ -50,9 +65,11 @@
 		             		<i class="fa fa-user"></i><span class="nav-label"><spring:message code="menu.customer.reality" text="!"/></span>
 		             	</a>
 					</li>
+					</sec:authorize>
 				</ul>
 			</li>
 			
+			<sec:authorize access="hasAnyRole('MARKETING','RECEPTION','ADMIN')">
 			<li id="sms">
 				<a href="#">
 					<i class="fa fa-mobile"></i><span class="nav-label"><spring:message code="menu.sms" text="!"/></span><span class="fa arrow"></span>
@@ -70,7 +87,7 @@
 					</li>
 				</ul>
 			</li>
-			
+			</sec:authorize>
 			<%-- <li id="invoice">
 				<a href="#">
 					<i class="fa fa-files-o"></i><span class="nav-label"><spring:message code="menu.invoice" text="!"/></span><span class="fa arrow"></span>

@@ -167,6 +167,8 @@
 						</option>
 					</form:select>
 				</div>
+				
+				<sec:authorize access="hasAnyRole('MARKETING','ADMIN')">
 				<div class="col-sm-4">
 					<label><spring:message code="customer.branch" text="!"/></label>
 					<form:select path="branch" class="chosen-select" cssStyle="width:100%">
@@ -180,6 +182,7 @@
 						</c:forEach>
 					</form:select>
 				</div>
+				</sec:authorize>
 			</div>
 		</div>
 		

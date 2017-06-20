@@ -59,14 +59,18 @@
 			</thead>
 			<tbody>
 				<c:forEach items="${records}" var="elm" varStatus="stt">
+					<c:url value="/secure/records"  var="linkCustomerDetail">
+						<c:param name="id" value="${elm.customerId}"/>
+					</c:url>
+						
 					<tr>
 						<td class="text-center">${row + stt.index + 1}</td>
 						<td>
-							<a onclick="doView('VIEW', '${elm.serial}', '${elm.branch}')">${elm.serial }</a>
+							<a href="${linkCustomerDetail }">${elm.serial }</a>
 						</td>
-						<td><a onclick="doView('VIEW', '${elm.serial}', '${elm.branch}')">${elm.customer.fullName}</a></td>
+						<td><a href="${linkCustomerDetail }">${elm.fullName}</a></td>
 						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${elm.dateExcute}" /></td>
-						<td>${elm.customer.phone}</td>
+						<td>${elm.phone}</td>
 						<td>${elm.content}</td>
 						<td>${elm.dentist}</td>
 						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.payment}"/></td>
@@ -76,7 +80,7 @@
 			<tfoot>
 				<tr>
 					<th colspan="7" class="text-right"><spring:message code="customer.total" text="!"/></th>
-					<th class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${totalPayment}"/></th>
+					<th class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${totalPayment.payment}"/></th>
 				</tr>
 			</tfoot>
 		</table>

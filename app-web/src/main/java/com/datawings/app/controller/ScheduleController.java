@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.datawings.app.bean.CustomerBean;
 import com.datawings.app.common.DateUtil;
 import com.datawings.app.filter.RecordsFilter;
 import com.datawings.app.model.Branches;
 import com.datawings.app.model.Dentist;
-import com.datawings.app.model.Records;
 import com.datawings.app.model.SysUser;
 import com.datawings.app.service.IBranchesService;
 import com.datawings.app.service.IDentistService;
@@ -70,7 +70,7 @@ public class ScheduleController {
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
 		filter.setPage(pageNo);
-		List<Records> records = recordsService.getSchedule(filter, sysUser);
+		List<CustomerBean> records = recordsService.getSchedule(filter, sysUser);
 		model.addAttribute("records", records);
 		model.addAttribute("row", (filter.getPage()) * filter.getPageSize());
 		return "scheduleLoadPage";

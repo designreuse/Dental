@@ -267,9 +267,12 @@ public class RecordsController {
 	@RequestMapping(value = "/secure/records/errorEdit.json", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> doValidatorEdit(@ModelAttribute("recordsFilter") RecordsFilter filter, BindingResult result, Locale locale){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		SysUser sysUser = (SysUser) auth.getPrincipal();
+		
 		HashMap<String, Object> rs = new HashMap<String, Object>();
 		int errCode = 0;
-		errCode = recordsValidator.checkRecordsEdit(filter, result);
+		errCode = recordsValidator.checkRecordsEdit(filter, result, sysUser);
 		if(errCode > 0){
 			rs.put("errCodeEdit", errCode);
 			List<ValidationError> lstErr = new ArrayList<ValidationError>();

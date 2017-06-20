@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 import com.datawings.app.common.DateUtil;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.service.ICustomerService;
 
 @Component
@@ -16,7 +16,7 @@ public class CustomerValidator {
 	private ICustomerService customerService;
 	
 	public int checkCustomerAdd(Object target, Errors errors) {
-		CustomerFiler filter = (CustomerFiler) target;
+		CustomerFilter filter = (CustomerFilter) target;
 		Integer erroCode = 0;
 		
 		if (StringUtils.isBlank(filter.getFullNameCreate())) {
@@ -44,7 +44,7 @@ public class CustomerValidator {
 	}
 	
 	public int checkCustomerFromMarketing(Object target, Errors errors) {
-		CustomerFiler filter = (CustomerFiler) target;
+		CustomerFilter filter = (CustomerFilter) target;
 		Integer erroCode = 0;
 		
 		if (StringUtils.isBlank(filter.getFullNameAdd())) {
@@ -73,7 +73,7 @@ public class CustomerValidator {
 
 
 	public int checkCustomerEdit(Object target, Errors errors) {
-		CustomerFiler filter = (CustomerFiler) target;
+		CustomerFilter filter = (CustomerFilter) target;
 		Integer erroCode = 0;
 		
 		if (StringUtils.isBlank(filter.getFullNameCreate())) {

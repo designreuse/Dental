@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import com.datawings.app.common.DateUtil;
 import com.datawings.app.common.DentalUtils;
 import com.datawings.app.common.IntegerUtil;
 import com.datawings.app.common.StringUtilz;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.filter.RecordsFilter;
 import com.datawings.app.model.Customer;
 import com.datawings.app.model.Marketing;
@@ -35,7 +36,7 @@ public class CustomerManager {
 	private IRecordsService recordsService;
 	
 	@Transactional
-	public Integer addCustomer(CustomerFiler filter, SysUser sysUser, Integer id) {
+	public Integer addCustomer(CustomerFilter filter, SysUser sysUser, Integer id) {
 		Integer serial = customerService.maxSerial(sysUser);
 		
 		Customer customer = new Customer();
@@ -85,7 +86,7 @@ public class CustomerManager {
 	}
 	
 	@Transactional
-	public Integer addCustomerGuest(CustomerFiler filter, SysUser sysUser) {
+	public Integer addCustomerGuest(CustomerFilter filter, SysUser sysUser) {
 		Integer serial = customerService.maxSerial(sysUser);
 		
 		Customer customer = new Customer();
@@ -131,16 +132,6 @@ public class CustomerManager {
 	@Transactional
 	public void modifyRecord(Customer customer, Records records, RecordsFilter filter, SysUser sysUser) {
 		
-		List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
-		customer.setContent("");
-		for (int i = 0; i< listRecords.size(); i++) {
-			Records elm = listRecords.get(i);
-			if(i < listRecords.size() - 1){
-				customer.setContent(customer.getContent() +  elm.getContent() + " + ");
-			}else{
-				customer.setContent(customer.getContent() + elm.getContent());
-			}
-		}
 		customer.setGross(customer.getGross() + IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getGrossEdit())) - records.getGross());
 		customer.setSale(customer.getSale() + IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getSaleEdit())) - records.getSale());
 		customer.setPayment(customer.getPayment() + IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getPaymentEdit())) - records.getPayment());
@@ -156,9 +147,28 @@ public class CustomerManager {
 		records.setDateNext(DateUtil.string2Date(filter.getDateNextEdit(), "dd/MM/yyyy"));
 		records.setContentNext(filter.getContentNextEdit().toUpperCase());
 		records.setCausePayment(filter.getCausePaymentEdit().toUpperCase());
-		records.setStatus(filter.getStatusEdit());
+		if(StringUtils.isBlank(filter.getStatusEdit())){
+			records.setStatus("W");
+		}else{
+			records.setStatus(filter.getStatusEdit());
+		}
 		records.setModifiedBy(sysUser.getUsername());
 		records.setModifiedDate(new Date());
 		recordsService.merge(records);
+		
+		//update content
+		
+		List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
+		customer.setContent("");
+		for (int i = 0; i< listRecords.size(); i++) {
+			Records elm = listRecords.get(i);
+			if(i < listRecords.size() - 1){
+				customer.setContent(customer.getContent() +  elm.getContent() + " + ");
+			}else{
+				customer.setContent(customer.getContent() + elm.getContent());
+			}
+		}
+		
+		customerService.updateContent(customer);
 	}
 }

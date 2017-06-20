@@ -50,9 +50,9 @@
 					<th><spring:message code="schedule.serial" text="!"/></th>
 					<th><spring:message code="schedule.name" text="!"/></th>
 					<th><spring:message code="schedule.telephone" text="!"/></th>
-					<th><spring:message code="schedule.content" text="!"/></th>
-					<th><spring:message code="schedule.content.next" text="!"/></th>
+					<%-- <th><spring:message code="schedule.content" text="!"/></th> --%>
 					<th><spring:message code="schedule.dentist" text="!"/></th>
+					<th><spring:message code="schedule.content.next" text="!"/></th>
 					<th class="text-right"><spring:message code="schedule.amount" text="!"/></th>
 					<th class="text-right"><spring:message code="schedule.sale" text="!"/></th>
 					<th class="text-right"><spring:message code="schedule.payment" text="!"/></th>
@@ -62,27 +62,26 @@
 			<tbody>
 				<c:forEach items="${records}" var="elm" varStatus="stt">
 					<c:url value="/secure/records"  var="linkCustomer">
-						<c:param name="id" value="${elm.serial}"/>
-						<c:param name="agency" value="${elm.branch}"/>
+						<c:param name="id" value="${elm.customerId}"/>
 					</c:url>
 					
 					<tr>
 						<td class="text-center">${row + stt.index + 1}</td>
 						<td><a href="${linkCustomer }">${elm.serial}</a></td>
-						<td><a href="${linkCustomer }">${elm.customer.name}</a></td>
-						<td>${elm.customer.telephone}</td>
-						<td>${elm.customer.content}</td>
-						<td>${elm.contentNext}</td>
+						<td><a href="${linkCustomer }">${elm.fullName}</a></td>
+						<td>${elm.phone}</td>
+						<%-- <td>${elm.content}</td> --%>
 						<td>${elm.dentist}</td>
-						<td class="text-right"><fmt:formatNumber value="${elm.customer.gross}"/></td>
-						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.customer.sale}"/></td>
-						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.customer.payment}"/></td>
+						<td>${elm.contentNext}</td>
+						<td class="text-right"><fmt:formatNumber value="${elm.gross}"/></td>
+						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.sale}"/></td>
+						<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.payment}"/></td>
 						<c:choose>
-							<c:when test="${elm.customer.gross - elm.customer.sale - elm.customer.payment < 0 }">
-								<td class="text-right text-danger"><fmt:formatNumber pattern="${formatPattern}" value="${elm.customer.gross - elm.customer.sale - elm.customer.payment}"/></td>
+							<c:when test="${elm.gross - elm.sale - elm.payment < 0 }">
+								<td class="text-right text-danger"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross - elm.sale - elm.payment}"/></td>
 							</c:when>
 							<c:otherwise>
-								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.customer.gross - elm.customer.sale - elm.customer.payment}"/></td>
+								<td class="text-right"><fmt:formatNumber pattern="${formatPattern}" value="${elm.gross - elm.sale - elm.payment}"/></td>
 							</c:otherwise>
 						</c:choose>
 					</tr>

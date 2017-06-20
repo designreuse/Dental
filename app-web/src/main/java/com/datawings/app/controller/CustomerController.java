@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.datawings.app.common.DateUtil;
 import com.datawings.app.common.StringUtilz;
-import com.datawings.app.filter.CustomerFiler;
+import com.datawings.app.filter.CustomerFilter;
 import com.datawings.app.filter.ValidationError;
 import com.datawings.app.manager.CustomerManager;
 import com.datawings.app.model.Branches;
@@ -61,20 +61,20 @@ public class CustomerController {
 	private CustomerManager customerManager;
 	
 	@ModelAttribute("customerFilter")
-	public CustomerFiler customerFilter() {
-		CustomerFiler filter = new CustomerFiler();
+	public CustomerFilter customerFilter() {
+		CustomerFilter filter = new CustomerFilter();
 		filter.setArrivalDateCreate(DateUtil.date2String(new Date(), "dd/MM/yyyy"));
 		return filter;
 	}
 	
 	@ModelAttribute("customerDetailFilter")
-	public CustomerFiler customerDetailFilter() {
-		CustomerFiler filter = new CustomerFiler();
+	public CustomerFilter customerDetailFilter() {
+		CustomerFilter filter = new CustomerFilter();
 		return filter;
 	}
 	
 	@RequestMapping(value = "/secure/customer", method = RequestMethod.GET)
-	public String getDentist(@ModelAttribute("customerFilter") CustomerFiler filter, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String getDentist(@ModelAttribute("customerFilter") CustomerFilter filter, Model model, HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		request.getSession().setAttribute("FROM_PAGE", "CUSTOMER");
@@ -90,7 +90,7 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value = "secure/customer/loadpage", method = RequestMethod.GET)
-	public String getDentistLoadPage(@ModelAttribute("customerFilter") CustomerFiler filter, Integer pageNo, Model model){
+	public String getDentistLoadPage(@ModelAttribute("customerFilter") CustomerFilter filter, Integer pageNo, Model model){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
@@ -102,7 +102,7 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value = "/secure/customer", method = RequestMethod.POST)
-	public String postRdv(@ModelAttribute("customerFilter") CustomerFiler filter, Model model, HttpServletRequest request) {
+	public String postRdv(@ModelAttribute("customerFilter") CustomerFilter filter, Model model, HttpServletRequest request) {
 		
 		String action = ServletRequestUtils.getStringParameter(request, "action", "");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -127,7 +127,7 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value = "/secure/customer/detail", method = RequestMethod.GET)
-	public String getCustomerDetail(@ModelAttribute("customerDetailFilter") CustomerFiler filter, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String getCustomerDetail(@ModelAttribute("customerDetailFilter") CustomerFilter filter, Model model, HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
@@ -147,7 +147,7 @@ public class CustomerController {
 	}
 	
 	@RequestMapping(value = "/secure/customer/detail", method = RequestMethod.POST)
-	public String postCustomerDetail(@ModelAttribute("customerDetailFilter") CustomerFiler filter, Model model, HttpServletRequest request) {
+	public String postCustomerDetail(@ModelAttribute("customerDetailFilter") CustomerFilter filter, Model model, HttpServletRequest request) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		SysUser sysUser = (SysUser) auth.getPrincipal();
 		
@@ -193,7 +193,7 @@ public class CustomerController {
 	
 	@RequestMapping(value = "/secure/customer/errorCreate.json", method = RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, Object> doValidatorAgent(@ModelAttribute("customerFilter") CustomerFiler filter, BindingResult result, Model model, Locale locale){
+	public HashMap<String, Object> doValidatorAgent(@ModelAttribute("customerFilter") CustomerFilter filter, BindingResult result, Model model, Locale locale){
 		
 		HashMap<String, Object> rs = new HashMap<String, Object>();
 		int errCode = 0;
@@ -215,7 +215,7 @@ public class CustomerController {
 	
 	@RequestMapping(value = "/secure/customer/errorEdit.json", method = RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, Object> doValidatorEdit(@ModelAttribute("customerDetailFilter") CustomerFiler filter, BindingResult result, Model model, Locale locale){
+	public HashMap<String, Object> doValidatorEdit(@ModelAttribute("customerDetailFilter") CustomerFilter filter, BindingResult result, Model model, Locale locale){
 		HashMap<String, Object> rs = new HashMap<String, Object>();
 		int errCode = 0;
 		errCode = customerValidator.checkCustomerEdit(filter, result);
