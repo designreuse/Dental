@@ -142,7 +142,7 @@
 		<div class="form-group">
 			<div class="row">
 				<div class="col-sm-4">
-					<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
+					<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#smsSendForm">
 						<i class="fa fa-envelope"> <spring:message code="sms.create" text="!"/></i>
 					</button>
 				</div>
@@ -165,7 +165,7 @@
 	</form:form>
 	
 	<!-- ------------------------------------------- CREATE ----------------------------------------------------- -->
-	<div class="modal inmodal" id="formCreate" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal inmodal" id="smsSendForm" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" style="width:900px">
 			<div class="modal-content animated bounceInRight">
 				<div class="modal-header">

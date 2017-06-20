@@ -127,6 +127,20 @@
  	        }
  	    });
  	}
+	
+	function sendMultiSms(){
+		var phones = '';
+		$('input#sendSms:checked').each(function(){
+			if($(this).is(':checked')){
+				phones += $(this).parent().parent().parent().find('a').text().trim() + ';';
+			}
+		});
+		phones = phones.substring(0,phones.length - 1);
+		$('textarea#phoneSend').val(phones);
+	}
+	function doSendSMS(){
+		$("#sms-send-form").submit();
+	}
 </script>
 
 <div id="body">
@@ -180,19 +194,8 @@
 						</c:forEach>
 					</form:select>
 				</div>
-			</div>
-		</div>
-		
-		<div class="form-group">
-			<div class="row">
-				<div class="col-sm-4">
-					<sec:authorize access="hasAnyRole('MARKETING','ADMIN')">
-						<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
-							<i class="fa fa-plus-square"> <spring:message code="marketing.create" text="!"/></i>
-						</button>
-					</sec:authorize>
-				</div>
-				<div class="col-sm-8 text-right">
+				<div class="col-sm-4 text-left">
+					<label class="text-left" style="width:100%;"></label>
 					<a onclick="javascript:doSubmit('RESET');" class="btn btn-w-m btn-default text-uppercase">
 						<i class="fa fa-undo"></i> <spring:message code="button.reset" text="!"/>
 					</a>
@@ -200,6 +203,22 @@
 						<i class="fa fa-search"></i> <spring:message code="button.search" text="!"/>
 					</a>
 				</div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<div class="row">
+				<div class="col-sm-8">
+					<sec:authorize access="hasAnyRole('MARKETING','ADMIN')">
+						<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
+							<i class="fa fa-plus-square"> <spring:message code="marketing.create" text="!"/></i>
+						</button>
+						<button type="button" onclick="sendMultiSms();" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#sendMultiSMS">
+							<i class="fa fa-envelope"> <spring:message code="sms.create" text="!"/></i>
+						</button>
+					</sec:authorize>
+				</div>
+				
 			</div>
 		</div>
 		
@@ -361,6 +380,72 @@
 				</div>
 				<div class="modal-body">
 					<div id="sms-send-result"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- SEND SMS FORM -->
+	<div class="modal inmodal" id="sendMultiSMS" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" style="width:900px">
+			<div class="modal-content animated bounceInRight">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
+					<h5 class="modal-title text-uppercase"><spring:message code="sms.create" text="!"/></h5>
+				</div>
+				<div class="modal-body">
+					<form:form id="sms-send-form" name="form-add" method="post" commandName="smsFilter" action="sms">
+						<input type="hidden" name="action" value="SEND">
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-4">
+									<label><spring:message code="sms.type" text="!"/></label>
+									<form:select path="typeSend" class="chosen-select" cssStyle="width:100%">
+										<option value="7" <c:if test="${'7' == smsFilter.typeSend}">selected="selected"</c:if>>
+											<spring:message code="sms.type.7" text="!"/>
+										</option>
+										<option value="0" <c:if test="${'0' == smsFilter.typeSend}">selected="selected"</c:if>>
+											<spring:message code="sms.type.0" text="!"/>
+										</option>
+									</form:select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12">
+									<spring:message code="sms.phone.note" text="!" var = "notePhone"/>
+									<label><spring:message code="customer.telephone" text="!"/></label> <label class="text-danger">*</label>
+									<form:textarea placeholder="${notePhone }" path="phoneSend" rows="2" class="form-control textfield"/>
+									<label id="err_phoneSend" class="text-danger"></label>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12">
+									<label><spring:message code="sms.message" text="!"/></label>
+									<form:textarea maxlength="450" path="messageSend" rows="3" class="form-control textfield"/>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-12 text-right">
+									<button type="button" class="btn btn-w-m btn-default text-uppercase" data-dismiss="modal">
+										<i class="fa fa-close"></i> <spring:message code="button.close" text="!"/>
+									</button>
+									<button type="button" onclick="doSendSMS();" class="btn btn-w-m btn-success text-uppercase">
+										<i class="fa fa-paper-plane"></i> <spring:message code="button.send" text="!"/>
+									</button>
+								</div>
+							</div>
+						</div>
+					</form:form>
 				</div>
 			</div>
 		</div>
