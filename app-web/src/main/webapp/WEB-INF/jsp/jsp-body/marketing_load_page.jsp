@@ -40,15 +40,15 @@
 				        </c:otherwise>
 			        </c:choose>
 		                        
-		                <c:choose>
-				            <c:when test="${marketingFilter.page < (marketingFilter.totalPage - 1)}">
-				            	<a id="next" class="btn btn-sm btn-white text-uppercase" href="++pageNo"><spring:message code="button.next" text="!Next"/></a>
-				                </c:when>
-				                <c:otherwise>
-				                	<a class="btn btn-sm btn-white text-uppercase disabled"><spring:message code="button.next" text="!Next"/></a>
-				                </c:otherwise>
-			            </c:choose>
-		          </div>
+	                <c:choose>
+			            <c:when test="${marketingFilter.page < (marketingFilter.totalPage - 1)}">
+			            	<a id="next" class="btn btn-sm btn-white text-uppercase" href="++pageNo"><spring:message code="button.next" text="!Next"/></a>
+		                </c:when>
+		                <c:otherwise>
+		                	<a class="btn btn-sm btn-white text-uppercase disabled"><spring:message code="button.next" text="!Next"/></a>
+		                </c:otherwise>
+		            </c:choose>
+	          </div>
 			</div>
 		</c:if>
 	</div>
@@ -62,12 +62,10 @@
 				<tr>
 					<th class="text-center">#</th>
 					<th class="text-center">
-					<div class="checkbox checkbox-primary">
-		                     <input name="selectAll" id="selectAll" onchange="selectAllSms(this);" type="checkbox" value="F">
-		                     <label for="checkbox2">
-		                         
-		                     </label>
-		                 </div>
+						<div class="checkbox checkbox-primary">
+	                    	<input name="selectAll" id="selectAll" onchange="selectAllSms(this);" type="checkbox" value="F">
+	                    	<label for="checkbox2"></label>
+	                 	</div>
 					</th>
 					<th class="text-center"></th>
 					<th><spring:message code="customer.name" text="!"/></th>
@@ -93,9 +91,17 @@
 						</td>
 						<td class="text-center text-nowrap">
 							<sec:authorize access="hasAnyRole('RECEPTION','ADMIN')">
-								<a onclick='doCustomer("${elm.marketingId}")' data-toggle="modal" data-target="#formCustomer"
-									title="<spring:message code="button.go" text="!"/>"><i class="fa fa-2x fa-user-plus"></i>
-								</a>
+								<c:choose>
+									<c:when test="${elm.status == 'FINISH' }">
+										<a style="color: #bababa"><i class="fa fa-2x fa-user-plus"></i></a>
+									</c:when>
+									<c:otherwise>
+										<a onclick='doCustomer("${elm.marketingId}")' data-toggle="modal" data-target="#formCustomer"
+											title="<spring:message code="button.go" text="!"/>"><i class="fa fa-2x fa-user-plus"></i>
+										</a>
+									</c:otherwise>
+								</c:choose>
+								
 							</sec:authorize>
 							<sec:authorize access="hasAnyRole('MARKETING','ADMIN')">
 								<a onclick='doEdit("${elm.marketingId}")' data-toggle="modal" data-target="#formEdit"

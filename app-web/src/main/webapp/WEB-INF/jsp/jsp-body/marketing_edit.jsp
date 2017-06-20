@@ -140,7 +140,7 @@
 				<label><spring:message code="customer.branch" text="!" /></label>
 				<form:select path="branchEdit" class="chosen-select" cssStyle="width:100%">
 					<c:forEach items="${branches}" var="elm">
-						<option value="${elm.id }">${elm.name }</option>
+						<option value="${elm.id }" <c:if test="${elm.id == marketing.branch}">selected="selected"</c:if>>${elm.name }</option>
 					</c:forEach>
 				</form:select>
 			</div>

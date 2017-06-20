@@ -207,6 +207,9 @@
 						<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
 							<i class="fa fa-plus-square"> <spring:message code="marketing.create" text="!"/></i>
 						</button>
+					</sec:authorize>
+						
+					<sec:authorize access="hasAnyRole('RECEPTION','MARKETING','ADMIN')">
 						<button type="button" onclick="sendMultiSms();" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#sendMultiSMS">
 							<i class="fa fa-envelope"> <spring:message code="sms.create" text="!"/></i>
 						</button>
@@ -231,9 +234,9 @@
 	</form:form>
 	
 	<!-- ------------------------------------------- CREATE ----------------------------------------------------- -->
-	<div class="modal inmodal" id="formCreate" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal inmodal" id="formCreate" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog" style="width:900px">
-			<div class="modal-content animated bounceInRight">
+			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
 					<h5 class="modal-title text-uppercase"><spring:message code="marketing.create" text="!"/></h5>
@@ -307,7 +310,7 @@
 									<label><spring:message code="customer.branch" text="!"/></label>
 									<form:select path="branchCreate" class="chosen-select" cssStyle="width:100%">
 										<c:forEach items="${branches}" var="elm">
-											<option value="${elm.id }">${elm.name }</option>
+											<option value="${elm.id }" <c:if test="${'DN10' == elm.id}">selected="selected"</c:if>>${elm.name }</option>
 										</c:forEach>
 									</form:select>
 								</div>
@@ -342,9 +345,9 @@
 	</div>
 	
 	<!-- ------------------------------------------- EDIT ----------------------------------------------------- -->
-	<div class="modal inmodal" id="formEdit" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal inmodal" id="formEdit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog" style="width: 900px;">
-			<div class="modal-content animated bounceInRight">
+			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
 					<h5 class="modal-title text-uppercase"><spring:message code="marketing.edit" text="!"/></h5>
@@ -357,9 +360,9 @@
 	</div>
 	
 	<!-- ------------------------------------------- ADD CUSTOMER  ----------------------------------------------------- -->
-	<div class="modal inmodal" id="formCustomer" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal inmodal" id="formCustomer" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog" style="width: 900px;">
-			<div class="modal-content animated bounceInRight">
+			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
 					<h5 class="modal-title text-uppercase"><spring:message code="customer.create" text="!"/></h5>
@@ -372,9 +375,9 @@
 	</div>
 	
 	<!-- ------------------------------------------- ADD CUSTOMER  ----------------------------------------------------- -->
-	<div class="modal inmodal" id="formSendSms" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal inmodal" id="formSendSms" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog" style="width: 900px;">
-			<div class="modal-content animated bounceInRight">
+			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
 					<h5 class="modal-title text-uppercase"><spring:message code="sms.create" text="!"/></h5>
@@ -387,9 +390,9 @@
 	</div>
 	
 	<!-- SEND SMS FORM -->
-	<div class="modal inmodal" id="sendMultiSMS" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal inmodal" id="sendMultiSMS" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog" style="width:900px">
-			<div class="modal-content animated bounceInRight">
+			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
 					<h5 class="modal-title text-uppercase"><spring:message code="sms.create" text="!"/></h5>

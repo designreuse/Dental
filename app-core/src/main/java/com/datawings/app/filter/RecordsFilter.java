@@ -40,7 +40,7 @@ public class RecordsFilter extends BaseFilter {
 	private String paymentEdit;
 	private String causePaymentEdit;
 	private String statusEdit;
-	
+
 	public RecordsFilter() {
 		init();
 	}
@@ -49,6 +49,21 @@ public class RecordsFilter extends BaseFilter {
 		super.init();
 		this.sale = "0";
 		this.dateExcute = DateUtil.date2String(new Date(), "dd/MM/yyyy");
+	}
+
+	public void initEdit() {
+		this.dateExcuteEdit = "";
+		this.teethEdit = "";
+		this.contentEdit = "";
+		this.dentistEdit = "";
+		this.dateNextEdit = "";
+		this.contentNextEdit = "";
+		this.grossEdit = "";
+		this.saleEdit = "";
+		this.paymentEdit = "";
+		this.causePaymentEdit = "";
+		this.statusEdit = "";
+
 	}
 
 	public String getCausePayment() {

@@ -237,9 +237,9 @@
 	</form:form>
 	
 	<!-- ------------------------------------------- CREATE ----------------------------------------------------- -->
-	<div class="modal inmodal" id="formCreate" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal inmodal" id="formCreate" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog" style="width:900px">
-			<div class="modal-content animated bounceInRight">
+			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-2x fa-times-circle"></i></span></button>
 					<h5 class="modal-title text-uppercase"><spring:message code="customer.create" text="!"/></h5>

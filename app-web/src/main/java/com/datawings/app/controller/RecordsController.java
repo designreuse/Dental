@@ -177,6 +177,7 @@ public class RecordsController {
 			Customer customer = customerService.find(filter.getCustomerId());
 			Records records = recordsService.find(filter.getRecordId());
 			customerManager.modifyRecord(customer, records, filter, sysUser);
+			filter.initEdit();
 			
 			//update content
 			List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
@@ -196,6 +197,7 @@ public class RecordsController {
 			Customer customer = customerService.find(filter.getCustomerId());
 			Records records = recordsService.find(filter.getRecordId());
 			customerManager.modifyRecord(customer, records, filter, sysUser);
+			filter.initEdit();
 			
 			//update content
 			List<Records> listRecords = new ArrayList<Records>(customer.getRecords());

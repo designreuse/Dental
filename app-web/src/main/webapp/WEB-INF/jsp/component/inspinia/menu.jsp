@@ -29,7 +29,7 @@
 			<sec:authorize access="hasAnyRole('MARKETING','RECEPTION','ADMIN')">
 			<li id="marketing">
              	<a href="<c:url value="/secure/marketing"/>">
-             		<i class="fa fa-university"></i><span class="nav-label"><spring:message code="menu.marketing" text="!"/></span>
+             		<i class="fa fa-maxcdn"></i><span class="nav-label"><spring:message code="menu.marketing" text="!"/></span>
              	</a>
 			</li>
 			</sec:authorize>
