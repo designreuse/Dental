@@ -76,13 +76,25 @@
 					<label><spring:message code="customer.telephone" text="!"/></label>
 					<form:input path="phone" class="form-control textfield"/>
 				</div>
-				<div class="col-sm-4">
-					<label><spring:message code="customer.id" text="!"/></label>
-					<form:input path="serial" class="form-control textfield"/>
-				</div>
+				
 				<div class="col-sm-4">
 					<label><spring:message code="customer.name" text="!"/></label>
 					<form:input path="fullName" class="form-control textfield"/>
+				</div>
+				
+				<div class="col-sm-4">
+					<label><spring:message code="sms.status" text="!"/></label>
+					<form:select path="status" class="chosen-select" cssStyle="width:100%">
+						<option value="" <c:if test="${'' == smsFilter.status}">selected="selected"</c:if>>
+							<spring:message code="commom.all" text="!"/>
+						</option>
+						<option value="W" <c:if test="${'W' == smsFilter.status}">selected="selected"</c:if>>
+							<spring:message code="sms.status.W" text="!"/>
+						</option>
+						<option value="F" <c:if test="${'F' == smsFilter.status}">selected="selected"</c:if>>
+							<spring:message code="sms.status.F" text="!"/>
+						</option>
+					</form:select>
 				</div>
 			</div>
 		</div>
@@ -95,11 +107,11 @@
 						<option value="" <c:if test="${'' == smsFilter.type}">selected="selected"</c:if>>
 							<spring:message code="commom.all" text="!"/>
 						</option>
-						<option value="1" <c:if test="${'W' == smsFilter.type}">selected="selected"</c:if>>
-							<spring:message code="sms.type.1" text="!"/>
+						<option value="7" <c:if test="${'7' == smsFilter.type}">selected="selected"</c:if>>
+							<spring:message code="sms.type.7" text="!"/>
 						</option>
-						<option value="2" <c:if test="${'F' == smsFilter.type}">selected="selected"</c:if>>
-							<spring:message code="sms.type.2" text="!"/>
+						<option value="0" <c:if test="${'0' == smsFilter.type}">selected="selected"</c:if>>
+							<spring:message code="sms.type.0" text="!"/>
 						</option>
 					</form:select>
 				</div>
@@ -116,25 +128,6 @@
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <form:input path="dateTo" type="text" cssClass="form-control textfield" placeholder="dd/MM/yyyy"/>
 					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class="form-group">
-			<div class="row">
-				<div class="col-sm-4">
-					<label><spring:message code="sms.status" text="!"/></label>
-					<form:select path="status" class="chosen-select" cssStyle="width:100%">
-						<option value="" <c:if test="${'' == smsFilter.status}">selected="selected"</c:if>>
-							<spring:message code="commom.all" text="!"/>
-						</option>
-						<option value="W" <c:if test="${'W' == smsFilter.status}">selected="selected"</c:if>>
-							<spring:message code="sms.status.W" text="!"/>
-						</option>
-						<option value="F" <c:if test="${'F' == smsFilter.status}">selected="selected"</c:if>>
-							<spring:message code="sms.status.F" text="!"/>
-						</option>
-					</form:select>
 				</div>
 			</div>
 		</div>

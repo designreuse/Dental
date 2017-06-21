@@ -196,25 +196,13 @@
 						</c:forEach>
 					</form:select>
 				</div>
-
 				</sec:authorize>
-
-				<div class="col-sm-4 text-left">
-					<label class="text-left" style="width:100%;"></label>
-					<a onclick="javascript:doSubmit('RESET');" class="btn btn-w-m btn-default text-uppercase">
-						<i class="fa fa-undo"></i> <spring:message code="button.reset" text="!"/>
-					</a>
-					<a onclick="javascript:doSubmit('GO');" class="btn btn-w-m btn-success text-uppercase">
-						<i class="fa fa-search"></i> <spring:message code="button.search" text="!"/>
-					</a>
-				</div>
-
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<div class="row">
-				<div class="col-sm-8">
+				<div class="col-sm-6">
 					<sec:authorize access="hasAnyRole('MARKETING','ADMIN')">
 						<button type="button" class="btn btn-w-m btn-success text-uppercase" data-toggle="modal" data-target="#formCreate">
 							<i class="fa fa-plus-square"> <spring:message code="marketing.create" text="!"/></i>
@@ -224,7 +212,14 @@
 						</button>
 					</sec:authorize>
 				</div>
-				
+				<div class="col-sm-6 text-right">
+					<a onclick="javascript:doSubmit('RESET');" class="btn btn-w-m btn-default text-uppercase">
+						<i class="fa fa-undo"></i> <spring:message code="button.reset" text="!"/>
+					</a>
+					<a onclick="javascript:doSubmit('GO');" class="btn btn-w-m btn-success text-uppercase">
+						<i class="fa fa-search"></i> <spring:message code="button.search" text="!"/>
+					</a>
+				</div>
 			</div>
 		</div>
 		

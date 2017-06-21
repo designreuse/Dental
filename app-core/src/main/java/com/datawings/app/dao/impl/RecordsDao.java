@@ -112,7 +112,6 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 		hql.append("select count(*)");
 		hql.append(" from customer c, records r");
 		hql.append(" where c.customer_id = r.customer_id ");
-		hql.append(" and date_next is not null");
 		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
 			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}else {
@@ -149,7 +148,6 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 		hql.append(", r.payment as payment"); 
 		hql.append(" from customer c, records r");
 		hql.append(" where c.customer_id = r.customer_id ");
-		hql.append(" and date_next is not null");
 		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
 			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}else {
@@ -197,7 +195,6 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 		hql.append("select sum(r.payment) as payment");
 		hql.append(" from customer c, records r");
 		hql.append(" where c.customer_id = r.customer_id ");
-		hql.append(" and date_next is not null");
 		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_RECEPTION)){
 			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}else {
@@ -239,18 +236,18 @@ public class RecordsDao extends BaseDao<Records, Integer> implements IRecordsDao
 		hql.append(" and r.status = 'W'");
 		hql.append(" and date_excute = " + "str_to_date('" + filter.getArrivalDateFrom() + "','%d/%m/%Y') ");
 		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_ADMIN)){
-			hql.append(" and r.dentist = '" + filter.getDentist() + "'");
-		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				hql.append(" and r.dentist = '" + sysUser.getName() + "'");
+				hql.append(" and r.dentist = '" + filter.getDentist() + "'");
 			}
+		}else {
+			hql.append(" and r.dentist = '" + sysUser.getName() + "'");
 		}
 		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_ADMIN)){
-			hql.append(" and c.branch = '" + filter.getBranch() + "'");
-		}else {
 			if(StringUtils.isNotBlank(filter.getBranch())){
-				hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
+				hql.append(" and c.branch = '" + filter.getBranch() + "'");
 			}
+		}else {
+			hql.append(" and c.branch = '" + sysUser.getBranch() + "'");
 		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
 			hql.append(" and c.serial = '" + filter.getSerial() + "'");

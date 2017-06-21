@@ -178,15 +178,40 @@ public class RecordsController {
 			Records records = recordsService.find(filter.getRecordId());
 			customerManager.modifyRecord(customer, records, filter, sysUser);
 			
+			//update content
+			List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
+			customer.setContent("");
+			for (int i = 0; i< listRecords.size(); i++) {
+				Records elm = listRecords.get(i);
+				if(i < listRecords.size() - 1){
+					customer.setContent(customer.getContent() +  elm.getContent() + " + ");
+				}else{
+					customer.setContent(customer.getContent() + elm.getContent());
+				}
+			}
+			customerService.updateContent(customer);
+			
 			return "redirect:/secure/records?id=" + filter.getCustomerId();
 		}else if(StringUtils.equals(action, "PRINT")){
 			Customer customer = customerService.find(filter.getCustomerId());
 			Records records = recordsService.find(filter.getRecordId());
 			customerManager.modifyRecord(customer, records, filter, sysUser);
 			
+			//update content
+			List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
+			customer.setContent("");
+			for (int i = 0; i< listRecords.size(); i++) {
+				Records elm = listRecords.get(i);
+				if(i < listRecords.size() - 1){
+					customer.setContent(customer.getContent() +  elm.getContent() + " + ");
+				}else{
+					customer.setContent(customer.getContent() + elm.getContent());
+				}
+			}
+			customerService.updateContent(customer);
+			
 			return "redirect:/secure/pdf?id=" + records.getRecordId();
 		}
-			
 			
 		return "redirect:/secure/records?id=" + id;
 	}
@@ -228,7 +253,6 @@ public class RecordsController {
 		return new ModelAndView("fileView", "map", map);
 	}
 	
-	
 	@RequestMapping(value = {"/secure/records/edit/{id}"}, method = RequestMethod.GET)
 	public String getDentist(@PathVariable Integer id, Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -241,7 +265,6 @@ public class RecordsController {
 		model.addAttribute("dentists", dentists);
 		return "recordsEdit";
 	}
-	
 	
 	@RequestMapping(value = "/secure/records/errorCreate.json", method = RequestMethod.POST)
 	@ResponseBody

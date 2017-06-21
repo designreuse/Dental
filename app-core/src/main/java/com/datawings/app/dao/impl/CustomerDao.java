@@ -33,6 +33,9 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 				criteria.add(Restrictions.eq("branch", filter.getBranch()));
 			}
 		}
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_DOCTOR)){
+			criteria.add(Restrictions.eq("dentist", sysUser.getName().trim()));
+		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
 			criteria.add(Restrictions.eq("serial", filter.getSerial().trim()));
 		}
@@ -66,6 +69,9 @@ public class CustomerDao extends BaseDao<Customer, CustomerId> implements ICusto
 			if(StringUtils.isNotBlank(filter.getBranch())){
 				criteria.add(Restrictions.eq("branch", filter.getBranch()));
 			}
+		}
+		if(StringUtils.equals(sysUser.getRole(), DentalUtils.ROLE_DOCTOR)){
+			criteria.add(Restrictions.eq("dentist", sysUser.getName().trim()));
 		}
 		if(StringUtils.isNotBlank(filter.getSerial())){
 			criteria.add(Restrictions.eq("serial", filter.getSerial().trim()));
