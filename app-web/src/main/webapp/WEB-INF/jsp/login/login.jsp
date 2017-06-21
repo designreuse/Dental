@@ -22,7 +22,7 @@
 	  
 	  	<style>
 	  		.gray-bg {
-				background:url("<c:url value='/static/images/bg.png'/>");	
+				background:url("<c:url value='/static/images/bg1.jpg'/>");	
 				background-size: cover
 			}
 	

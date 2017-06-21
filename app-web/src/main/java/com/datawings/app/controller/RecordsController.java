@@ -116,28 +116,11 @@ public class RecordsController {
 			records.setDateExcute(DateUtil.string2Date(filter.getDateExcute(), "dd/MM/yyyy"));
 			records.setDentist(filter.getDentist());
 			records.setDateNext(DateUtil.string2Date(filter.getDateNext(), "dd/MM/yyyy"));
-			/*records.setTeeth(filter.getTeeth());
-			records.setContent(filter.getContent().toUpperCase());
-			records.setGross(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getGross())));
-			records.setSale(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getSale())));
-			records.setPayment(IntegerUtil.convertInteger(StringUtilz.replaceMoney(filter.getPayment())));
-			records.setDateNext(DateUtil.string2Date(filter.getDateNext(), "dd/MM/yyyy"));
-			records.setContentNext(filter.getContentNext().toUpperCase());*/
 			records.setNote(filter.getNote());
 			records.setCausePayment(filter.getCausePayment());
 			records.setStatus("W");
 			records.setCreatedBy(sysUser.getUsername());
 			records.setCreatedDate(new Date());
-			
-			/*if(StringUtils.isBlank(customer.getContent())){
-				customer.setContent(records.getContent());
-			}else {
-				customer.setContent(customer.getContent() + " + " + records.getContent());
-			}
-			
-			customer.setGross(customer.getGross() + records.getGross());
-			customer.setSale(customer.getSale() + records.getSale());
-			customer.setPayment(customer.getPayment() + records.getPayment());*/
 			
 			recordsService.merge(records);
 			filter.init();
@@ -145,19 +128,11 @@ public class RecordsController {
 			
 		} else if(StringUtils.equals(action, "DELETE")){
 			Integer idRecords = ServletRequestUtils.getIntParameter(request, "idRecords", 0);
-			Customer customer = customerService.find(id);
+			
 			Records records = recordsService.find(idRecords);
+			Customer customer = records.getCustomer();
 			
-			recordsService.deleteById(idRecords);
-			customer.setContent("");
-			for (Records elm : customer.getRecords()) {
-				customer.setContent(customer.getContent() + elm.getContent());
-			}
-			customer.setGross(customer.getGross() - records.getGross());
-			customer.setSale(customer.getSale() - records.getSale());
-			customer.setPayment(customer.getPayment() - records.getPayment());
-			
-			customerService.merge(customer);
+			customerManager.deleteRecord(customer, records, filter, sysUser);
 			
 			return "redirect:/secure/records?id=" + id;
 			
@@ -181,15 +156,7 @@ public class RecordsController {
 			
 			//update content
 			List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
-			customer.setContent("");
-			for (int i = 0; i< listRecords.size(); i++) {
-				Records elm = listRecords.get(i);
-				if(i < listRecords.size() - 1){
-					customer.setContent(customer.getContent() +  elm.getContent() + " + ");
-				}else{
-					customer.setContent(customer.getContent() + elm.getContent());
-				}
-			}
+			customer.setContent(customerManager.genContent(listRecords));
 			customerService.updateContent(customer);
 			
 			return "redirect:/secure/records?id=" + filter.getCustomerId();
@@ -201,15 +168,7 @@ public class RecordsController {
 			
 			//update content
 			List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
-			customer.setContent("");
-			for (int i = 0; i< listRecords.size(); i++) {
-				Records elm = listRecords.get(i);
-				if(i < listRecords.size() - 1){
-					customer.setContent(customer.getContent() +  elm.getContent() + " + ");
-				}else{
-					customer.setContent(customer.getContent() + elm.getContent());
-				}
-			}
+			customer.setContent(customerManager.genContent(listRecords));
 			customerService.updateContent(customer);
 			
 			return "redirect:/secure/pdf?id=" + records.getRecordId();
@@ -227,7 +186,6 @@ public class RecordsController {
 		model.addAttribute("record", record);
 		return "pdfPage";
 	}
-	
 	
 	@RequestMapping(value = "secure/print", method = RequestMethod.GET)
 	public ModelAndView getInvoicePdfview(Model model, HttpServletRequest request) throws DocumentException, IOException{

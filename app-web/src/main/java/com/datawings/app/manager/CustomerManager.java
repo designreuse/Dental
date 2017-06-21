@@ -1,6 +1,8 @@
 package com.datawings.app.manager;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,5 +155,32 @@ public class CustomerManager {
 		records.setModifiedBy(sysUser.getUsername());
 		records.setModifiedDate(new Date());
 		recordsService.merge(records);
+	}
+	
+	@Transactional
+	public void deleteRecord(Customer customer, Records records, RecordsFilter filter, SysUser sysUser) {
+		customer.setGross(customer.getGross() - records.getGross());
+		customer.setSale(customer.getSale() - records.getSale());
+		customer.setPayment(customer.getPayment() - records.getPayment());
+		
+		customer.getRecords().remove(records);
+		
+		List<Records> listRecords = new ArrayList<Records>(customer.getRecords());
+		customer.setContent(genContent(listRecords));
+			
+		customerService.merge(customer);
+	}
+	
+	public String genContent(List<Records> records) {
+		StringBuffer rs = new StringBuffer("");
+		for (int i = 0; i< records.size(); i++) {
+			Records elm = records.get(i);
+			if(i < records.size() - 1){
+				rs.append(elm.getContent() + " + ");
+			}else{
+				rs.append(elm.getContent());
+			}
+		}
+		return rs.toString();
 	}
 }

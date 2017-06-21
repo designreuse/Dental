@@ -20,7 +20,7 @@ public class RecordsService implements IRecordsService{
 	@Autowired
 	private IRecordsDao dao;
 	
-	@Transactional
+	//@Transactional
 	public Records find(Serializable id) {
 		return dao.find(id);
 	}

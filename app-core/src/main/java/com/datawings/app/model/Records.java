@@ -85,7 +85,7 @@ public class Records extends Base {
 	@Column(name = "modified_date")
 	private Date modifiedDate;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false, insertable = false, updatable = false)
 	private Customer customer;
 

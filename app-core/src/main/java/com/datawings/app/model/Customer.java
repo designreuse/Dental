@@ -103,7 +103,7 @@ public class Customer extends Base {
 	@Column(name = "modified_date")
 	private Date modifiedDate;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL)
 	@OrderBy("dateExcute DESC")
 	private Set<Records> records = new HashSet<Records>(0);
 
